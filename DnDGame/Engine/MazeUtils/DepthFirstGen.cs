@@ -31,13 +31,13 @@ namespace DnDGame.MazeGen.DepthFirst
 
             }
         }
-        static Pos[] Dirs = { new Pos(0, 2), new Pos(0, -2), new Pos(-2, 0), new Pos(2, 0) };
+        static Pos[] Dirs = { new Pos(-2, 0), new Pos(2, 0), new Pos(0, 2), new Pos(0, -2) };
 
 
 
         public static Stack<Pos> GenMaze(int sizeX, int sizeY)
         {
-
+            var rnd = new Random();
             var CurrentCell = rndOddCell(sizeX, sizeY);
             var Path = new Stack<Pos>();
             var Maze = new Stack<Pos>();
@@ -54,9 +54,11 @@ namespace DnDGame.MazeGen.DepthFirst
                 }
                 var newCell = new Pos(0, 0);
                 var dir = new Pos(0, 0);
-                var dirs = rndDirs();
+                var dirs = rndDirs(rnd);
+                
                 var canMove = false;
-                var validDirs = dirs.Where(x => isValidMove(new Pos(CurrentCell.X + x.X, CurrentCell.Y + x.Y), sizeX, sizeY, Maze)).ToList();
+                var validDirs = dirs.Where(x => IsValidMove(new Pos(CurrentCell.X + x.X, CurrentCell.Y + x.Y), sizeX, sizeY, Maze)).ToList();
+                Console.WriteLine(validDirs.Count);
                 if (validDirs.Count > 0)
                 {
                     dir = validDirs[0];
@@ -87,26 +89,23 @@ namespace DnDGame.MazeGen.DepthFirst
                 /*displayBoard(grid, Maze.ToArray(), sizeX, sizeY);
                 Console.ReadKey();
                 Console.Clear();*/
-                /*var grid = new int[size, size];
-                for (int x = 0; x < size; x++)
-                {
-                    for (int y = 0; y < size; y++)
-                    {
-                        grid[x, y] = 0;
-                    }
-                }
-                if (!Backtracking)
-                {
-                    Console.Clear();
-                    displayBoard(grid, Maze.ToArray());
-                }*/
+     
 
 
             } while (true);
+            var grid = new int[sizeX, sizeY];
+            for (int x = 0; x < sizeX; x++)
+            {
+                for (int y = 0; y < sizeY; y++)
+                {
+                    grid[x, y] = 0;
+                }
+            }
+                displayBoard(grid, Maze.ToArray(), sizeX, sizeY);
             return Maze;
         }
 
-        static bool isValidMove(Pos newCell, int sizeX, int sizeY, Stack<Pos> Maze)
+        static bool IsValidMove(Pos newCell, int sizeX, int sizeY, Stack<Pos> Maze)
         {
             var outOfBounds  = newCell.X < 1 || newCell.X > sizeX - 1 || newCell.Y < 1 || newCell.Y > sizeY - 1;
             var visited = Maze.Where(x => x.X == newCell.X && x.Y == newCell.Y).ToArray().Length > 0;
@@ -154,19 +153,23 @@ namespace DnDGame.MazeGen.DepthFirst
 
         static Pos rndOddCell(int sizeX, int sizeY)
         {
+            var rand = new Random();
+            int randX, randY;
 
-            var point = new Pos(new int[] { new Random().Next(0, (sizeX - 1) / 2), new Random().Next(0, (sizeY - 1) / 2) }.Select(x => (2 * x) + 1).ToArray());
+            do
+            {
+                randX = rand.Next(1, sizeX);
+                randY = rand.Next(1, sizeY);
+            } while (randX % 2 != 1 || randY % 2 != 1);
+            var point = new Pos(randX, randY);
             Console.WriteLine($"{point.X}, {point.Y} ");
             return point;
 
         }
 
-        static Pos[] rndDirs()
+        static Pos[] rndDirs(Random rnd)
         {
             var dirsList = Dirs.ToList();
-            var rnd = new Random();
-            
-
             for (int i = 0; i < 10; i++)
             {
                 var index = rnd.Next(0, 4);

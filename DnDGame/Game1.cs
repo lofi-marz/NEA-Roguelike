@@ -71,7 +71,7 @@ namespace DnDGame
             testMap = new TileGrid(spriteSheet, 12, 9);
             
             var testCells = new List<Cell>();
-            var sizeX = 15;
+            var sizeX = 17;
             var sizeY = 15;
 
             var maze = DepthFirst.GenMaze(sizeX, sizeY);
@@ -87,7 +87,7 @@ namespace DnDGame
                 {
                     for (int j = 1; j <= scale; j++)
                     {
-                        testCells.Add(new Cell( point.X * scale - i, point.Y * scale - j, "floor"));
+                        testCells.Add(new Cell( point.X * scale - i + scale, point.Y * scale - j + scale, "floor"));
                     }
                 }
             }

@@ -15,7 +15,7 @@ namespace DnDGame
 
     public class PlayerCharacter
     {
-        const float ACC = 100f;
+        const float ACC = 150f;
         const float DRAG = 0.5f;
         public AnimatedSprite Sprite;
         public CollisionPolygon CollisionBox;
