@@ -17,7 +17,6 @@ namespace DnDGame
     /// </summary>
 
     //Goals
-    //Set up dungeon map system
     //Set up enemies
     //Character animation
     public class Game1 : Game
@@ -173,7 +172,7 @@ namespace DnDGame
             // TODO: use this.Content to load your game content here
 
         }
-
+        
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload
         /// game-specific content.

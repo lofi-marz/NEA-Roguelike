@@ -77,7 +77,7 @@ namespace DnDGame
             else { return false; }
         }
 
-        public Boolean IsMouseButtonDown(MouseButtons button)
+        public bool IsMouseButtonDown(MouseButtons button)
         {   //check to see if the mouse button is being held down
             if (button == MouseButtons.LeftButton)
             { return (currentMouseState.LeftButton == ButtonState.Pressed); }

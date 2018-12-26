@@ -44,16 +44,18 @@
   <ItemGroup>
     <Compile Include="Engine\Drawing\Camera.cs" />
     <Compile Include="Engine\Drawing\Core.cs" />
+    <Compile Include="Engine\Input\InputMap.cs" />
+    <Compile Include="Engine\Player\Player.cs" />
     <Compile Include="Engine\Utils\Utils.cs" />
     <Compile Include="Game1.cs" />
-    <Compile Include="InputHelper.cs" />
+    <Compile Include="Engine\Input\InputHelper.cs" />
     <Compile Include="Engine\MazeUtils\DepthFirstGen.cs" />
     <Compile Include="Engine\Physics\Physics2D.cs" />
-    <Compile Include="Engine\Player\Player.cs" />
+    <Compile Include="Engine\Player\PlayerCharacter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Engine\Drawing\Sprite.cs" />
-    <Compile Include="Engine\Drawing\Map.cs" />
+    <Compile Include="Engine\Drawing\Tile.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

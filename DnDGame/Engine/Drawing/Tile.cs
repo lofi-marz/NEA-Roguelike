@@ -21,6 +21,16 @@ namespace DnDGame.Engine.Drawing
             Tiles = new TileMap(tileSet);
             Pos = new Vector2(0, 0);
         }
+
+        public Cell[,] toGrid()
+        {
+            var Grid = new Cell[Width, Height];
+            for (int x = 0; x < Width; x++)
+            {
+
+            }
+            return Grid;
+        }
         
         public void Draw(SpriteBatch spriteBatch)
         {
