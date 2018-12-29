@@ -5,6 +5,7 @@ using DnDGame.Engine;
 using DnDGame.Engine.Drawing;
 using DnDGame.MazeGen.DepthFirst;
 using System.Collections.Generic;
+using DnDGame.Engine.ECS;
 
 //TODO
 // - Maze gen needs to be able to support rooms with entrances
@@ -22,11 +23,12 @@ namespace DnDGame
     public class Game1 : Game
     {
         GraphicsDeviceManager graphics;
-        
+        World world;
         SpriteBatch spriteBatch;
         PlayerCharacter Player;
         TileGrid testMap;
         InputHelper input;
+        Camera camera;
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -45,6 +47,10 @@ namespace DnDGame
         {
             // TODO: Add your initialization logic here
             input = new InputHelper();
+            camera = new Camera();
+            world = new World();
+            world.Systems.Add(new DrawSystem());
+            
             graphics.PreferredBackBufferWidth = 1280;  // set this value to the desired width of your window
             graphics.PreferredBackBufferHeight = 720;   // set this value to the desired height of your window
             graphics.ApplyChanges();
@@ -61,11 +67,15 @@ namespace DnDGame
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            var knightSprite = Content.Load<Texture2D>("Sprites/Knight");
             var playerSprite = new AnimatedSprite(Content.Load<Texture2D>("Sprites/Knight"), 9, 1)
             {
-                xScale = 2f,
-                yScale = 2f
+                xScale = 1f,
+                yScale = 1f
             };
+
+            world.CreateEntity(1, new PositionComponent(new Vector2(0f)), new SpriteComponent(knightSprite, new Rectangle(0, 0, 16, 32), new Vector2(2f), 32, 16)); 
+            
             var spriteSheet = Content.Load<Texture2D>("Sprites/DungeonTileset");
             testMap = new TileGrid(spriteSheet, 12, 9);
             
@@ -92,84 +102,10 @@ namespace DnDGame
             }
             testMap.Cells = testCells;
             Player = new PlayerCharacter(playerSprite);
-            Player.Pos = new Vector2(GraphicsDevice.Viewport.Width * 0.5f, GraphicsDevice.Viewport.Height * 0.5f);
-            /*for (int x = 0; x < size; x++)
-            {
+           
+     
 
-                for (int y = 0; y < size+2; y++)
-                {
-
-                    if (x == 0 && y == 0)
-                    {
-
-                        testCells.Add(new Cell(x, y, "topLeftWallTop"));
-                    }
-                    else if (x == 0 && y == size)
-                    {
-                        testCells.Add(new Cell(x, y, "floor"));
-                        testCells.Add(new Cell(x, y, "bottomLeftWallTop"));
-                    }
-
-                    else if (x == size-1 && y == 0)
-                    {
-                        testCells.Add(new Cell(x, y, "topRightWallTop"));
-                    }
-                    else if (x == size-1 && y == size)
-                    {
-                        testCells.Add(new Cell(x, y, "floor"));
-                        testCells.Add(new Cell(x, y, "bottomRightWallTop"));
-                    }
-                    else if (y == size+1)
-                    {
-                        testCells.Add(new Cell(x, y, "wall"));
-                    }
-                    else if (x == 0 && y == 1)
-                    {
-                        testCells.Add(new Cell(x, y, "wall"));
-                        testCells.Add(new Cell(x, y, "leftWallMid"));
-                    }
-                    else if (x == 0)
-                    {
-                        testCells.Add(new Cell(x, y, "floor"));
-                        testCells.Add(new Cell(x, y, "leftWallMid"));
-                    }
-                    else if (x == size-1 && y == 1)
-                    {
-                        testCells.Add(new Cell(x, y, "wall"));
-                        testCells.Add(new Cell(x, y, "rightWallMid"));
-                    }
-                    else if (x == size-1)
-                    {
-                        testCells.Add(new Cell(x, y, "floor"));
-                        testCells.Add(new Cell(x, y, "rightWallMid"));
-                    }
-
-                    else if (y == 0)
-                    {
-                        testCells.Add(new Cell(x, y, "wallTop"));
-                    }
-                    else if (y == 1)
-                    {
-
-                        testCells.Add(new Cell(x, y, "wall"));
-                    }
-                    else if (y == size)
-                    {
-                        testCells.Add(new Cell(x, y, "floor"));
-                        testCells.Add(new Cell(x, y, "wallTop"));
-                    }
-                    else
-                    {
-                        testCells.Add(new Cell(x, y, "floor"));
-                    }
-
-                }
-            }*/
-
-
-
-            //PlayerCharacter = new PlayerCharacter(Content.Load<Texture2D>());
-            // TODO: use this.Content to load your game content here
+               
 
         }
         
@@ -210,16 +146,20 @@ namespace DnDGame
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-            var camera = new Camera();
+            
             var viewport = GraphicsDevice.Viewport;
+            
             var centre = new Vector2(viewport.Width * 0.5f, viewport.Height * 0.5f);
             
-            camera.Pos = (Player.Pos - centre) * new Vector2(0.9f);
-            camera.Scale = new Vector2(1f);
+            
+            camera.Scale = new Vector2(2f);
+            
+            camera.Pos = (Player.Pos- centre) * new Vector2(0.8f);
             spriteBatch.Begin(samplerState: SamplerState.PointWrap, transformMatrix:camera.GetTransform(GraphicsDevice.Viewport));
             //spriteBatch.Draw(playerSprite, destinationRectangle: new Rectangle(10, 10, 32, 32), sourceRectangle: new Rectangle(0, 0, 32, 32));
             testMap.Draw(spriteBatch);
             Player.Draw(spriteBatch);
+            ((DrawSystem)world.Systems[0]).Draw(world, spriteBatch);
             base.Draw(gameTime);
             spriteBatch.End();
         }

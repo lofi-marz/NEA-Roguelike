@@ -9,12 +9,13 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DnDGame.Engine.Drawing
 {
-    public class Camera : Object
+    public class Camera : GameObject
     {
         
         public float Bounds;
         public float Rotation;
         public Viewport Viewport;
+        public Vector2 Zoom { get => Scale; set => value = Scale; }
         public Camera()
         {
             Pos = Vector2.Zero;

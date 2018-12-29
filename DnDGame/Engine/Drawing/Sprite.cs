@@ -11,14 +11,13 @@ namespace DnDGame.Engine.Drawing
 {
 
 
-    public class Sprite
+    public class Sprite : GameObject
     {
         public Texture2D Texture;
         public Rectangle SourceRect;
         public int Height;
         public int Width;
-        public float xScale = 1f;
-        public float yScale = 1f;
+
 
         public Sprite(Texture2D texture, Rectangle sourceRect, int height = 16, int width = 16)
         {
@@ -26,11 +25,12 @@ namespace DnDGame.Engine.Drawing
             SourceRect = sourceRect;
             Height = height;
             Width = width;
+            
         }
 
         public void Draw(SpriteBatch spriteBatch, Vector2 pos)
         {
-            var destRect = new Rectangle((int)pos.X, (int)pos.Y, (int)(Width * xScale), (int)(Height * yScale));
+            var destRect = new Rectangle((int)pos.X, (int)pos.Y, (int)(Width * Scale.X), (int)(Height * Scale.Y));
             spriteBatch.Draw(Texture,
                 destRect,
                 SourceRect, Color.AliceBlue);

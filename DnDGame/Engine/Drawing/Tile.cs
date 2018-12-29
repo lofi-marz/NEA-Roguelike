@@ -7,38 +7,31 @@ using System.Collections.Generic;
 namespace DnDGame.Engine.Drawing
 {
 
-    public class TileGrid : Object
+    public class TileGrid : GameObject
     {
         public List<Cell> Cells;
         public int Height;
         public int Width;
-        public Cell[][] Grid;
+        public Cell[,] Grid;
         private TileMap Tiles;
         public int CellSize;
         
         public TileGrid(Texture2D tileSet, int height, int width)
         {
+            Grid = new Cell[width, height];
             Tiles = new TileMap(tileSet);
             Pos = new Vector2(0, 0);
         }
 
-        public Cell[,] toGrid()
-        {
-            var Grid = new Cell[Width, Height];
-            for (int x = 0; x < Width; x++)
-            {
 
-            }
-            return Grid;
-        }
         
         public void Draw(SpriteBatch spriteBatch)
         {
             foreach (var cell in Cells)
             {
                 var Tile = Tiles.Map[cell.Tile];
-                var sprite = new Sprite(Tiles.SpriteSheet, new Rectangle(16 * Tile[0], 16 * Tile[1], 16, 16), 32, 32);
-                sprite.Draw(spriteBatch, new Vector2(Pos.X + cell.X * 32f, Pos.Y + cell.Y * 32f));
+                var sprite = new Sprite(Tiles.SpriteSheet, new Rectangle(16 * Tile[0], 16 * Tile[1], 16, 16), 16, 16);
+                sprite.Draw(spriteBatch, new Vector2(Pos.X + cell.X * 16f, Pos.Y + cell.Y * 16f));
             }
         }
     }

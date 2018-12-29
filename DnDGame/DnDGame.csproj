@@ -44,6 +44,10 @@
   <ItemGroup>
     <Compile Include="Engine\Drawing\Camera.cs" />
     <Compile Include="Engine\Drawing\Core.cs" />
+    <Compile Include="Engine\ECS\Components.cs" />
+    <Compile Include="Engine\ECS\Entity.cs" />
+    <Compile Include="Engine\ECS\Systems.cs" />
+    <Compile Include="Engine\ECS\World.cs" />
     <Compile Include="Engine\Input\InputMap.cs" />
     <Compile Include="Engine\Player\Player.cs" />
     <Compile Include="Engine\Utils\Utils.cs" />

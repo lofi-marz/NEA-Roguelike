@@ -14,14 +14,12 @@ using DnDGame.Engine.Input;
 namespace DnDGame
 {
 
-    public class PlayerCharacter
+    
+
+    public class PlayerCharacter : KinematicObject
     {
-        const float ACC = 150f;
-        const float DRAG = 0.5f;
         public AnimatedSprite Sprite;
         public CollisionPolygon CollisionBox;
-        public Vector2 Pos;
-        public Vector2 Velocity;
         public Direction Facing;
         InputMap Input;
         public Dictionary<Direction, List<Keys>> InputMap; //For multiple players; map an input to a direction
@@ -44,14 +42,14 @@ namespace DnDGame
             Sprite.Draw(spriteBatch, Pos);
         }
 
-        public void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
 
             
-            //Debug.WriteLine(this.Sprite.CurrentFrame);
+            
             var delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
             Pos += Velocity * new Vector2(delta, delta);
-            //Console.WriteLine(Utils.Vector2String(Velocity));
+            
             Velocity *= new Vector2(DRAG, DRAG);
             Sprite.xScale = Math.Abs(Sprite.xScale) * (Facing == Direction.Left ? -1 : 1);
 
@@ -83,13 +81,11 @@ namespace DnDGame
             {
                 Velocity.X -= ACC;
                 Facing = Direction.Left;
-                
             }
             if (Input.IsActionTriggered(input, GameAction.MoveRight))
             {
                 Velocity.X += ACC;
                 Facing = Direction.Right;
-                
             }
         }
     }
