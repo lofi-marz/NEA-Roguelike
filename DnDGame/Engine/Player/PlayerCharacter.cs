@@ -21,8 +21,8 @@ namespace DnDGame
         public AnimatedSprite Sprite;
         public CollisionPolygon CollisionBox;
         public Direction Facing;
-        InputMap Input;
-        public Dictionary<Direction, List<Keys>> InputMap; //For multiple players; map an input to a direction
+        public InputMap Input;
+        public Dictionary<Direction, List<Keys>> InputMap; // For multiple players; map an input to a direction
 
         public PlayerCharacter(AnimatedSprite sprite)
         {
@@ -103,6 +103,7 @@ namespace DnDGame
         Right
     }
 
+   
     public static class Utils
     {
         public static string Vector2String(Vector2 vector, int precision = 2)

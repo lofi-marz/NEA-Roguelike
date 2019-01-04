@@ -58,7 +58,7 @@ namespace DnDGame.MazeGen.DepthFirst
                 
                 var canMove = false;
                 var validDirs = dirs.Where(x => IsValidMove(new Pos(CurrentCell.X + x.X, CurrentCell.Y + x.Y), sizeX, sizeY, Maze)).ToList();
-                Console.WriteLine(validDirs.Count);
+                //Console.WriteLine(validDirs.Count);
                 if (validDirs.Count > 0)
                 {
                     dir = validDirs[0];
@@ -101,7 +101,7 @@ namespace DnDGame.MazeGen.DepthFirst
                     grid[x, y] = 0;
                 }
             }
-                displayBoard(grid, Maze.ToArray(), sizeX, sizeY);
+               // displayBoard(grid, Maze.ToArray(), sizeX, sizeY);
             return Maze;
         }
 
@@ -162,7 +162,7 @@ namespace DnDGame.MazeGen.DepthFirst
                 randY = rand.Next(1, sizeY);
             } while (randX % 2 != 1 || randY % 2 != 1);
             var point = new Pos(randX, randY);
-            Console.WriteLine($"{point.X}, {point.Y} ");
+            //Console.WriteLine($"{point.X}, {point.Y} ");
             return point;
 
         }

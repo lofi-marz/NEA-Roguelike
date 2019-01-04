@@ -14,7 +14,8 @@ namespace DnDGame.Engine.Input
                 { GameAction.MoveUp, new List<Keys>() {Keys.Up, Keys.W } },
                 { GameAction.MoveDown, new List<Keys>() {Keys.Down, Keys.S } },
                 { GameAction.MoveLeft, new List<Keys>() {Keys.Left, Keys.A } },
-                { GameAction.MoveRight, new List<Keys>() {Keys.Right, Keys.D } },
+                { GameAction.MoveRight, new List<Keys>() {Keys.Right, Keys.D } }
+            
             };
 
     }
@@ -34,11 +35,16 @@ namespace DnDGame.Engine.Input
     public class InputMap
     {
         public Dictionary<GameAction, List<Keys>> KeyMap;
-        
+
+        public Dictionary<GameAction, Action> ActionMap;
         
         public InputMap(Dictionary<GameAction, List<Keys>> map)
         {
             KeyMap = map;
+            foreach (var mapping in map)
+            {
+                ActionMap.Add(mapping.Key, () => { });
+            }
         }
         
         public InputMap()
@@ -58,5 +64,7 @@ namespace DnDGame.Engine.Input
             }
             return false;
         }
+
+        
     }
 }

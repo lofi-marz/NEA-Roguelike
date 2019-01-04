@@ -13,8 +13,9 @@ namespace DnDGame.Engine.Drawing
         public int Height;
         public int Width;
         public Cell[,] Grid;
-        private TileMap Tiles;
         public int CellSize;
+        private TileMap Tiles;
+        
         
         public TileGrid(Texture2D tileSet, int height, int width)
         {

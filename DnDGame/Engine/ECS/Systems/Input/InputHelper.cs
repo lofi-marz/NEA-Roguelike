@@ -8,7 +8,7 @@ namespace DnDGame
 
     public class InputHelper
     {
-        public KeyboardState currentKeyboardState = new KeyboardState();
+        public KeyboardState CurrentKeyboardState = new KeyboardState();
         public MouseState currentMouseState = new MouseState();
 
         public KeyboardState lastKeyboardState = new KeyboardState();
@@ -20,10 +20,10 @@ namespace DnDGame
 
         public void Update()
         {
-            lastKeyboardState = currentKeyboardState; //Update the last keyboard/mouse states
+            lastKeyboardState = CurrentKeyboardState; //Update the last keyboard/mouse states
             lastMouseState = currentMouseState;
 
-            currentKeyboardState = Keyboard.GetState(); //Get the current keyboard/mouse state
+            CurrentKeyboardState = Keyboard.GetState(); //Get the current keyboard/mouse state
             currentMouseState = Mouse.GetState();
 
             //track cursor position
@@ -34,17 +34,17 @@ namespace DnDGame
         //check for keyboard key press, hold, and release
         public bool IsNewKeyPress(Keys key)
         {
-            return (currentKeyboardState.IsKeyDown(key) &&
+            return (CurrentKeyboardState.IsKeyDown(key) &&
                 lastKeyboardState.IsKeyUp(key));
         }
 
         public bool IsKeyDown(Keys key)
-        { return (currentKeyboardState.IsKeyDown(key)); }
+        { return (CurrentKeyboardState.IsKeyDown(key)); }
 
         public bool IsNewKeyRelease(Keys key)
         {
             return (lastKeyboardState.IsKeyDown(key) &&
-                currentKeyboardState.IsKeyUp(key));
+                CurrentKeyboardState.IsKeyUp(key));
         }
 
         public bool IsNewMouseButtonPress(MouseButtons button)

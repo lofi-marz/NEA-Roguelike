@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DnDGame.Engine.ECS.Systems.Drawing;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,51 +10,70 @@ namespace DnDGame.Engine.ECS
     public class World
     {
         public List<Entity> Entities;
-        public Dictionary<int, List<Component>> EntityComponents;
-        public List<ECSSystem> Systems;
-
+        //public Dictionary<int, List<Component>> EntityComponents;
+        public Dictionary<Type, Dictionary<int, Component>> EntityComponents;
+        public SpatialHash Sprites;
+        private int entityI;
         public World()
         {
             Entities = new List<Entity>();
-            EntityComponents = new Dictionary<int, List<Component>>();
-            Systems = new List<ECSSystem>();
+            EntityComponents = new Dictionary<Type, Dictionary<int, Component>>();
+            entityI = 0;
+            Sprites = new SpatialHash();
         }
 
-        public void Update()
+
+
+        public int CreateEntity(params Component[] components)
         {
-
-        }
-
-        public void CreateEntity(int entityid, params Component[] components)
-        {
-            Entities.Add(new Entity(entityid));
-            EntityComponents.Add(entityid, components.ToList() ?? new List<Component>());
-
+            Entities.Add(new Entity(entityI));
+            foreach (var component in components)
+            {
+                AddComponent(entityI, component);
+            }
+            
+            return entityI++;
         }
 
        
 
-        public void CreateComponent(int entityid, Component component)
+        public void AddComponent(int entityid, Component component)
         {
-            if (!EntityComponents.ContainsKey(entityid)) return;
-            EntityComponents[entityid].Add(component);
+
+            var componentType = component.GetType();
+            if (!EntityComponents.ContainsKey(componentType))
+            {
+                EntityComponents.Add(componentType, new Dictionary<int, Component>());
+            }
+            if (!EntityComponents[componentType].ContainsKey(entityid))
+            {
+                EntityComponents[componentType].Add(entityid, component);
+            }
+            Type type = component.GetType();
+            
+            var i = (int)(ComponentUtils.GetEnum(type));
+
+            //Entities[entityid].ComponentFlags[i] = true;
         }
 
-        public Component GetComponent(int entityid, Type componentType)
+
+        public T GetComponent<T>(int entityid)
         {
-            return EntityComponents[entityid].Where(x => x.GetType() == componentType).First();
+
+            var components = EntityComponents[typeof(T)];
+            return (T)Convert.ChangeType(components[entityid], typeof(T));
         }
 
         public void SetComponent(int entityid, Component newComponent)
         {
-            var currentComponent = EntityComponents[entityid].Find(x => x.GetType() == newComponent.GetType());
-            var i = EntityComponents[entityid].IndexOf(currentComponent);
-            EntityComponents[entityid][i] = newComponent;
+            Type componentType = newComponent.GetType();
+            EntityComponents[componentType][entityid] = newComponent;
+            
         }
 
-        public List<int> FilterEntities(Type type)
+        /*public List<int> FilterEntities(Type type)
         {
-            return EntityComponents.Where(x => x.Value.Where(y => y.GetType() == type).Count() > 0).Select(x => x.Key).ToList();
-        }
+            return EntityComponents[ComponentUtils.GetEnum(type)]
+        }*/
     }
 }
