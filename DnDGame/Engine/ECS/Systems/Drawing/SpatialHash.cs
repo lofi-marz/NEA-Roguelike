@@ -9,8 +9,8 @@ namespace DnDGame.Engine.ECS.Systems.Drawing
 {
     public class SpatialHash
     {
-        const int CELL_SIZE = 32;
-        const int PADDING = 32;
+        const int CELL_SIZE = 64;
+        const int PADDING = 64;
 
         public Dictionary<string, List<int>> Hash;
 

@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using DnDGame.Engine.ECS;
 using DnDGame.Engine.ECS.Systems;
 using System;
+using DnDGame.Engine.Input;
+using DnDGame.Engine.ECS.Systems.Input;
 
 //TODO
 // - Maze gen needs to be able to support rooms with entrances
@@ -28,9 +30,10 @@ namespace DnDGame
         World world;
         SpriteBatch spriteBatch;
         PlayerCharacter Player;
-        int playerid;
+        public int playerid;
         TileGrid testMap;
-        InputHelper input;
+        PlayerInput playerInput;
+        //InputHelper input;
         Camera camera;
         SpriteFont arial;
         public Game1()
@@ -50,9 +53,10 @@ namespace DnDGame
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            input = new InputHelper();
+            //input = new InputHelper();
             camera = new Camera();
             world = new World();
+            playerInput = new PlayerInput();
             
             graphics.PreferredBackBufferWidth = 1280;  // set this value to the desired width of your window
             graphics.PreferredBackBufferHeight = 720;   // set this value to the desired height of your window
@@ -78,13 +82,18 @@ namespace DnDGame
                 yScale = 1f
             };
             var PlayerCollision = new List<Rectangle>();
-            PlayerCollision.Add(new Rectangle(4, 4, 8, 24));
+            PlayerCollision.Add(new Rectangle(0, 0, 16, 32));
             playerid = world.CreateEntity( 
                 new TransformComponent(new Vector2(0f)), 
                 new SpriteComponent(knightSprite, new Rectangle(0, 0, 16, 32), new Vector2(2f), 2, 32, 16),
-                new MovementComponent(Vector2.Zero, new Vector2(10), new Vector2(0.8f)),
+                new MovementComponent(Vector2.Zero, new Vector2(150), new Vector2(0.75f)),
                 new CollisionPolygon(PlayerCollision));
             
+            Console.WriteLine(playerid);
+            playerInput.Map.ActionMap[GameAction.MoveUp] = new Action(() => { Movement.MoveEntity(world, playerid, Direction.Up); });
+            playerInput.Map.ActionMap[GameAction.MoveDown] = new Action(() => { Movement.MoveEntity(world, playerid, Direction.Down); });
+            playerInput.Map.ActionMap[GameAction.MoveLeft] = new Action(() => { Movement.MoveEntity(world, playerid, Direction.Left); });
+            playerInput.Map.ActionMap[GameAction.MoveRight] = new Action(() => { Movement.MoveEntity(world, playerid, Direction.Right); });
             var spriteSheet = Content.Load<Texture2D>("Sprites/DungeonTileset");
             testMap = new TileGrid(spriteSheet, 12, 9);
             
@@ -94,6 +103,8 @@ namespace DnDGame
             var maze = DepthFirst.GenMaze(sizeX, sizeY);
 
             var scale = 3;
+            var FloorCollision = new List<Rectangle>();
+            FloorCollision.Add(new Rectangle(0, 0, 16, 16));
             foreach (var point in maze)
             {
                 /*testCells.Add(new Cell(point.X*scale, point.Y*scale, "floor"));
@@ -108,7 +119,8 @@ namespace DnDGame
                         var yPos = point.Y * scale - j + scale;
                         var cell = world.CreateEntity(
     new TransformComponent(new Vector2(xPos*16*2, yPos*16*2)),
-    new SpriteComponent(spriteSheet, new Rectangle(1*16, 4*16, 16, 16), new Vector2(2f)));
+    new SpriteComponent(spriteSheet, new Rectangle(1*16, 4*16, 16, 16), new Vector2(2f)),
+    new CollisionPolygon(FloorCollision));
                         world.Sprites.Add(cell, new Vector2(xPos * 16*2, yPos * 16*2));
                     }
                 }
@@ -137,19 +149,34 @@ namespace DnDGame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            input.Update();
+            /*var testBox = new List<Rectangle>
+            {
+                new Rectangle(0, 0, 15, 15)
+            };
+            var testBox2 = new List<Rectangle>
+            {
+                new Rectangle(10, 10, 10, 10)
+            };
+            var testPoly = new CollisionPolygon(testBox);
+            var testPoly2 = new CollisionPolygon(testBox2);
+            Console.WriteLine(testPoly.IsColliding(testPoly2));*/
+            
+            playerInput.Update();
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            var oldPos = Player.Pos;
-            Player.UpdateInput(input);
-            Player.Update(gameTime);
+            var oldPos = world.GetComponent<TransformComponent>(playerid).Pos;
+            var vel = world.GetComponent<MovementComponent>(playerid).Velocity;
+            //Player.UpdateInput(input);
+            //Player.Update(gameTime);
             Velocity.Update(world, gameTime);
-            if (Player.Pos != oldPos)
+            var newPos = world.GetComponent<TransformComponent>(playerid).Pos;
+            if (vel.Length() > 0)
             {
                 world.Sprites.Remove(playerid, oldPos);
-                world.Sprites.Add(playerid, Player.Pos);
-                ((TransformComponent)world.EntityComponents[typeof(TransformComponent)][playerid]).Pos = Player.Pos;
+                world.Sprites.Add(playerid, newPos);
+                //((TransformComponent)world.EntityComponents[typeof(TransformComponent)][playerid]).Pos = Player.Pos;
             }
+            
             // TODO: Add your update logic here
 
             base.Update(gameTime);
@@ -170,11 +197,11 @@ namespace DnDGame
             var viewport = GraphicsDevice.Viewport;
             
             var centre = new Vector2(viewport.Width * 0.5f, viewport.Height * 0.5f);
-            
+         
             
             camera.Scale = new Vector2(1f);
-            
-            camera.Pos = (Player.Pos-centre) * new Vector2(0.95f);
+            var playerPos = world.GetComponent<TransformComponent>(playerid).Pos;
+            camera.Pos = (playerPos-centre) * new Vector2(0.95f);
             spriteBatch.Begin(samplerState: SamplerState.PointWrap, transformMatrix:camera.GetTransform(GraphicsDevice.Viewport));
             //spriteBatch.Begin(samplerState: SamplerState.PointWrap);
             //spriteBatch.Draw(playerSprite, destinationRectangle: new Rectangle(10, 10, 32, 32), sourceRectangle: new Rectangle(0, 0, 32, 32));

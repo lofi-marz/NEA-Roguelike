@@ -47,9 +47,15 @@ namespace DnDGame.Engine.Input
             }
         }
         
+
         public InputMap()
         {
             KeyMap = Input.DefaultKeyMap;
+            ActionMap = new Dictionary<GameAction, Action>();
+            foreach (var keymap in KeyMap)
+            {
+                ActionMap.Add(keymap.Key, () => { });
+            }
         }
 
         public bool IsActionTriggered(InputHelper input, GameAction action)

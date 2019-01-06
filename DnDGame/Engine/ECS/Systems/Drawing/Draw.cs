@@ -31,7 +31,6 @@ namespace DnDGame.Engine.ECS.Systems
             }*/
             for (int i = 0; i < entityids.Count(); i++)
             {
-                //Console.WriteLine(entity);
                 var pos = world.GetComponent<TransformComponent>(entityids[i]).Pos;
                 var sprite = world.GetComponent<SpriteComponent>(entityids[i]);
 

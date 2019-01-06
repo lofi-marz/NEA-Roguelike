@@ -29,7 +29,6 @@ namespace DnDGame.Engine.ECS
             for (int i = 0; i < Boxes.Count; i++)
             {
                 newPoly.Add(new Rectangle(Boxes[i].X + (int)vector.X, Boxes[i].Y + (int)vector.Y, Boxes[i].Width, Boxes[i].Height));
-
             }
             return new CollisionPolygon(newPoly);
         }
