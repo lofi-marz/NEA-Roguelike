@@ -16,15 +16,13 @@ namespace DnDGame.Engine.ECS
         public int Height;
         public int Width;
         public int Depth = 1;
-        public Vector2 Scale = new Vector2(1f);
-        public SpriteComponent(Texture2D spriteSheet, Rectangle sourceRect, Vector2 scale, int depth = 1, int height = 16, int width = 16)
+        public SpriteComponent(Texture2D spriteSheet, Rectangle sourceRect, int depth = 1, int height = 16, int width = 16)
         {
             SpriteSheet = spriteSheet;
             SourceRect = sourceRect;
             Height = height;
             Width = width;
             Depth = depth;
-            Scale = scale;
         }
     }
 

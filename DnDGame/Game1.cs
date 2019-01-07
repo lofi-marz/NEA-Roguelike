@@ -10,6 +10,7 @@ using DnDGame.Engine.ECS.Systems;
 using System;
 using DnDGame.Engine.Input;
 using DnDGame.Engine.ECS.Systems.Input;
+using DnDGame.Engine.ECS.Systems.MazeGen;
 
 //TODO
 // - Maze gen needs to be able to support rooms with entrances
@@ -81,11 +82,13 @@ namespace DnDGame
                 xScale = 1f,
                 yScale = 1f
             };
-            var PlayerCollision = new List<Rectangle>();
-            PlayerCollision.Add(new Rectangle(0, 0, 16, 32));
+            var PlayerCollision = new List<Rectangle>
+            {
+                new Rectangle(0, 0, 16, 32)
+            };
             playerid = world.CreateEntity( 
-                new TransformComponent(new Vector2(0f)), 
-                new SpriteComponent(knightSprite, new Rectangle(0, 0, 16, 32), new Vector2(2f), 2, 32, 16),
+                new TransformComponent(new Vector2(0f), new Vector2(2f)), 
+                new SpriteComponent(knightSprite, new Rectangle(0, 0, 16, 32), 2, 32, 16),
                 new MovementComponent(Vector2.Zero, new Vector2(150), new Vector2(0.75f)),
                 new CollisionPolygon(PlayerCollision));
             
@@ -103,27 +106,35 @@ namespace DnDGame
             var maze = DepthFirst.GenMaze(sizeX, sizeY);
 
             var scale = 3;
-            var FloorCollision = new List<Rectangle>();
-            FloorCollision.Add(new Rectangle(0, 0, 16, 16));
+            var FloorCollision = new List<Rectangle>
+            {
+                new Rectangle(0, 0, 16, 16)
+            };
+            var mazeList = new List<Point>();
             foreach (var point in maze)
             {
-                /*testCells.Add(new Cell(point.X*scale, point.Y*scale, "floor"));
-                testCells.Add(new Cell(point.X * scale-1, point.Y * scale, "floor"));
-                testCells.Add(new Cell(point.X * scale, point.Y * scale-1, "floor"));
-                testCells.Add(new Cell(point.X * scale-1, point.Y * scale-1, "floor"));*/
                 for (int i = 1; i <= scale; i++ )
                 {
                     for (int j = 1; j <= scale; j++)
                     {
-                        var xPos = point.X * scale - i + scale;
-                        var yPos = point.Y * scale - j + scale;
-                        var cell = world.CreateEntity(
-    new TransformComponent(new Vector2(xPos*16*2, yPos*16*2)),
-    new SpriteComponent(spriteSheet, new Rectangle(1*16, 4*16, 16, 16), new Vector2(2f)),
-    new CollisionPolygon(FloorCollision));
-                        world.Sprites.Add(cell, new Vector2(xPos * 16*2, yPos * 16*2));
+                        var xPos = point.X * scale - i;
+                        var yPos = point.Y * scale - j;
+                        mazeList.Add(new Point(xPos, yPos));
+                        
                     }
                 }
+            }
+            var newMaze = MazeCon.ConvertMaze(mazeList, sizeX * scale, sizeY * scale);
+            foreach (var cell in newMaze)
+            {
+                var pos = cell.Key;
+                var type = cell.Value;
+                var cellEntity = world.CreateEntity(
+new TransformComponent(pos.ToVector2() * new Vector2(16 * 2), new Vector2(2f)),
+new SpriteComponent(spriteSheet, new Rectangle(1 * 16, 4 * 16, 16, 16))
+//new CollisionPolygon(FloorCollision)
+);
+                world.Sprites.Add(cellEntity, pos.ToVector2() * new Vector2(16 * 2));
             }
             Player = new PlayerCharacter(playerSprite);
             world.Sprites.Add(playerid, Player.Pos);

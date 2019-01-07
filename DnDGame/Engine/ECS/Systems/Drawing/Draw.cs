@@ -31,10 +31,12 @@ namespace DnDGame.Engine.ECS.Systems
             }*/
             for (int i = 0; i < entityids.Count(); i++)
             {
-                var pos = world.GetComponent<TransformComponent>(entityids[i]).Pos;
+                var transform = world.GetComponent<TransformComponent>(entityids[i]);
+                var pos = transform.Pos;
+                var scale = transform.Scale;
                 var sprite = world.GetComponent<SpriteComponent>(entityids[i]);
 
-                var destRect = new Rectangle((int)pos.X, (int)pos.Y, (int)(sprite.Width * sprite.Scale.X), (int)(sprite.Height * sprite.Scale.Y));
+                var destRect = new Rectangle((int)pos.X, (int)pos.Y, (int)(sprite.Width * scale.X), (int)(sprite.Height * scale.Y));
                 spriteBatch.Draw(sprite.SpriteSheet,
                     destRect,
                     sprite.SourceRect, Color.AliceBlue);

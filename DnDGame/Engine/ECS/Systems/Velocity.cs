@@ -17,13 +17,13 @@ namespace DnDGame.Engine.ECS.Systems
             foreach (var ec in velocities.ToList())
             {
                 var moveComponent = world.GetComponent<MovementComponent>(ec.Key);
-                var posComponent = world.GetComponent<TransformComponent>(ec.Key);
+                var transformComponent = world.GetComponent<TransformComponent>(ec.Key);
                 var collisionComponent = world.GetComponent<CollisionPolygon>(ec.Key);
                 var velocity = moveComponent.Velocity;
                 var drag = moveComponent.Drag;
                 var displacement = velocity * new Vector2(delta, delta);
                 velocity *= drag;
-                var pos = posComponent.Pos;
+                var pos = transformComponent.Pos;
                 var nearbyRegion = new Rectangle((int)(pos.X - 64), (int)(pos.Y - 64), (int)(pos.X + 128), (int)(pos.Y + 128));
                 var nearbyItems = world.Sprites.GetItems(nearbyRegion);
                 
@@ -32,10 +32,14 @@ namespace DnDGame.Engine.ECS.Systems
                     
                     if (entity == ec.Key) continue;
                     if (!world.EntityComponents[typeof(CollisionPolygon)].ContainsKey(entity)) continue;
-                    var actualPoly = collisionComponent.Translate(posComponent.Pos + displacement);
+
+                    var displacedPoly = collisionComponent.Translate(transformComponent.Pos + displacement);
+                    var actualPoly = displacedPoly.Scale(transformComponent.Scale);
+
                     var poly2 = world.GetComponent<CollisionPolygon>(entity);
-                    var pos2 = world.GetComponent<TransformComponent>(entity);
-                    var actualPoly2 = poly2.Translate(pos2.Pos);
+                    var trans2 = world.GetComponent<TransformComponent>(entity);
+                    var actualPoly2 = poly2.Translate(trans2.Pos).Scale(trans2.Scale);
+
                     if (actualPoly.IsColliding(actualPoly2))
                     {
                         Console.WriteLine("Collision");
@@ -47,9 +51,9 @@ namespace DnDGame.Engine.ECS.Systems
                 if (velocity.Length() < 0.01f) velocity = Vector2.Zero;
                 moveComponent.Velocity = velocity;
                 //Console.WriteLine(velocity.ToString());
-                posComponent.Pos += displacement;
+                transformComponent.Pos += displacement;
                 world.SetComponent(ec.Key, moveComponent);
-                world.SetComponent(ec.Key, posComponent);
+                world.SetComponent(ec.Key, transformComponent);
             };
 
             // Pos += Velocity * new Vector2(delta, delta);

@@ -59,6 +59,7 @@
     <Compile Include="Engine\ECS\Systems\Input\Actions.cs" />
     <Compile Include="Engine\ECS\Systems\Input\Movement.cs" />
     <Compile Include="Engine\ECS\Systems\Input\PlayerInput.cs" />
+    <Compile Include="Engine\ECS\Systems\MazeGen\MazeGen.cs" />
     <Compile Include="Engine\ECS\Systems\Velocity.cs" />
     <Compile Include="Engine\ECS\World.cs" />
     <Compile Include="Engine\ECS\Systems\Input\InputMap.cs" />

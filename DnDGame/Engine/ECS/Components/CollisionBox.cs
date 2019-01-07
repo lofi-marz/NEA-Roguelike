@@ -33,6 +33,16 @@ namespace DnDGame.Engine.ECS
             return new CollisionPolygon(newPoly);
         }
 
+        public CollisionPolygon Scale(Vector2 vector)
+        {
+            List<Rectangle> newPoly = new List<Rectangle>();
+            for (int i = 0; i < Boxes.Count; i++)
+            {
+                newPoly.Add(new Rectangle(Boxes[i].X, Boxes[i].Y, (int)(Boxes[i].Width * vector.X), (int)(Boxes[i].Height * vector.Y)));
+            }
+            return new CollisionPolygon(newPoly);
+        }
+
         public bool IsColliding(CollisionPolygon poly)
         {
 
