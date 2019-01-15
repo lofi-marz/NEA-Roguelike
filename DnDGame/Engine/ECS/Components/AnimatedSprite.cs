@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace DnDGame.Engine.ECS
 {
 
-    public class AnimatedSpriteComponent : Component
+    public class AnimatedSprite : Component
     {
         public Texture2D SpriteSheet;
         public Rectangle FrameRect;
@@ -20,7 +20,7 @@ namespace DnDGame.Engine.ECS
         public int CurrentFrame;
         public Vector2 Scale = new Vector2(1f);
 
-        public AnimatedSpriteComponent(Texture2D spriteSheet,  Vector2 scale, int height = 16, int width = 16)
+        public AnimatedSprite(Texture2D spriteSheet,  Vector2 scale, int height = 16, int width = 16)
         { 
             SpriteSheet = spriteSheet;
             Scale = scale;

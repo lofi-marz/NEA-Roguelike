@@ -9,9 +9,9 @@ namespace DnDGame.Engine.ECS.Systems.Input
 {
     public static class Movement
     {
-        public static void MoveEntity(World world, int entityid, Direction direction)
+        public static void MoveEntity(int entityid, Direction direction)
         {
-            var movement = world.GetComponent<MovementComponent>(entityid);
+            var movement = World.Instance.GetComponent<ECS.Movement>(entityid);
             float x = 0f;
             float y = 0f;
             switch (direction)
@@ -31,8 +31,8 @@ namespace DnDGame.Engine.ECS.Systems.Input
             }
             var acc = new Vector2(x, y);
             movement.Velocity += acc;
-            //((MovementComponent)world.EntityComponents[typeof(MovementComponent)][entityid]).Velocity += acc;
-            world.SetComponent(entityid, movement);
+            //((MovementComponent)World.Instance.EntityComponents[typeof(MovementComponent)][entityid]).Velocity += acc;
+            World.Instance.SetComponent(entityid, movement);
         }
     }
 }

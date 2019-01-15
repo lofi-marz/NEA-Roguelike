@@ -7,8 +7,18 @@ using System.Threading.Tasks;
 
 namespace DnDGame.Engine.ECS
 {
-    public class World
+    public sealed class World
     {
+        private static Lazy<World> lazy = new Lazy<World>(() => new World());
+        
+        public static World Instance
+        {
+            get
+            {
+                return lazy.Value;
+            }
+        }
+        
         public List<Entity> Entities;
         //public Dictionary<int, List<Component>> EntityComponents;
         public Dictionary<Type, Dictionary<int, Component>> EntityComponents;

@@ -1,0 +1,28 @@
+{
+
+  "cellSize": 16,
+  "map": {
+    "wallTop": [ 1, 0 ],
+    "wall": [ 1, 1 ],
+    "floor": [ 1, 4 ],
+
+    "leftWallMid": [ 1, 8 ],
+
+    "rightWallMid": [ 0, 8 ],
+
+    "topLeftWallTop": [ 2, 7 ],
+    "topLeftWall": [ 2, 8 ],
+
+    "topRightWallTop": [ 3, 7 ],
+    "topRightWall": [ 3, 8 ],
+
+    "bottomRightWallTop": [ 3, 9 ],
+    "bottomRightWall": [ 3, 10 ],
+
+    "bottomLeftWallTop": [ 2, 9 ],
+    "bottomLeftWall": [ 2, 10 ],
+
+    "playerDefault": [8, 4, 1, 2]
+  }
+}
+

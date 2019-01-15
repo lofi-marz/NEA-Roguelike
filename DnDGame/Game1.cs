@@ -11,6 +11,9 @@ using System;
 using DnDGame.Engine.Input;
 using DnDGame.Engine.ECS.Systems.Input;
 using DnDGame.Engine.ECS.Systems.MazeGen;
+using Newtonsoft.Json;
+using System.IO;
+using DnDGame.Engine.ECS.Systems.Drawing;
 
 //TODO
 // - Maze gen needs to be able to support rooms with entrances
@@ -28,11 +31,10 @@ namespace DnDGame
     public class Game1 : Game
     {
         GraphicsDeviceManager graphics;
-        World world;
         SpriteBatch spriteBatch;
         PlayerCharacter Player;
         public int playerid;
-        TileGrid testMap;
+
         PlayerInput playerInput;
         //InputHelper input;
         Camera camera;
@@ -42,7 +44,7 @@ namespace DnDGame
             graphics = new GraphicsDeviceManager(this);
             
             Content.RootDirectory = "Content";
-
+            
         }
 
         /// <summary>
@@ -56,7 +58,6 @@ namespace DnDGame
             // TODO: Add your initialization logic here
             //input = new InputHelper();
             camera = new Camera();
-            world = new World();
             playerInput = new PlayerInput();
             
             graphics.PreferredBackBufferWidth = 1280;  // set this value to the desired width of your window
@@ -77,7 +78,10 @@ namespace DnDGame
             arial = Content.Load<SpriteFont>("fonts/Arial");
             spriteBatch = new SpriteBatch(GraphicsDevice);
             var knightSprite = Content.Load<Texture2D>("Sprites/Knight");
-            var playerSprite = new AnimatedSprite(Content.Load<Texture2D>("Sprites/Knight"), 9, 1)
+            var tileset = TilesetManager.LoadJson("DungeonTileset");
+            tileset.SpriteSheet = Content.Load<Texture2D>("Sprites/DungeonTileset");
+            TilesetManager.AddSet("dungeon", tileset);
+            var playerSprite = new Engine.Drawing.AnimatedSprite(Content.Load<Texture2D>("Sprites/Knight"), 9, 1)
             {
                 xScale = 1f,
                 yScale = 1f
@@ -86,20 +90,19 @@ namespace DnDGame
             {
                 new Rectangle(0, 0, 16, 32)
             };
-            playerid = world.CreateEntity( 
-                new TransformComponent(new Vector2(0f), new Vector2(2f)), 
-                new SpriteComponent(knightSprite, new Rectangle(0, 0, 16, 32), 2, 32, 16),
-                new MovementComponent(Vector2.Zero, new Vector2(150), new Vector2(0.75f)),
-                new CollisionPolygon(PlayerCollision));
+            playerid = World.Instance.CreateEntity( 
+                new TransformComponent(new Vector2(-32f), new Vector2(2f)), 
+                new Engine.ECS.Sprite("dungeon", "playerDefault", 2, 32, 16),
+                new Engine.ECS.Movement(Vector2.Zero, new Vector2(150), new Vector2(0.75f)),
+                new Hitbox(PlayerCollision));
             
             Console.WriteLine(playerid);
-            playerInput.Map.ActionMap[GameAction.MoveUp] = new Action(() => { Movement.MoveEntity(world, playerid, Direction.Up); });
-            playerInput.Map.ActionMap[GameAction.MoveDown] = new Action(() => { Movement.MoveEntity(world, playerid, Direction.Down); });
-            playerInput.Map.ActionMap[GameAction.MoveLeft] = new Action(() => { Movement.MoveEntity(world, playerid, Direction.Left); });
-            playerInput.Map.ActionMap[GameAction.MoveRight] = new Action(() => { Movement.MoveEntity(world, playerid, Direction.Right); });
+            playerInput.Map.ActionMap[GameAction.MoveUp] = new Action(() => { Engine.ECS.Systems.Input.Movement.MoveEntity(playerid, Direction.Up); });
+            playerInput.Map.ActionMap[GameAction.MoveDown] = new Action(() => { Engine.ECS.Systems.Input.Movement.MoveEntity(playerid, Direction.Down); });
+            playerInput.Map.ActionMap[GameAction.MoveLeft] = new Action(() => { Engine.ECS.Systems.Input.Movement.MoveEntity(playerid, Direction.Left); });
+            playerInput.Map.ActionMap[GameAction.MoveRight] = new Action(() => { Engine.ECS.Systems.Input.Movement.MoveEntity(playerid, Direction.Right); });
             var spriteSheet = Content.Load<Texture2D>("Sprites/DungeonTileset");
-            testMap = new TileGrid(spriteSheet, 12, 9);
-            
+  
             var sizeX = 50;
             var sizeY = 50;
 
@@ -125,19 +128,20 @@ namespace DnDGame
                 }
             }
             var newMaze = MazeCon.ConvertMaze(mazeList, sizeX * scale, sizeY * scale);
+ 
             foreach (var cell in newMaze)
             {
                 var pos = cell.Key;
                 var type = cell.Value;
-                var cellEntity = world.CreateEntity(
+                var cellEntity = World.Instance.CreateEntity(
 new TransformComponent(pos.ToVector2() * new Vector2(16 * 2), new Vector2(2f)),
-new SpriteComponent(spriteSheet, new Rectangle(1 * 16, 4 * 16, 16, 16))
-//new CollisionPolygon(FloorCollision)
+new Engine.ECS.Sprite("dungeon", "floor"),
+new Hitbox(FloorCollision)
 );
-                world.Sprites.Add(cellEntity, pos.ToVector2() * new Vector2(16 * 2));
+                World.Instance.Sprites.Add(cellEntity, pos.ToVector2() * new Vector2(16 * 2));
             }
             Player = new PlayerCharacter(playerSprite);
-            world.Sprites.Add(playerid, Player.Pos);
+            World.Instance.Sprites.Add(playerid, Player.Pos);
 
 
 
@@ -154,7 +158,7 @@ new SpriteComponent(spriteSheet, new Rectangle(1 * 16, 4 * 16, 16, 16))
         }
 
         /// <summary>
-        /// Allows the game to run logic such as updating the world,
+        /// Allows the game to run logic such as updating the World.Instance,
         /// checking for collisions, gathering input, and playing audio.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
@@ -175,20 +179,20 @@ new SpriteComponent(spriteSheet, new Rectangle(1 * 16, 4 * 16, 16, 16))
             playerInput.Update();
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            var oldPos = world.GetComponent<TransformComponent>(playerid).Pos;
-            var vel = world.GetComponent<MovementComponent>(playerid).Velocity;
+            var oldPos = World.Instance.GetComponent<TransformComponent>(playerid).Pos;
+            var vel = World.Instance.GetComponent<Engine.ECS.Movement>(playerid).Velocity;
             //Player.UpdateInput(input);
             //Player.Update(gameTime);
-            Velocity.Update(world, gameTime);
-            var newPos = world.GetComponent<TransformComponent>(playerid).Pos;
+            Velocity.Update(gameTime);
+            var newPos = World.Instance.GetComponent<TransformComponent>(playerid).Pos;
             if (vel.Length() > 0)
             {
-                world.Sprites.Remove(playerid, oldPos);
-                world.Sprites.Add(playerid, newPos);
-                //((TransformComponent)world.EntityComponents[typeof(TransformComponent)][playerid]).Pos = Player.Pos;
+                World.Instance.Sprites.Remove(playerid, oldPos);
+                World.Instance.Sprites.Add(playerid, newPos);
+                //((TransformComponent)World.Instance.EntityComponents[typeof(TransformComponent)][playerid]).Pos = Player.Pos;
             }
             
-            // TODO: Add your update logic here
+            
 
             base.Update(gameTime);
         }
@@ -211,7 +215,7 @@ new SpriteComponent(spriteSheet, new Rectangle(1 * 16, 4 * 16, 16, 16))
          
             
             camera.Scale = new Vector2(1f);
-            var playerPos = world.GetComponent<TransformComponent>(playerid).Pos;
+            var playerPos = World.Instance.GetComponent<TransformComponent>(playerid).Pos;
             camera.Pos = (playerPos-centre) * new Vector2(0.95f);
             spriteBatch.Begin(samplerState: SamplerState.PointWrap, transformMatrix:camera.GetTransform(GraphicsDevice.Viewport));
             //spriteBatch.Begin(samplerState: SamplerState.PointWrap);
@@ -224,7 +228,7 @@ new SpriteComponent(spriteSheet, new Rectangle(1 * 16, 4 * 16, 16, 16))
             int startY = (int)camera.Pos.Y;
             int width = viewport.Width;
             int height = viewport.Height;
-            DrawSystem.Update(world, spriteBatch, new Rectangle(startX, startY, width, height));
+            DrawSystem.Update(spriteBatch, new Rectangle(startX, startY, width, height));
             base.Draw(gameTime);
             spriteBatch.End();
         }

@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 
 namespace DnDGame.Engine.ECS
 {
-    public class CollisionPolygon : Component
+    public class Hitbox : Component
     {
         List<Rectangle> Boxes;
 
-        public CollisionPolygon(List<Rectangle> boxes)
+        public Hitbox(List<Rectangle> boxes)
         {
             Boxes = boxes;
         }
-        public CollisionPolygon(int[][] boxes)
+        public Hitbox(int[][] boxes)
         {
             foreach (var box in boxes)
             {
@@ -23,27 +23,27 @@ namespace DnDGame.Engine.ECS
             }
         }
 
-        public CollisionPolygon Translate(Vector2 vector)
+        public Hitbox Translate(Vector2 vector)
         {
             List<Rectangle> newPoly = new List<Rectangle>();
             for (int i = 0; i < Boxes.Count; i++)
             {
                 newPoly.Add(new Rectangle(Boxes[i].X + (int)vector.X, Boxes[i].Y + (int)vector.Y, Boxes[i].Width, Boxes[i].Height));
             }
-            return new CollisionPolygon(newPoly);
+            return new Hitbox(newPoly);
         }
 
-        public CollisionPolygon Scale(Vector2 vector)
+        public Hitbox Scale(Vector2 vector)
         {
             List<Rectangle> newPoly = new List<Rectangle>();
             for (int i = 0; i < Boxes.Count; i++)
             {
                 newPoly.Add(new Rectangle(Boxes[i].X, Boxes[i].Y, (int)(Boxes[i].Width * vector.X), (int)(Boxes[i].Height * vector.Y)));
             }
-            return new CollisionPolygon(newPoly);
+            return new Hitbox(newPoly);
         }
 
-        public bool IsColliding(CollisionPolygon poly)
+        public bool IsColliding(Hitbox poly)
         {
 
             foreach (var box1 in this.Boxes)

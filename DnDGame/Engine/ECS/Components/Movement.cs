@@ -11,12 +11,12 @@ namespace DnDGame.Engine.ECS
 
 
 
-    public class MovementComponent : Component
+    public class Movement : Component
     {
         public Vector2 Velocity;
         public Vector2 Acceleration;
         public Vector2 Drag;
-        public MovementComponent(Vector2 velocity, Vector2 acc, Vector2 drag)
+        public Movement(Vector2 velocity, Vector2 acc, Vector2 drag)
         {
             Velocity = velocity;
             Acceleration = acc;

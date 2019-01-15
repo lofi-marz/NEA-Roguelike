@@ -9,17 +9,18 @@ using System.Threading.Tasks;
 namespace DnDGame.Engine.ECS
 {
 
-    public class SpriteComponent : Component
+    public class Sprite : Component
     {
-        public Texture2D SpriteSheet;
-        public Rectangle SourceRect;
+        public string SpriteSheet;
+        public string Tile;
         public int Height;
         public int Width;
         public int Depth = 1;
-        public SpriteComponent(Texture2D spriteSheet, Rectangle sourceRect, int depth = 1, int height = 16, int width = 16)
+        public Sprite(string spriteSheet, string tile, int depth = 1, int height = 16, int width = 16)
         {
             SpriteSheet = spriteSheet;
-            SourceRect = sourceRect;
+            Tile = tile;
+
             Height = height;
             Width = width;
             Depth = depth;

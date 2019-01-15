@@ -44,3 +44,6 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/Knight.png
 
+#begin Tilesets/DungeonTileset.json
+/copy:Tilesets/DungeonTileset.json
+
