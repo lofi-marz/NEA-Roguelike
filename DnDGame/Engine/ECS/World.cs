@@ -45,7 +45,29 @@ namespace DnDGame.Engine.ECS
             return entityI++;
         }
 
-       
+        /// <summary>
+        /// Retrieve all entities with the given types.
+        /// </summary>
+        /// <param name="ComponentTypes">A list of components. The returned entities will have all of these./param>
+        public List<int> GetEntities(params Type[] ComponentTypes)
+        {
+            List<int> Entities = new List<int>();
+            foreach (var type in ComponentTypes)
+            {
+               Entities = Entities.Concat(EntityComponents[type].Select(x => x.Key)).ToList();
+            }
+            var ValidEntities = Entities.GroupBy(r => r)
+                .Select(grp => new
+                {
+                    Value = grp.Key,
+                    Count = grp.Count()
+                })
+                .Where(x => x.Count >= ComponentTypes.Length)
+                .Select(x => x.Value).ToList();
+            return ValidEntities;
+        }
+
+
 
         public void AddComponent(int entityid, Component component)
         {

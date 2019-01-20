@@ -16,7 +16,7 @@ namespace DnDGame.Engine.ECS.Systems
             
             
             var spriteType = typeof(Sprite);
-            var posType = typeof(TransformComponent);
+            var posType = typeof(Transform);
             var entityids = World.Instance.Sprites.GetItems(visible);
             
             //var sprites = entityids.ToDictionary<int, SpriteComponent>(x => (SpriteComponent)World.Instance.GetComponent(x, spriteType)).ToList();
@@ -34,7 +34,7 @@ namespace DnDGame.Engine.ECS.Systems
             }*/
             for (int i = 0; i < entityids.Count(); i++)
             {
-                var transform = World.Instance.GetComponent<TransformComponent>(entityids[i]);
+                var transform = World.Instance.GetComponent<Transform>(entityids[i]);
                 var pos = transform.Pos;
                 var scale = transform.Scale;
                 var sprite = World.Instance.GetComponent<Sprite>(entityids[i]);

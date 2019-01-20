@@ -91,7 +91,7 @@ namespace DnDGame
                 new Rectangle(0, 0, 16, 32)
             };
             playerid = World.Instance.CreateEntity( 
-                new TransformComponent(new Vector2(-32f), new Vector2(2f)), 
+                new Transform(new Vector2(-32f), new Vector2(2f)), 
                 new Engine.ECS.Sprite("dungeon", "playerDefault", 2, 32, 16),
                 new Engine.ECS.Movement(Vector2.Zero, new Vector2(150), new Vector2(0.75f)),
                 new Hitbox(PlayerCollision));
@@ -134,7 +134,7 @@ namespace DnDGame
                 var pos = cell.Key;
                 var type = cell.Value;
                 var cellEntity = World.Instance.CreateEntity(
-new TransformComponent(pos.ToVector2() * new Vector2(16 * 2), new Vector2(2f)),
+new Transform(pos.ToVector2() * new Vector2(16 * 2), new Vector2(2f)),
 new Engine.ECS.Sprite("dungeon", "floor"),
 new Hitbox(FloorCollision)
 );
@@ -179,12 +179,12 @@ new Hitbox(FloorCollision)
             playerInput.Update();
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            var oldPos = World.Instance.GetComponent<TransformComponent>(playerid).Pos;
+            var oldPos = World.Instance.GetComponent<Transform>(playerid).Pos;
             var vel = World.Instance.GetComponent<Engine.ECS.Movement>(playerid).Velocity;
             //Player.UpdateInput(input);
             //Player.Update(gameTime);
             Velocity.Update(gameTime);
-            var newPos = World.Instance.GetComponent<TransformComponent>(playerid).Pos;
+            var newPos = World.Instance.GetComponent<Transform>(playerid).Pos;
             if (vel.Length() > 0)
             {
                 World.Instance.Sprites.Remove(playerid, oldPos);
@@ -215,7 +215,7 @@ new Hitbox(FloorCollision)
          
             
             camera.Scale = new Vector2(1f);
-            var playerPos = World.Instance.GetComponent<TransformComponent>(playerid).Pos;
+            var playerPos = World.Instance.GetComponent<Transform>(playerid).Pos;
             camera.Pos = (playerPos-centre) * new Vector2(0.95f);
             spriteBatch.Begin(samplerState: SamplerState.PointWrap, transformMatrix:camera.GetTransform(GraphicsDevice.Viewport));
             //spriteBatch.Begin(samplerState: SamplerState.PointWrap);

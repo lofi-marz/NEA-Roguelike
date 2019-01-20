@@ -9,16 +9,16 @@ using System.Threading.Tasks;
 namespace DnDGame.Engine.ECS
 {
 
-    public class TransformComponent : Component
+    public class Transform : Component
     {
         public Vector2 Pos;
         public Vector2 Scale;
-        public TransformComponent(Vector2 pos, Vector2 scale)
+        public Transform(Vector2 pos, Vector2 scale)
         {
             Pos = pos;
             Scale = scale;
         }
-        public TransformComponent(Vector2 pos)
+        public Transform(Vector2 pos)
         {
             Pos = pos;
             Scale = new Vector2(1f);
