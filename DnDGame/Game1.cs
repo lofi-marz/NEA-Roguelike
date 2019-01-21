@@ -33,6 +33,7 @@ namespace DnDGame
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         PlayerCharacter Player;
+        Rectangle VisibleRegion;
         public int playerid;
 
         PlayerInput playerInput;
@@ -93,7 +94,7 @@ namespace DnDGame
             playerid = World.Instance.CreateEntity( 
                 new Transform(new Vector2(-32f), new Vector2(2f)), 
                 new Engine.ECS.Sprite("dungeon", "playerDefault", 2, 32, 16),
-                new Engine.ECS.Movement(Vector2.Zero, new Vector2(150), new Vector2(0.75f)),
+                new Engine.ECS.Movement(Vector2.Zero, new Vector2(1000), new Vector2(0.5f)),
                 new Hitbox(PlayerCollision));
             
             Console.WriteLine(playerid);
@@ -134,10 +135,10 @@ namespace DnDGame
                 var pos = cell.Key;
                 var type = cell.Value;
                 var cellEntity = World.Instance.CreateEntity(
-new Transform(pos.ToVector2() * new Vector2(16 * 2), new Vector2(2f)),
-new Engine.ECS.Sprite("dungeon", "floor"),
-new Hitbox(FloorCollision)
-);
+                    new Transform(pos.ToVector2() * new Vector2(16 * 2), new Vector2(2f)),
+                    new Engine.ECS.Sprite("dungeon", "floor"),
+                    new Hitbox(FloorCollision)
+                    );
                 World.Instance.Sprites.Add(cellEntity, pos.ToVector2() * new Vector2(16 * 2));
             }
             Player = new PlayerCharacter(playerSprite);
@@ -164,17 +165,6 @@ new Hitbox(FloorCollision)
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            /*var testBox = new List<Rectangle>
-            {
-                new Rectangle(0, 0, 15, 15)
-            };
-            var testBox2 = new List<Rectangle>
-            {
-                new Rectangle(10, 10, 10, 10)
-            };
-            var testPoly = new CollisionPolygon(testBox);
-            var testPoly2 = new CollisionPolygon(testBox2);
-            Console.WriteLine(testPoly.IsColliding(testPoly2));*/
             
             playerInput.Update();
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
@@ -183,16 +173,26 @@ new Hitbox(FloorCollision)
             var vel = World.Instance.GetComponent<Engine.ECS.Movement>(playerid).Velocity;
             //Player.UpdateInput(input);
             //Player.Update(gameTime);
+            var viewport = GraphicsDevice.Viewport;
+
+            var centre = new Vector2(viewport.Width * 0.5f, viewport.Height * 0.5f);
+
+
+            camera.Scale = new Vector2(1f);
+            var playerPos = World.Instance.GetComponent<Transform>(playerid).Pos;
+            camera.Pos = (playerPos - centre) * new Vector2(0.95f);
+            int startX = (int)camera.Pos.X;
+            int startY = (int)camera.Pos.Y;
+            int width = viewport.Width;
+            int height = viewport.Height;
+            VisibleRegion = new Rectangle(startX, startY, width, height);
             Velocity.Update(gameTime);
+            Physics.Update(gameTime, VisibleRegion);
             var newPos = World.Instance.GetComponent<Transform>(playerid).Pos;
-            if (vel.Length() > 0)
-            {
-                World.Instance.Sprites.Remove(playerid, oldPos);
-                World.Instance.Sprites.Add(playerid, newPos);
-                //((TransformComponent)World.Instance.EntityComponents[typeof(TransformComponent)][playerid]).Pos = Player.Pos;
-            }
-            
-            
+
+ 
+
+
 
             base.Update(gameTime);
         }
@@ -208,15 +208,8 @@ new Hitbox(FloorCollision)
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-            
             var viewport = GraphicsDevice.Viewport;
-            
-            var centre = new Vector2(viewport.Width * 0.5f, viewport.Height * 0.5f);
-         
-            
-            camera.Scale = new Vector2(1f);
-            var playerPos = World.Instance.GetComponent<Transform>(playerid).Pos;
-            camera.Pos = (playerPos-centre) * new Vector2(0.95f);
+
             spriteBatch.Begin(samplerState: SamplerState.PointWrap, transformMatrix:camera.GetTransform(GraphicsDevice.Viewport));
             //spriteBatch.Begin(samplerState: SamplerState.PointWrap);
             //spriteBatch.Draw(playerSprite, destinationRectangle: new Rectangle(10, 10, 32, 32), sourceRectangle: new Rectangle(0, 0, 32, 32));

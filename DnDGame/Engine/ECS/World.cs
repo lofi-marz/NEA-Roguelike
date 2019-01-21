@@ -1,4 +1,5 @@
 ﻿using DnDGame.Engine.ECS.Systems.Drawing;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,7 +50,7 @@ namespace DnDGame.Engine.ECS
         /// Retrieve all entities with the given types.
         /// </summary>
         /// <param name="ComponentTypes">A list of components. The returned entities will have all of these./param>
-        public List<int> GetEntities(params Type[] ComponentTypes)
+        public List<int> GetEntitiesByType(params Type[] ComponentTypes)
         {
             List<int> Entities = new List<int>();
             foreach (var type in ComponentTypes)
@@ -67,7 +68,12 @@ namespace DnDGame.Engine.ECS
             return ValidEntities;
         }
 
-
+        public List<int> GetByTypeAndRegion(Rectangle region, params Type[] types)
+        {
+            List<int> entitiesInRegion = Instance.Sprites.GetItems(region);
+            List<int> typeEntities = Instance.GetEntitiesByType(types);
+            return  entitiesInRegion.Intersect(typeEntities).ToList();
+        }
 
         public void AddComponent(int entityid, Component component)
         {
@@ -88,12 +94,21 @@ namespace DnDGame.Engine.ECS
             //Entities[entityid].ComponentFlags[i] = true;
         }
 
-
+        /// <summary>
+        /// If the entity has a component of the given type, return it.
+        /// </summary>
+        /// <typeparam name="T">The type of component to look for.</typeparam>
+        /// <param name="entityid">The id of the entity.</param>
+        /// <returns>Returns the entity's component if found, otherwise null.</returns>
         public T GetComponent<T>(int entityid)
         {
+            var components = EntityComponents.ContainsKey(typeof(T)) ? EntityComponents[typeof(T)] : null;
+            return components == null ? (T)Convert.ChangeType(null, typeof(T)) : (T)Convert.ChangeType(components[entityid], typeof(T));
+        }
 
-            var components = EntityComponents[typeof(T)];
-            return (T)Convert.ChangeType(components[entityid], typeof(T));
+        public bool HasComponent<T>(int entityid)
+        {
+            return EntityComponents.ContainsKey(typeof(T)) && EntityComponents[typeof(T)].ContainsKey(entityid);
         }
 
         public void SetComponent(int entityid, Component newComponent)

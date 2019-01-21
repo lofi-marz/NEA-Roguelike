@@ -9,7 +9,7 @@ namespace DnDGame.Engine.ECS
 {
     public class Hitbox : Component
     {
-        List<Rectangle> Boxes;
+        public List<Rectangle> Boxes;
 
         public Hitbox(List<Rectangle> boxes)
         {
@@ -43,20 +43,5 @@ namespace DnDGame.Engine.ECS
             return new Hitbox(newPoly);
         }
 
-        public bool IsColliding(Hitbox poly)
-        {
-
-            foreach (var box1 in this.Boxes)
-            {
-                foreach (var box2 in poly.Boxes)
-                {
-                    if (box1.Intersects(box2))
-                    {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
     }
 }

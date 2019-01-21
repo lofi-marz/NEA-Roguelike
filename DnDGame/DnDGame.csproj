@@ -54,6 +54,7 @@
     <Compile Include="Engine\ECS\Components\Movement.cs" />
     <Compile Include="Engine\ECS\Entity.cs" />
     <Compile Include="Engine\ECS\System.cs" />
+    <Compile Include="Engine\ECS\Systems\Physics.cs" />
     <Compile Include="Engine\ECS\Systems\Drawing\Draw.cs" />
     <Compile Include="Engine\ECS\Systems\Drawing\SpatialHash.cs" />
     <Compile Include="Engine\ECS\Systems\Drawing\TilesetManager.cs" />
