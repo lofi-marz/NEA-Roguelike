@@ -20,10 +20,11 @@ namespace DnDGame.Engine.ECS.Systems
                 Movement move = World.Instance.GetComponent<Movement>(entity);
                 Transform transform = World.Instance.GetComponent<Transform>(entity);
                 Vector2 oldPos = transform.Pos;
-                move.Velocity *= move.Drag;
-                transform.Pos += move.Velocity * new Vector2(delta);
-                World.Instance.SetComponent(entity, move);
-                World.Instance.SetComponent(entity, transform);
+                Vector2 pos = transform.Pos;
+                Rectangle nearbyRegion = new Rectangle((int)(pos.X - 64), (int)(pos.Y - 64), (int)(pos.X + 128), (int)(pos.Y + 128));
+                Hitbox hitbox = World.Instance.GetComponent<Hitbox>(entity);
+
+
                 if (move.Velocity.Length() > 0)
                 {
                     World.Instance.Sprites.Remove(entity, oldPos);
@@ -31,19 +32,37 @@ namespace DnDGame.Engine.ECS.Systems
                     //((TransformComponent)World.Instance.EntityComponents[typeof(TransformComponent)][playerid]).Pos = Player.Pos;
                 }
 
-                Hitbox hitbox = World.Instance.GetComponent<Hitbox>(entity);
+               
                 if (hitbox == null) continue;
-                Vector2 pos = transform.Pos;
+                List<int> nearbyPotentialCollisions = World.Instance.GetByTypeAndRegion(nearbyRegion, typeof(Hitbox));
 
-                Rectangle nearbyRegion = new Rectangle((int)(pos.X - 64), (int)(pos.Y - 64), (int)(pos.X + 128), (int)(pos.Y + 128));
-                List<int> nearbyItems = World.Instance.GetByTypeAndRegion(nearbyRegion, typeof(Hitbox));
-                foreach (var entity2 in nearbyItems)
+
+                move.Velocity.X *= move.Drag.X;
+                transform.Pos.X += move.Velocity.X * new Vector2(delta).X;
+                foreach (var entity2 in nearbyPotentialCollisions)
                 {
                     if (entity == entity2) continue;
+                    var hitbox2 = World.Instance.GetComponent<Hitbox>(entity2);
+                    var transform2 = World.Instance.GetComponent<Transform>(entity2);
+                    if (CheckCollision(hitbox, transform, hitbox2, transform2))
+                    {
+                        Console.WriteLine("Collision");
+                        move.Velocity.X = 0;
+                        transform.Pos.X -= move.Velocity.X * new Vector2(delta).X;
+                    }
                     
                 }
-
+                
+                World.Instance.SetComponent(entity, move);
+                World.Instance.SetComponent(entity, transform);
             }
+        }
+
+        public static bool CheckCollision(Hitbox hit1, Transform trans1, Hitbox hit2, Transform trans2)
+        {
+            var realHit1 = hit1.Scale(trans1.Scale).Translate(trans1.Pos);
+            var realHit2 = hit2.Scale(trans2.Scale).Translate(trans2.Pos);
+            return IsColliding(hit1, hit2);
         }
 
         public static bool IsColliding(Hitbox hit1, Hitbox hit2)

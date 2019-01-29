@@ -5,12 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DnDGame.Engine.ECS.Systems.Drawing
+namespace DnDGame.Engine.ECS.Systems
 {
     public class SpatialHash
     {
         const int CELL_SIZE = 64;
-        const int PADDING = 64;
+        const int PADDING = -CELL_SIZE;
 
         public Dictionary<string, List<int>> Hash;
 
@@ -24,7 +24,7 @@ namespace DnDGame.Engine.ECS.Systems.Drawing
 
             var x = Math.Floor(pos.X / CELL_SIZE) * CELL_SIZE;
             var y = Math.Floor(pos.Y / CELL_SIZE) * CELL_SIZE;
-            var key = $"{x},{y}";
+            var key = x.ToString() + "," + y.ToString();
             if (!Hash.ContainsKey(key)) Hash.Add(key, new List<int>());
             Hash[key].Add(entityId);
         }
@@ -42,7 +42,7 @@ namespace DnDGame.Engine.ECS.Systems.Drawing
         {
             var cellx = (int)Math.Floor((float)x / CELL_SIZE) * CELL_SIZE;
             var celly = (int)Math.Floor((float)y / CELL_SIZE) * CELL_SIZE;
-            var key = $"{cellx},{celly}";
+            var key = cellx.ToString() + "," + celly.ToString();
             return Hash.ContainsKey(key) ? Hash[key] : null;
         }
 
@@ -55,7 +55,7 @@ namespace DnDGame.Engine.ECS.Systems.Drawing
 
         public List<int> GetItems(Rectangle region)
         {
-            var VisibleItems = new List<int>();
+            var VisibleItemLists = new List<List<int>>();
             var startX = region.X - PADDING;
             var startY = region.Y - PADDING;
             var endX = region.Right + PADDING;
@@ -67,9 +67,14 @@ namespace DnDGame.Engine.ECS.Systems.Drawing
                     var sublist = GetCell(x, y);
                     if (sublist != null)
                     {
-                        VisibleItems = VisibleItems.Concat(sublist).ToList();
+                         VisibleItemLists.Add(sublist);
                     }
                 }
+            }
+            var VisibleItems = new List<int>();
+            for (int i = 0; i < VisibleItemLists.Count(); i++) 
+            {
+                VisibleItems.AddRange(VisibleItemLists[i]);
             }
             return VisibleItems;
         }

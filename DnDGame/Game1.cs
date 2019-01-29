@@ -180,7 +180,7 @@ namespace DnDGame
 
             camera.Scale = new Vector2(1f);
             var playerPos = World.Instance.GetComponent<Transform>(playerid).Pos;
-            camera.Pos = (playerPos - centre) * new Vector2(0.95f);
+            camera.Pos = (playerPos - centre) * new Vector2(0.99f);
             int startX = (int)camera.Pos.X;
             int startY = (int)camera.Pos.Y;
             int width = viewport.Width;

@@ -1,4 +1,4 @@
-﻿using DnDGame.Engine.ECS.Systems.Drawing;
+﻿using DnDGame.Engine.ECS.Systems;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -52,19 +52,37 @@ namespace DnDGame.Engine.ECS
         /// <param name="ComponentTypes">A list of components. The returned entities will have all of these./param>
         public List<int> GetEntitiesByType(params Type[] ComponentTypes)
         {
+
             List<int> Entities = new List<int>();
-            foreach (var type in ComponentTypes)
+            List<int> ValidEntities = new List<int>();
+            /*foreach (var type in ComponentTypes)
             {
-               Entities = Entities.Concat(EntityComponents[type].Select(x => x.Key)).ToList();
+               Entities.AddRange(EntityComponents[type].Select(x => x.Key));
+            }*/
+            foreach (var entity in EntityComponents[ComponentTypes[0]]) {
+                int count = 1;
+                for (int i = 1; i < ComponentTypes.Length; i++)
+                {
+                    if (EntityComponents[ComponentTypes[i]].ContainsKey(entity.Key))
+                    {
+                        count++;
+                    }
+ 
+                }
+                if (count == ComponentTypes.Length)
+                {
+                    ValidEntities.Add(entity.Key);
+                }
             }
-            var ValidEntities = Entities.GroupBy(r => r)
+            
+            /*var ValidEntities = Entities.GroupBy(r => r)
                 .Select(grp => new
                 {
                     Value = grp.Key,
                     Count = grp.Count()
                 })
                 .Where(x => x.Count >= ComponentTypes.Length)
-                .Select(x => x.Value).ToList();
+                .Select(x => x.Value).ToList();*/
             return ValidEntities;
         }
 
