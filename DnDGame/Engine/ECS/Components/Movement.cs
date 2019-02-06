@@ -13,12 +13,25 @@ namespace DnDGame.Engine.ECS
 
     public class Movement : Component
     {
-        public Vector2 Velocity;
+        float Mass;
+        private Vector2 _velocity;
+        public Vector2 Velocity {
+            get { return _velocity; }
+            set { OldVelocity = _velocity; _velocity = value; }
+        }
+        public Vector2 OldVelocity;
         public Vector2 Acceleration;
         public Vector2 Drag;
-        public Movement(Vector2 velocity, Vector2 acc, Vector2 drag)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="velocity">Change in displacement</param>
+        /// <param name="acc">Change in velocity</param>
+        /// <param name="drag">How much velocity will reduce by per frame</param>
+        public Movement(float mass, Vector2 velocity, Vector2 acc, Vector2 drag)
         {
-            Velocity = velocity;
+            OldVelocity = new Vector2();
+            Velocity = velocity; //NB: Max velocity ends up being acc / (1-drag)
             Acceleration = acc;
             Drag = drag;
         }

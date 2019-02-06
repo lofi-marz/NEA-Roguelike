@@ -9,8 +9,18 @@ namespace DnDGame.Engine.ECS
 {
     public class Hitbox : Component
     {
-        public List<Rectangle> Boxes;
 
+        enum Direction
+        {
+            North,
+            East,
+            South,
+            West
+        }
+
+        public List<Rectangle> Boxes;
+        public Vector2 Pos;
+        public List<Rectangle> RealBoxes => Translate(Pos).Boxes;
         public Hitbox(List<Rectangle> boxes)
         {
             Boxes = boxes;

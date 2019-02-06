@@ -49,6 +49,7 @@
     <Compile Include="Engine\ECS\Component.cs" />
     <Compile Include="Engine\ECS\Components\AnimatedSprite.cs" />
     <Compile Include="Engine\ECS\Components\Input.cs" />
+    <Compile Include="Engine\ECS\Components\PhysicsBody.cs" />
     <Compile Include="Engine\ECS\Components\Transform.cs" />
     <Compile Include="Engine\ECS\Components\Sprite.cs" />
     <Compile Include="Engine\ECS\Components\Movement.cs" />

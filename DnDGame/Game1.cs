@@ -14,6 +14,7 @@ using DnDGame.Engine.ECS.Systems.MazeGen;
 using Newtonsoft.Json;
 using System.IO;
 using DnDGame.Engine.ECS.Systems.Drawing;
+using DnDGame.Engine.ECS.Components;
 
 //TODO
 // - Maze gen needs to be able to support rooms with entrances
@@ -91,10 +92,10 @@ namespace DnDGame
             {
                 new Rectangle(0, 0, 16, 32)
             };
-            playerid = World.Instance.CreateEntity( 
-                new Transform(new Vector2(-32f), new Vector2(2f)), 
+            playerid = World.Instance.CreateEntity(
+                new Transform(new Vector2(-64f, -32f), new Vector2(2f)),
                 new Engine.ECS.Sprite("dungeon", "playerDefault", 2, 32, 16),
-                new Engine.ECS.Movement(Vector2.Zero, new Vector2(1000), new Vector2(0.5f)),
+                new PhysicsBody(new Mass(10f)),
                 new Hitbox(PlayerCollision));
             
             Console.WriteLine(playerid);
@@ -170,7 +171,7 @@ namespace DnDGame
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             var oldPos = World.Instance.GetComponent<Transform>(playerid).Pos;
-            var vel = World.Instance.GetComponent<Engine.ECS.Movement>(playerid).Velocity;
+            var vel = World.Instance.GetComponent<PhysicsBody>(playerid).Velocity;
             //Player.UpdateInput(input);
             //Player.Update(gameTime);
             var viewport = GraphicsDevice.Viewport;
@@ -180,20 +181,15 @@ namespace DnDGame
 
             camera.Scale = new Vector2(1f);
             var playerPos = World.Instance.GetComponent<Transform>(playerid).Pos;
-            camera.Pos = (playerPos - centre) * new Vector2(0.99f);
+            camera.Pos = (playerPos - centre) * new Vector2(1f);
             int startX = (int)camera.Pos.X;
             int startY = (int)camera.Pos.Y;
             int width = viewport.Width;
             int height = viewport.Height;
             VisibleRegion = new Rectangle(startX, startY, width, height);
-            Velocity.Update(gameTime);
+            //Velocity.Update(gameTime);
             Physics.Update(gameTime, VisibleRegion);
             var newPos = World.Instance.GetComponent<Transform>(playerid).Pos;
-
- 
-
-
-
             base.Update(gameTime);
         }
 

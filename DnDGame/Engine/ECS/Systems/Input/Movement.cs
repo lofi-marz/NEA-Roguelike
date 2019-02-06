@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using DnDGame.Engine.ECS.Components;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,28 +12,28 @@ namespace DnDGame.Engine.ECS.Systems.Input
     {
         public static void MoveEntity(int entityid, Direction direction)
         {
-            var movement = World.Instance.GetComponent<ECS.Movement>(entityid);
+            PhysicsBody pBody = World.Instance.GetComponent<PhysicsBody>(entityid);
             float x = 0f;
             float y = 0f;
             switch (direction)
             {
                 case Direction.Up:
-                    y = -movement.Acceleration.Y;
+                    y = -10f;
                     break;
                 case Direction.Down:
-                    y = movement.Acceleration.Y;
+                    y = 10f;
                     break;
                 case Direction.Left:
-                    x = -movement.Acceleration.X;
+                    x = -10f;
                     break;
                 case Direction.Right:
-                    x = movement.Acceleration.X;
+                    x = 10f;
                     break;
             }
-            var acc = new Vector2(x, y);
-            movement.Velocity += acc;
+
+            pBody.Force = new Vector2(x, y);
             //((MovementComponent)World.Instance.EntityComponents[typeof(MovementComponent)][entityid]).Velocity += acc;
-            World.Instance.SetComponent(entityid, movement);
+            World.Instance.SetComponent(entityid, pBody);
         }
     }
 }
