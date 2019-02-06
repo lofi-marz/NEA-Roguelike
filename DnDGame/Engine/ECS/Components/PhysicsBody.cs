@@ -11,7 +11,8 @@ namespace DnDGame.Engine.ECS.Components
     {
         public Mass Mass; //Maybe change to density later
         public Vector2 Velocity;
-        public Vector2 Force;
+        public Vector2 Force { get;
+            set; }
         public Vector2 Acc;
         float CoOfRest;
         public PhysicsBody(Mass mass)

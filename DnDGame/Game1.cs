@@ -1,20 +1,22 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+
+
 using DnDGame.Engine;
 using DnDGame.Engine.Drawing;
-using DnDGame.MazeGen.DepthFirst;
-using System.Collections.Generic;
 using DnDGame.Engine.ECS;
 using DnDGame.Engine.ECS.Systems;
-using System;
-using DnDGame.Engine.Input;
 using DnDGame.Engine.ECS.Systems.Input;
 using DnDGame.Engine.ECS.Systems.MazeGen;
-using Newtonsoft.Json;
-using System.IO;
 using DnDGame.Engine.ECS.Systems.Drawing;
 using DnDGame.Engine.ECS.Components;
+using DnDGame.MazeGen.DepthFirst;
+using System.Collections.Generic;
+using System;
+
+using Newtonsoft.Json;
+using System.IO;
 
 //TODO
 // - Maze gen needs to be able to support rooms with entrances
@@ -37,16 +39,16 @@ namespace DnDGame
         Rectangle VisibleRegion;
         public int playerid;
 
-        PlayerInput playerInput;
+        PlayerController playerInput;
         //InputHelper input;
         Camera camera;
         SpriteFont arial;
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
-            
+
             Content.RootDirectory = "Content";
-            
+
         }
 
         /// <summary>
@@ -60,13 +62,13 @@ namespace DnDGame
             // TODO: Add your initialization logic here
             //input = new InputHelper();
             camera = new Camera();
-            playerInput = new PlayerInput();
-            
+            playerInput = new PlayerController();
+
             graphics.PreferredBackBufferWidth = 1280;  // set this value to the desired width of your window
             graphics.PreferredBackBufferHeight = 720;   // set this value to the desired height of your window
             graphics.ApplyChanges();
 
-           
+
             base.Initialize();
         }
 
@@ -97,14 +99,29 @@ namespace DnDGame
                 new Engine.ECS.Sprite("dungeon", "playerDefault", 2, 32, 16),
                 new PhysicsBody(new Mass(10f)),
                 new Hitbox(PlayerCollision));
-            
+
             Console.WriteLine(playerid);
-            playerInput.Map.ActionMap[GameAction.MoveUp] = new Action(() => { Engine.ECS.Systems.Input.Movement.MoveEntity(playerid, Direction.Up); });
-            playerInput.Map.ActionMap[GameAction.MoveDown] = new Action(() => { Engine.ECS.Systems.Input.Movement.MoveEntity(playerid, Direction.Down); });
-            playerInput.Map.ActionMap[GameAction.MoveLeft] = new Action(() => { Engine.ECS.Systems.Input.Movement.MoveEntity(playerid, Direction.Left); });
-            playerInput.Map.ActionMap[GameAction.MoveRight] = new Action(() => { Engine.ECS.Systems.Input.Movement.MoveEntity(playerid, Direction.Right); });
+            for (int i = 0; i < 4; i++)
+            {
+                var iTemp = i;
+                playerInput.AddAction((GameAction)iTemp,
+                    new Action(() =>
+                    {
+                        Direction dir = (Direction)iTemp;
+                        Movement.MoveEntity(playerid, (Direction)iTemp);
+                        Console.WriteLine("Key press");
+                    }));
+                playerInput.AddAction((GameAction)iTemp,
+                    new Action(() =>
+                    {
+                        Movement.MoveEntity(playerid, Direction.None);
+                        Console.WriteLine("Key release");
+                    }),
+                    ActionType.Release);
+            }
+ 
             var spriteSheet = Content.Load<Texture2D>("Sprites/DungeonTileset");
-  
+
             var sizeX = 50;
             var sizeY = 50;
 
@@ -118,19 +135,19 @@ namespace DnDGame
             var mazeList = new List<Point>();
             foreach (var point in maze)
             {
-                for (int i = 1; i <= scale; i++ )
+                for (int i = 1; i <= scale; i++)
                 {
                     for (int j = 1; j <= scale; j++)
                     {
                         var xPos = point.X * scale - i;
                         var yPos = point.Y * scale - j;
                         mazeList.Add(new Point(xPos, yPos));
-                        
+
                     }
                 }
             }
             var newMaze = MazeCon.ConvertMaze(mazeList, sizeX * scale, sizeY * scale);
- 
+
             foreach (var cell in newMaze)
             {
                 var pos = cell.Key;
@@ -149,7 +166,7 @@ namespace DnDGame
 
 
         }
-        
+
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload
         /// game-specific content.
@@ -166,7 +183,7 @@ namespace DnDGame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            
+
             playerInput.Update();
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
@@ -206,12 +223,12 @@ namespace DnDGame
             // TODO: Add your drawing code here
             var viewport = GraphicsDevice.Viewport;
 
-            spriteBatch.Begin(samplerState: SamplerState.PointWrap, transformMatrix:camera.GetTransform(GraphicsDevice.Viewport));
+            spriteBatch.Begin(samplerState: SamplerState.PointWrap, transformMatrix: camera.GetTransform(GraphicsDevice.Viewport));
             //spriteBatch.Begin(samplerState: SamplerState.PointWrap);
             //spriteBatch.Draw(playerSprite, destinationRectangle: new Rectangle(10, 10, 32, 32), sourceRectangle: new Rectangle(0, 0, 32, 32));
             //testMap.Draw(spriteBatch);
             //Player.Draw(spriteBatch);
-            
+
             spriteBatch.DrawString(arial, $"{camera.Pos.X}, {camera.Pos.Y}", camera.Pos, Color.Black);
             int startX = (int)camera.Pos.X;
             int startY = (int)camera.Pos.Y;

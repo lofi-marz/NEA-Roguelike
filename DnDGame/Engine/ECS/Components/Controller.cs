@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DnDGame.Engine.ECS.Components
 {
-    public class Input : Component
+    public class Controller : Component
     {
 
     }

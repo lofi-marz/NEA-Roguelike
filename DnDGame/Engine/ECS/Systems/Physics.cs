@@ -21,22 +21,22 @@ namespace DnDGame.Engine.ECS.Systems
                 float delta = gameTime.ElapsedGameTime.Milliseconds / 1000f;
                 Vector2 vDelta = new Vector2(delta);
                 PhysicsBody pBody = World.Instance.GetComponent<PhysicsBody>(entity);
+                Transform transform = World.Instance.GetComponent<Transform>(entity);
+
                 if (pBody.Force != Vector2.Zero)
                 {
 
                 }
 
-                Transform transform = World.Instance.GetComponent<Transform>(entity);
-                Vector2 oldPos = transform.Pos;
-                Vector2 oldAcc = pBody.Acc;
-                Vector2 oldVel = pBody.Velocity;
+                var oldPos = transform.Pos;
+                var oldAcc = pBody.Acc;
 
-                transform.Pos += oldVel * vDelta + (0.5f * oldAcc * vDelta * vDelta);
+                transform.Pos += pBody.Velocity * vDelta + (0.5f * oldAcc * vDelta * vDelta);
 
-                Vector2 newAcc = pBody.Force * new Vector2(pBody.Mass.InvMass);
-                Vector2 avgAcc = (oldAcc + newAcc) / 2;
+                var newAcc = pBody.Force * pBody.Mass.InvMass;
+                var avgAcc = (oldAcc + newAcc) / 2;
 
-                pBody.Velocity += oldVel + (avgAcc * vDelta);
+                pBody.Velocity += avgAcc;
 
                 //pBody.Acc = newAcc;
                 //Rectangle nearbyRegion = new Rectangle((int)(pos.X - 64), (int)(pos.Y - 64), (int)(pos.X + 128), (int)(pos.Y + 128));
@@ -48,8 +48,8 @@ namespace DnDGame.Engine.ECS.Systems
                     World.Instance.Sprites.Add(entity, transform.Pos);
                 }
 
-                pBody.Force = Vector2.Zero; //-= pBody.Force * new Vector2(0.5f);
-
+                pBody.Force -= pBody.Velocity * 0.5f;
+                pBody.Force *= 0.5f;
                 World.Instance.SetComponent(entity, transform);
                 World.Instance.SetComponent(entity, pBody);
 

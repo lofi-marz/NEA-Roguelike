@@ -6,12 +6,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DnDGame.Engine.ECS
+namespace DnDGame.Old.Engine.ECS
 {
 
 
 
-    public class Movement : Component
+    public class Movement
     {
         float Mass;
         private Vector2 _velocity;

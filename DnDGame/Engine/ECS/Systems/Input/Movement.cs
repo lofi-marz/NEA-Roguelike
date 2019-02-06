@@ -13,21 +13,26 @@ namespace DnDGame.Engine.ECS.Systems.Input
         public static void MoveEntity(int entityid, Direction direction)
         {
             PhysicsBody pBody = World.Instance.GetComponent<PhysicsBody>(entityid);
+            float PushForce = 50f;
             float x = 0f;
             float y = 0f;
             switch (direction)
             {
                 case Direction.Up:
-                    y = -10f;
+                    y = -PushForce;
                     break;
                 case Direction.Down:
-                    y = 10f;
+                    y = PushForce;
                     break;
                 case Direction.Left:
-                    x = -10f;
+                    x = -PushForce;
                     break;
                 case Direction.Right:
-                    x = 10f;
+                    x = PushForce;
+                    break;
+                case Direction.None:
+                    //x = 0f;
+                   // y = 0f;
                     break;
             }
 

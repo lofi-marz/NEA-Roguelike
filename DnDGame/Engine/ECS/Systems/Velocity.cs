@@ -15,22 +15,6 @@ namespace DnDGame.Engine.ECS.Systems
         /// <param name="gameTime"></param>
         public static void Update(GameTime gameTime)
         {
-            float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            List<int> CollisionEntities = World.Instance.GetEntitiesByType(typeof(Movement));
-            foreach (var entity1 in CollisionEntities)
-            {
-                Movement moveComponent = World.Instance.GetComponent<Movement>(entity1);
-                Hitbox hitbox1 = World.Instance.GetComponent<Hitbox>(entity1);
-                Vector2 velocity = moveComponent.Velocity;
-   
-
-                /*Vector2 pos = transform1.Pos;
-                Rectangle nearbyRegion = new Rectangle((int)(pos.X - 64), (int)(pos.Y - 64), (int)(pos.X + 128), (int)(pos.Y + 128));
-                List<int> nearbyItems = World.Instance.Sprites.GetItems(nearbyRegion);*/
-                if (velocity.Length() < 0.01f) velocity = Vector2.Zero;
-                moveComponent.Velocity = velocity;
-                World.Instance.SetComponent(entity1, moveComponent);
-            };
 
             // Pos += Velocity * new Vector2(delta, delta);
         }

@@ -48,7 +48,7 @@
     <Compile Include="Engine\ECS\Components\CollisionBox.cs" />
     <Compile Include="Engine\ECS\Component.cs" />
     <Compile Include="Engine\ECS\Components\AnimatedSprite.cs" />
-    <Compile Include="Engine\ECS\Components\Input.cs" />
+    <Compile Include="Engine\ECS\Components\Controller.cs" />
     <Compile Include="Engine\ECS\Components\PhysicsBody.cs" />
     <Compile Include="Engine\ECS\Components\Transform.cs" />
     <Compile Include="Engine\ECS\Components\Sprite.cs" />
@@ -61,7 +61,7 @@
     <Compile Include="Engine\ECS\Systems\Drawing\TilesetManager.cs" />
     <Compile Include="Engine\ECS\Systems\Input\Actions.cs" />
     <Compile Include="Engine\ECS\Systems\Input\Movement.cs" />
-    <Compile Include="Engine\ECS\Systems\Input\PlayerInput.cs" />
+    <Compile Include="Engine\ECS\Systems\Input\PlayerController.cs" />
     <Compile Include="Engine\ECS\Systems\MazeGen\MazeGen.cs" />
     <Compile Include="Engine\ECS\Systems\Velocity.cs" />
     <Compile Include="Engine\ECS\World.cs" />
@@ -138,7 +138,9 @@
       <Link>MonoGame.Framework.dll.config</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="app.manifest" />
+    <None Include="app.manifest">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Content\Tilesets\DungeonTileset.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

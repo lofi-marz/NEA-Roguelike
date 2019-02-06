@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using DnDGame.Engine.Drawing;
 using DnDGame.Engine.Physics;
 using System.Diagnostics;
-using DnDGame.Engine.Input;
+using DnDGame.Engine.ECS.Systems.Input;
 
 namespace DnDGame
 {
@@ -69,7 +69,7 @@ namespace DnDGame
 
         public void UpdateInput(InputHelper input)
         {
-            if (Input.IsActionTriggered(input, GameAction.MoveUp))
+            /*if (Input.IsActionTriggered(input, GameAction.MoveUp))
             {
                 Velocity.Y -= ACC;
             }
@@ -86,7 +86,7 @@ namespace DnDGame
             {
                 Velocity.X += ACC;
                 Facing = Direction.Right;
-            }
+            }*/
         }
     }
 
@@ -98,9 +98,10 @@ namespace DnDGame
     public enum Direction
     {
         Up,
+        Right,
         Down,
         Left,
-        Right
+        None
     }
 
    
