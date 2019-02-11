@@ -14,13 +14,14 @@ namespace DnDGame.Engine.ECS.Components
         public Vector2 Force { get;
             set; }
         public Vector2 Acc;
+        public Vector2 DefaultAcc;
         float CoOfRest;
-        public PhysicsBody(Mass mass)
+        public PhysicsBody(Vector2 acc)
         {
-            Mass = mass;
             Velocity = new Vector2();
             Force = new Vector2();
             Acc = new Vector2();
+            DefaultAcc = acc;
         }
     }
 

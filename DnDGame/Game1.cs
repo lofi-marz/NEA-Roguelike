@@ -92,12 +92,12 @@ namespace DnDGame
             };
             var PlayerCollision = new List<Rectangle>
             {
-                new Rectangle(0, 0, 16, 32)
+                new Rectangle(0, 16, 16, 16)
             };
             playerid = World.Instance.CreateEntity(
-                new Transform(new Vector2(-64f, -32f), new Vector2(2f)),
+                new Transform(new Vector2(-64f, -32f), new Vector2(1f)),
                 new Engine.ECS.Sprite("dungeon", "playerDefault", 2, 32, 16),
-                new PhysicsBody(new Mass(10f)),
+                new PhysicsBody(new Vector2(2000f)),
                 new Hitbox(PlayerCollision));
 
             Console.WriteLine(playerid);
@@ -109,13 +109,13 @@ namespace DnDGame
                     {
                         Direction dir = (Direction)iTemp;
                         Movement.MoveEntity(playerid, (Direction)iTemp);
-                        Console.WriteLine("Key press");
+                        //Console.WriteLine("Key press");
                     }));
                 playerInput.AddAction((GameAction)iTemp,
                     new Action(() =>
                     {
                         Movement.MoveEntity(playerid, Direction.None);
-                        Console.WriteLine("Key release");
+                        //Console.WriteLine("Key release");
                     }),
                     ActionType.Release);
             }
@@ -153,11 +153,11 @@ namespace DnDGame
                 var pos = cell.Key;
                 var type = cell.Value;
                 var cellEntity = World.Instance.CreateEntity(
-                    new Transform(pos.ToVector2() * new Vector2(16 * 2), new Vector2(2f)),
+                    new Transform(pos.ToVector2() * new Vector2(16 * 1), new Vector2(1f)),
                     new Engine.ECS.Sprite("dungeon", "floor"),
                     new Hitbox(FloorCollision)
                     );
-                World.Instance.Sprites.Add(cellEntity, pos.ToVector2() * new Vector2(16 * 2));
+                World.Instance.Sprites.Add(cellEntity, pos.ToVector2() * new Vector2(16 * 1));
             }
             Player = new PlayerCharacter(playerSprite);
             World.Instance.Sprites.Add(playerid, Player.Pos);
@@ -198,7 +198,7 @@ namespace DnDGame
 
             camera.Scale = new Vector2(1f);
             var playerPos = World.Instance.GetComponent<Transform>(playerid).Pos;
-            camera.Pos = (playerPos - centre) * new Vector2(1f);
+            camera.Pos = (playerPos - centre);
             int startX = (int)camera.Pos.X;
             int startY = (int)camera.Pos.Y;
             int width = viewport.Width;
