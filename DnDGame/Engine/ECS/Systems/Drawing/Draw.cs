@@ -17,10 +17,10 @@ namespace DnDGame.Engine.ECS.Systems
             
             var spriteType = typeof(Sprite);
             var posType = typeof(Transform);
-            var entityids = World.GetInstance().Sprites.GetItems(visible);
+            var entityids = World.Instance.Sprites.GetItems(visible);
             
             //var sprites = entityids.ToDictionary<int, SpriteComponent>(x => (SpriteComponent)World.Instance.GetComponent(x, spriteType)).ToList();
-            entityids.Sort((x, y) => World.GetInstance().GetComponent<Sprite>(x).Depth.CompareTo((World.GetInstance().GetComponent<Sprite>(y)).Depth));
+            entityids.Sort((x, y) => World.Instance.GetComponent<Sprite>(x).Depth.CompareTo((World.Instance.GetComponent<Sprite>(y)).Depth));
 			entityids.Reverse();
             /*foreach (var entity in entityids)
             {
@@ -35,10 +35,10 @@ namespace DnDGame.Engine.ECS.Systems
             }*/
             for (int i = 0; i < entityids.Count(); i++)
             {
-                var transform = World.GetInstance().GetComponent<Transform>(entityids[i]);
+                var transform = World.Instance.GetComponent<Transform>(entityids[i]);
                 var pos = transform.Pos;
                 var scale = transform.Scale;
-                var sprite = World.GetInstance().GetComponent<Sprite>(entityids[i]);
+                var sprite = World.Instance.GetComponent<Sprite>(entityids[i]);
                 var tileSet = TilesetManager.Tilesets[sprite.SpriteSheet];
                 var SpriteSheet = tileSet.SpriteSheet;
                 var sourceRect = tileSet.GetSpriteRect(sprite.Tile);

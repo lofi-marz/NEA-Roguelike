@@ -93,7 +93,7 @@ namespace DnDGame
 			{
 				new Rectangle(0, 16, 16, 16)
 			};
-			playerid = World.GetInstance().CreateEntity(
+			playerid = World.Instance.CreateEntity(
 				new Transform(new Vector2(-64f, -32f), new Vector2(1f)),
 				new Engine.ECS.Sprite("dungeon", "PlayerDefault", -1, 32, 16),
 				new PhysicsBody(new Vector2(2000f)),
@@ -124,7 +124,7 @@ namespace DnDGame
 			var sizeX = 50;
 			var sizeY = 50;
 
-			var maze = DepthFirst.GenMaze(sizeX, sizeY);
+			var maze = DepthFirst.GenDungeon(sizeX, sizeY);
 
 			var scale = 5;
 			var FloorCollision = new List<Rectangle>
@@ -159,24 +159,24 @@ namespace DnDGame
 					int cellEntity;
 					if (item == MazeCon.CellType.Floor)
 					{
-						cellEntity = World.GetInstance().CreateEntity(
+						cellEntity = World.Instance.CreateEntity(
 							new Transform(pos.ToVector2() * new Vector2(16 * 1), new Vector2(1f)),
 							new Engine.ECS.Sprite("dungeon", item.ToString()));
 					}
 					else
 					{
-						cellEntity = World.GetInstance().CreateEntity(
+						cellEntity = World.Instance.CreateEntity(
 							new Transform(pos.ToVector2() * new Vector2(16 * 1), new Vector2(1f)),
 							new Engine.ECS.Sprite("dungeon", item.ToString(), 0),
 							TilesetManager.Tilesets["dungeon"].GetSpriteHit(item.ToString()));
 					}
 
-					World.GetInstance().Sprites.Add(cellEntity, pos.ToVector2() * new Vector2(16 * 1));
+					World.Instance.Sprites.Add(cellEntity, pos.ToVector2() * new Vector2(16 * 1));
 				
 
 
 			}
-			World.GetInstance().Sprites.Add(playerid, new Vector2(-64, -32));
+			World.Instance.Sprites.Add(playerid, new Vector2(-64, -32));
 		}
 
 		/// <summary>
@@ -199,8 +199,8 @@ namespace DnDGame
 			playerInput.Update();
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 				Exit();
-			var oldPos = World.GetInstance().GetComponent<Transform>(playerid).Pos;
-			var vel = World.GetInstance().GetComponent<PhysicsBody>(playerid).Velocity;
+			var oldPos = World.Instance.GetComponent<Transform>(playerid).Pos;
+			var vel = World.Instance.GetComponent<PhysicsBody>(playerid).Velocity;
 			//Player.UpdateInput(input);
 			//Player.Update(gameTime);
 			var viewport = GraphicsDevice.Viewport;
@@ -209,7 +209,7 @@ namespace DnDGame
 
 
 			camera.Scale = new Vector2(1f);
-			var playerPos = World.GetInstance().GetComponent<Transform>(playerid).Pos;
+			var playerPos = World.Instance.GetComponent<Transform>(playerid).Pos;
 			camera.Pos = (playerPos - centre);
 			int startX = (int)camera.Pos.X;
 			int startY = (int)camera.Pos.Y;
@@ -218,7 +218,7 @@ namespace DnDGame
 			VisibleRegion = new Rectangle(startX, startY, width, height);
 			//Velocity.Update(gameTime);
 			Physics.Update(gameTime, VisibleRegion);
-			var newPos = World.GetInstance().GetComponent<Transform>(playerid).Pos;
+			var newPos = World.Instance.GetComponent<Transform>(playerid).Pos;
 			base.Update(gameTime);
 		}
 

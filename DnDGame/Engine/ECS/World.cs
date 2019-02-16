@@ -8,15 +8,10 @@ using System.Threading.Tasks;
 
 namespace DnDGame.Engine.ECS
 {
-    public sealed class World
-    {
-        private static Lazy<World> lazy = new Lazy<World>(() => new World());
-
-		public static World GetInstance()
-		{
-
-			return lazy.Value;
-		}
+	public sealed class World
+	{
+		private static Lazy<World> lazy = new Lazy<World>(() => new World());
+		public static World Instance { get => lazy.Value; }
 
 		public List<Entity> Entities;
         //public Dictionary<int, List<Component>> EntityComponents;
@@ -86,8 +81,8 @@ namespace DnDGame.Engine.ECS
 
         public List<int> GetByTypeAndRegion(Rectangle region, params Type[] types)
         {
-            List<int> entitiesInRegion = GetInstance().Sprites.GetItems(region);
-            List<int> typeEntities = GetInstance().GetEntitiesByType(types);
+            List<int> entitiesInRegion = Instance.Sprites.GetItems(region);
+            List<int> typeEntities = Instance.GetEntitiesByType(types);
             return  entitiesInRegion.Intersect(typeEntities).ToList();
         }
 

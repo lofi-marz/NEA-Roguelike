@@ -13,15 +13,15 @@ namespace DnDGame.Engine.ECS.Systems
 
 		public static void Update(GameTime gameTime, Rectangle region)
 		{
-			List<int> entitiesToUpdate = World.GetInstance().GetByTypeAndRegion(region, typeof(PhysicsBody));
+			List<int> entitiesToUpdate = World.Instance.GetByTypeAndRegion(region, typeof(PhysicsBody));
 
 
 			foreach (int entity in entitiesToUpdate)
 			{
 				float delta = gameTime.ElapsedGameTime.Milliseconds / 1000f;
 				Vector2 vDelta = new Vector2(delta);
-				PhysicsBody pBody = World.GetInstance().GetComponent<PhysicsBody>(entity);
-				Transform transform = World.GetInstance().GetComponent<Transform>(entity);
+				PhysicsBody pBody = World.Instance.GetComponent<PhysicsBody>(entity);
+				Transform transform = World.Instance.GetComponent<Transform>(entity);
 
 				//X Axis
 				var oldVel = pBody.Velocity;
@@ -30,7 +30,7 @@ namespace DnDGame.Engine.ECS.Systems
 				var displacement = 0.5f * (oldVel + newVel) * delta;
 				var newPos = oldPos + displacement;
 				//pBody.Acc = newAcc;
-				Hitbox hitbox = World.GetInstance().GetComponent<Hitbox>(entity);
+				Hitbox hitbox = World.Instance.GetComponent<Hitbox>(entity);
 				var realAABB = new Rectangle(
 					(int)(hitbox.AABB.X + newPos.X),
 					(int)(hitbox.AABB.Y + newPos.Y),
@@ -38,15 +38,15 @@ namespace DnDGame.Engine.ECS.Systems
 					(int)(hitbox.AABB.Height * transform.Scale.Y));
 				if (hitbox == null) continue;
 
-				List<int> nearbyPotentialCollisions = World.GetInstance().GetByTypeAndRegion(realAABB, typeof(Hitbox));
+				List<int> nearbyPotentialCollisions = World.Instance.GetByTypeAndRegion(realAABB, typeof(Hitbox));
 				var prevPos = oldPos;
 				
 				foreach (var entity2 in nearbyPotentialCollisions)
 				{
 					if (entity == entity2) continue;
 					var RealHitbox1 = hitbox.Translate(newPos).Scale(transform.Scale);
-					var trans2 = World.GetInstance().GetComponent<Transform>(entity2);
-					var realHitbox2 = World.GetInstance().GetComponent<Hitbox>(entity2).Translate(trans2.Pos).Scale(trans2.Scale);
+					var trans2 = World.Instance.GetComponent<Transform>(entity2);
+					var realHitbox2 = World.Instance.GetComponent<Hitbox>(entity2).Translate(trans2.Pos).Scale(trans2.Scale);
 
 					var RectCollisions = realHitbox2.CheckCollidingBoxes(RealHitbox1);
 					if (RectCollisions.Count > 0)
@@ -96,15 +96,15 @@ namespace DnDGame.Engine.ECS.Systems
 
 				if (oldPos != transform.Pos)
 				{
-					World.GetInstance().Sprites.Remove(entity, oldPos);
-					World.GetInstance().Sprites.Add(entity, transform.Pos);
+					World.Instance.Sprites.Remove(entity, oldPos);
+					World.Instance.Sprites.Add(entity, transform.Pos);
 				}
 
 
 
 
-				World.GetInstance().SetComponent(entity, transform);
-				World.GetInstance().SetComponent(entity, pBody);
+				World.Instance.SetComponent(entity, transform);
+				World.Instance.SetComponent(entity, pBody);
 
 				/*if (hitbox == null) continue;
                 List<int> nearbyPotentialCollisions = World.Instance.GetByTypeAndRegion(nearbyRegion, typeof(Hitbox));

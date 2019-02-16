@@ -13,18 +13,24 @@ namespace DnDGame.Engine.ECS.Systems.MazeGen
         public enum CellType
         {
             Floor,
-            NorthWall,
 			WallTop,
+			NorthWall,
+
             EastWall,
             SouthWall,
 			SouthWallTop,
             WestWall,
             NorthWestWall,
+			NorthWestWallTop,
             NorthEastWall,
+			NorthEastWallTop,
             SouthEastWall,
-            SouthWestWall
+			SouthEastWallTop,
+            SouthWestWall,
+			SouthWestWallTop
         }
         static Point[] adjacentVectors = new Point[] { new Point(0, -1), new Point(1, 0), new Point(0, 1), new Point(-1, 0) };
+		static Point[] diagAdjacentVectors = new Point[] { new Point(-1, -1), new Point(1, -1), new Point(1, 1), new Point(-1, 1) };
 		/// <summary>
 		/// If a wall tile is in the middle of a larger wall, it will have 1  adjacent cell missing, which we can use to identify which direction it is in.
 		/// </summary>
@@ -73,9 +79,21 @@ namespace DnDGame.Engine.ECS.Systems.MazeGen
 					CellType cellType;
 					switch (adjCells.Count())
                     {
-
+						
                         case 4:
-
+							var diagAdjCells = GetDiagAdjacentCells(currentPoint, MazeGrid, width, height);
+							if (diagAdjCells.Count == 3)
+							{
+								var missingCell = diagAdjacentVectors.Where(v => !diagAdjCells.Contains(currentPoint + v)).First() + currentPoint;
+								if (missingCell.X > currentPoint.X && missingCell.Y > currentPoint.Y)
+								{
+									Maze.Add(new Tuple<Point, CellType>(currentPoint, CellType.EastWall));
+								}
+								if (missingCell.X < currentPoint.X && missingCell.Y > currentPoint.Y)
+								{
+									Maze.Add(new Tuple<Point, CellType>(currentPoint, CellType.WestWall));
+								}
+							}
                             Maze.Add(new Tuple<Point, CellType>(currentPoint, CellType.Floor));
                             break;
                         case 3:
@@ -97,6 +115,9 @@ namespace DnDGame.Engine.ECS.Systems.MazeGen
 									.Select(v => v.Value)
 									.First();
 							Maze.Add(new Tuple<Point, CellType>(currentPoint, cellType));
+							var cellName = cellType.ToString();
+							var cellTop = (CellType)Enum.Parse(typeof(CellType), cellType + "Top");
+							Maze.Add(new Tuple<Point, CellType>(currentPoint - new Point(0,1) , cellTop));
 							break;
 						default:
 							Maze.Add(new Tuple<Point, CellType>(currentPoint, CellType.Floor));
@@ -115,20 +136,36 @@ namespace DnDGame.Engine.ECS.Systems.MazeGen
             return cell;
         }
 
-        static List<Point> GetAdjacentCells(Point cell, int[,] grid, int width, int height)
+        static List<Point> GetDiagAdjacentCells(Point cell, int[,] grid, int width, int height)
         {
-            var AdjacentCells = new List<Point>();
-            for (int i = 0 ; i < adjacentVectors.Length; i++)
+            var DiagAdjacentCells = new List<Point>();
+            for (int i = 0 ; i < diagAdjacentVectors.Length; i++)
             {
-                var adjPoint = cell + adjacentVectors[i];
+                var adjPoint = cell + diagAdjacentVectors[i];
                 var mazeRegion = new Rectangle(0, 0, width, height);
                 if (!mazeRegion.Contains(adjPoint)) continue;
                 var adjCell = grid[adjPoint.X, adjPoint.Y];
-                if (adjCell != 0) AdjacentCells.Add(adjPoint);
+                if (adjCell != 0) DiagAdjacentCells.Add(adjPoint);
  
                 
             }
-            return AdjacentCells;
+            return DiagAdjacentCells;
         }
-    }
+
+		static List<Point> GetAdjacentCells(Point cell, int[,] grid, int width, int height)
+		{
+			var AdjacentCells = new List<Point>();
+			for (int i = 0; i < adjacentVectors.Length; i++)
+			{
+				var adjPoint = cell + adjacentVectors[i];
+				var mazeRegion = new Rectangle(0, 0, width, height);
+				if (!mazeRegion.Contains(adjPoint)) continue;
+				var adjCell = grid[adjPoint.X, adjPoint.Y];
+				if (adjCell != 0) AdjacentCells.Add(adjPoint);
+
+
+			}
+			return AdjacentCells;
+		}
+	}
 }

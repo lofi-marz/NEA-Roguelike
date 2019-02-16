@@ -35,10 +35,59 @@ namespace DnDGame.MazeGen.DepthFirst
 
 
 
-        public static Stack<Pos> GenMaze(int sizeX, int sizeY)
+		public static int[,] GenRooms(int width, int height)
+		{
+			var Grid = new int[width, height];
+			var rnd = new Random();
+			for (int x = 0; x < width; x++)
+			{
+				for (int y = 0; y > height; y++)
+				{
+					Grid[x, y] = 0;
+				}
+			}
+			for (int i = 0; i < 10; i++)
+			{
+				AddRoom(ref Grid, rnd.Next(0, width), rnd.Next(0, height), rnd.Next(5, 10), rnd.Next(5, 10));
+			}
+			return Grid;
+		}
+
+		public static bool AddRoom(ref int[,] OldGrid, int startX, int startY, int width, int height)
+		{
+			int[,] NewGrid = OldGrid;
+			for (int x = startX; x < startX + width; x++)
+			{
+				for (int y = startY; y < startY + height; y++)
+				{
+					
+					try
+					{
+						if (OldGrid[x, y] != 0) return false;
+						NewGrid[x, y] = 2;
+					}
+					catch (Exception)
+					{
+						return false;
+					}
+					
+				}
+			}
+			OldGrid = NewGrid;
+			return true;
+		}
+
+		public static Stack<Pos> GenDungeon(int width, int height)
+		{
+			var initialGrid = GenRooms(width, height);
+			var maze = GenMaze(initialGrid, width, height);
+			return maze;
+		}
+
+		public static Stack<Pos> GenMaze(int[,] InitialGrid, int width, int height)
         {
             var rnd = new Random();
-            var CurrentCell = rndOddCell(sizeX, sizeY);
+            var CurrentCell = rndOddCell(width, height, InitialGrid);
             var Path = new Stack<Pos>();
             var Maze = new Stack<Pos>();
             int Depth = 0;
@@ -57,7 +106,7 @@ namespace DnDGame.MazeGen.DepthFirst
                 var dirs = rndDirs(rnd);
                 
                 var canMove = false;
-                var validDirs = dirs.Where(x => IsValidMove(new Pos(CurrentCell.X + x.X, CurrentCell.Y + x.Y), sizeX, sizeY, Maze)).ToList();
+                var validDirs = dirs.Where(x => IsValidMove(new Pos(CurrentCell.X + x.X, CurrentCell.Y + x.Y), width, height, Maze, InitialGrid)).ToList();
                 //Console.WriteLine(validDirs.Count);
                 if (validDirs.Count > 0)
                 {
@@ -89,27 +138,31 @@ namespace DnDGame.MazeGen.DepthFirst
                 /*displayBoard(grid, Maze.ToArray(), sizeX, sizeY);
                 Console.ReadKey();
                 Console.Clear();*/
-     
-
-
             } while (true);
-            var grid = new int[sizeX, sizeY];
-            for (int x = 0; x < sizeX; x++)
+            var grid = new int[width, height];
+            for (int x = 0; x < width; x++)
             {
-                for (int y = 0; y < sizeY; y++)
+                for (int y = 0; y < height; y++)
                 {
-                    grid[x, y] = 0;
+                    if (InitialGrid[x,y] != 0)
+					{
+						Maze.Push(new Pos(x, y));
+					}
                 }
             }
                // displayBoard(grid, Maze.ToArray(), sizeX, sizeY);
             return Maze;
         }
 
-        static bool IsValidMove(Pos newCell, int sizeX, int sizeY, Stack<Pos> Maze)
+		
+
+        static bool IsValidMove(Pos newCell, int sizeX, int sizeY, Stack<Pos> Maze, int[,] Grid)
         {
+			
             var outOfBounds  = newCell.X < 1 || newCell.X > sizeX - 1 || newCell.Y < 1 || newCell.Y > sizeY - 1;
-            var visited = Maze.Where(x => x.X == newCell.X && x.Y == newCell.Y).ToArray().Length > 0;
-            return (!outOfBounds && !visited);
+			var inRoom = !outOfBounds && Grid[newCell.X, newCell.Y] == 2;
+			var visited = Maze.Where(x => x.X == newCell.X && x.Y == newCell.Y).ToArray().Length > 0;
+            return (!outOfBounds && !inRoom && !visited);
         }
 
 
@@ -151,7 +204,7 @@ namespace DnDGame.MazeGen.DepthFirst
             Console.ResetColor();
         }
 
-        static Pos rndOddCell(int sizeX, int sizeY)
+        static Pos rndOddCell(int sizeX, int sizeY, int[,] initialGrid)
         {
             var rand = new Random();
             int randX, randY;
@@ -160,7 +213,7 @@ namespace DnDGame.MazeGen.DepthFirst
             {
                 randX = rand.Next(1, sizeX);
                 randY = rand.Next(1, sizeY);
-            } while (randX % 2 != 1 || randY % 2 != 1);
+            } while (randX % 2 != 1 || randY % 2 != 1 && initialGrid[randX, randY] != 0);
             var point = new Pos(randX, randY);
             //Console.WriteLine($"{point.X}, {point.Y} ");
             return point;
