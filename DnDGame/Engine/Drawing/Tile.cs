@@ -95,13 +95,7 @@ namespace DnDGame.Engine.Drawing
 
 
 
-public enum Direction
-    {
-        Up,
-        Down,
-        Left,
-        Right
-    }
+
     public static class Utils
     {
         public static string Vector2String(Vector2 vector, int precision = 2)

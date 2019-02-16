@@ -25,7 +25,6 @@ namespace DnDGame.Engine.Drawing
         {
             Pos = new Vector2(0f);
             Scale = new Vector2(1f);
-            
         }
 
         public virtual void Update(GameTime gameTime) { }

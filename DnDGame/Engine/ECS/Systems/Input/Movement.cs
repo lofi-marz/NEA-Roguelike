@@ -12,22 +12,22 @@ namespace DnDGame.Engine.ECS.Systems.Input
     {
         public static void MoveEntity(int entityid, Direction direction)
         {
-            PhysicsBody pBody = World.Instance.GetComponent<PhysicsBody>(entityid);
+            PhysicsBody pBody = World.GetInstance().GetComponent<PhysicsBody>(entityid);
             float PushForce = pBody.DefaultAcc.X;
             float x = pBody.Acc.X;
             float y = pBody.Acc.Y;
             switch (direction)
             {
-                case Direction.Up:
+                case Direction.North:
                     y = -PushForce;
                     break;
-                case Direction.Down:
+                case Direction.South:
                     y = PushForce;
                     break;
-                case Direction.Left:
+                case Direction.West:
                     x = -PushForce;
                     break;
-                case Direction.Right:
+                case Direction.East:
                     x = PushForce;
                     break;
                 case Direction.None:
@@ -37,7 +37,7 @@ namespace DnDGame.Engine.ECS.Systems.Input
             }
             pBody.Acc = new Vector2(x, y);
             //((MovementComponent)World.Instance.EntityComponents[typeof(MovementComponent)][entityid]).Velocity += acc;
-            World.Instance.SetComponent(entityid, pBody);
+            World.GetInstance().SetComponent(entityid, pBody);
         }
     }
 }

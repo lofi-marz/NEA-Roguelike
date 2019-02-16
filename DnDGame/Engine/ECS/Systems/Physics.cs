@@ -13,15 +13,15 @@ namespace DnDGame.Engine.ECS.Systems
 
 		public static void Update(GameTime gameTime, Rectangle region)
 		{
-			List<int> entitiesToUpdate = World.Instance.GetByTypeAndRegion(region, typeof(PhysicsBody));
+			List<int> entitiesToUpdate = World.GetInstance().GetByTypeAndRegion(region, typeof(PhysicsBody));
 
 
 			foreach (int entity in entitiesToUpdate)
 			{
 				float delta = gameTime.ElapsedGameTime.Milliseconds / 1000f;
 				Vector2 vDelta = new Vector2(delta);
-				PhysicsBody pBody = World.Instance.GetComponent<PhysicsBody>(entity);
-				Transform transform = World.Instance.GetComponent<Transform>(entity);
+				PhysicsBody pBody = World.GetInstance().GetComponent<PhysicsBody>(entity);
+				Transform transform = World.GetInstance().GetComponent<Transform>(entity);
 
 				//X Axis
 				var oldVel = pBody.Velocity;
@@ -30,41 +30,58 @@ namespace DnDGame.Engine.ECS.Systems
 				var displacement = 0.5f * (oldVel + newVel) * delta;
 				var newPos = oldPos + displacement;
 				//pBody.Acc = newAcc;
-				Hitbox hitbox = World.Instance.GetComponent<Hitbox>(entity);
+				Hitbox hitbox = World.GetInstance().GetComponent<Hitbox>(entity);
 				var realAABB = new Rectangle(
 					(int)(hitbox.AABB.X + newPos.X),
 					(int)(hitbox.AABB.Y + newPos.Y),
 					(int)(hitbox.AABB.Width * transform.Scale.X),
 					(int)(hitbox.AABB.Height * transform.Scale.Y));
 				if (hitbox == null) continue;
-				List<int> nearbyPotentialCollisions = World.Instance.GetByTypeAndRegion(realAABB, typeof(Hitbox));
+
+				List<int> nearbyPotentialCollisions = World.GetInstance().GetByTypeAndRegion(realAABB, typeof(Hitbox));
+				var prevPos = oldPos;
 				foreach (var entity2 in nearbyPotentialCollisions)
 				{
+
 					if (entity == entity2) continue;
-					var hitbox2 = World.Instance.GetComponent<Hitbox>(entity2);
-					var trans2 = World.Instance.GetComponent<Transform>(entity2);
+					var hitbox2 = World.GetInstance().GetComponent<Hitbox>(entity2);
+					var trans2 = World.GetInstance().GetComponent<Transform>(entity2);
 					var realHitbox2 = hitbox2.Translate(trans2.Pos).Scale(trans2.Scale);
-					var XRealHitbox1 = hitbox.Translate(new Vector2(oldPos.X + displacement.X, oldPos.Y)).Scale(transform.Scale);
-
-
-
-					var XRectCollisions = realHitbox2.CheckCollidingBoxes(XRealHitbox1);
-
-					if (XRectCollisions.Count > 0)
+					var RealHitbox1 = hitbox.Translate(newPos).Scale(transform.Scale);
+					var RectCollisions = realHitbox2.CheckCollidingBoxes(RealHitbox1);
+					if (RectCollisions.Count > 0)
 					{
 						//TODO: Better collision resolving, move it up close instead of just undoing the movement
-						newPos.X = oldPos.X;
-						newVel.X = 0f;
+
+						foreach (var Rect in RectCollisions)
+						{
+							RealHitbox1 = hitbox.Translate(newPos).Scale(transform.Scale);
+							Direction collDirection = GetCollisionDirection((Rect.Center - RealHitbox1.AABB.Center).ToVector2());
+							Console.WriteLine(collDirection);
+
+							switch (collDirection)
+							{
+								case Direction.South: //Colliding with something below us
+									newPos.Y -= (RealHitbox1.AABB.Bottom - Rect.Top);
+									newVel.Y = 0;
+									break;
+								case Direction.North: //Colliding with something above us
+									newPos.Y -= (RealHitbox1.AABB.Top - Rect.Bottom);
+									newVel.Y = 0;
+									break;
+								case Direction.East: //Colliding with something to the right of us
+									newPos.X -= (RealHitbox1.AABB.Right - Rect.Left);
+									newVel.X = 0;
+									break;
+								case Direction.West:
+									newPos.X -= (RealHitbox1.AABB.Left - Rect.Right);
+									newVel.X = 0;
+									break;
+							}
+						}
+						
 					}
 
-					var YRealHitbox1 = hitbox.Translate(newPos).Scale(transform.Scale);
-					var YRectCollisions = realHitbox2.CheckCollidingBoxes(YRealHitbox1);
-					if (YRectCollisions.Count > 0)
-					{
-						newPos.Y = oldPos.Y;
-						newVel.Y = 0f;
-					}
-					
 				}
 
 				transform.Pos = newPos;
@@ -74,15 +91,15 @@ namespace DnDGame.Engine.ECS.Systems
 
 				if (oldPos != transform.Pos)
 				{
-					World.Instance.Sprites.Remove(entity, oldPos);
-					World.Instance.Sprites.Add(entity, transform.Pos);
+					World.GetInstance().Sprites.Remove(entity, oldPos);
+					World.GetInstance().Sprites.Add(entity, transform.Pos);
 				}
 
 
 
 
-				World.Instance.SetComponent(entity, transform);
-				World.Instance.SetComponent(entity, pBody);
+				World.GetInstance().SetComponent(entity, transform);
+				World.GetInstance().SetComponent(entity, pBody);
 
 				/*if (hitbox == null) continue;
                 List<int> nearbyPotentialCollisions = World.Instance.GetByTypeAndRegion(nearbyRegion, typeof(Hitbox));
@@ -131,8 +148,35 @@ namespace DnDGame.Engine.ECS.Systems
 			}
 			return false;
 		}
+
+		/// <summary>
+		/// Given a vector, return the direction it is moving the most in.
+		/// </summary>
+		/// <param name="Velocity"></param>
+		/// <returns></returns>
+		public static Direction GetCollisionDirection(Vector2 Velocity)
+		{
+			Vector2[] compass =
+			{
+				new Vector2(0f, -1f),
+				new Vector2(1f, 0f),
+				new Vector2(0f, 1f),
+				new Vector2(-1f, 0f)
+			};
+			float maxDot = 0f;
+			int bestMatch = 0;
+			for (int i = 0; i < 4; i++)
+			{
+				var dot = Vector2.Dot(Velocity, compass[i]);
+				if (dot > maxDot)
+				{
+					maxDot = dot;
+					bestMatch = i;
+				}
+			}
+			return (Direction)bestMatch;
+		}
 	}
-	/*                foreach (var entity2 in nearbyItems)
-}*/
+
 
 }

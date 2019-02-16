@@ -11,16 +11,14 @@ namespace DnDGame.Engine.ECS
     public sealed class World
     {
         private static Lazy<World> lazy = new Lazy<World>(() => new World());
-        
-        public static World Instance
-        {
-            get
-            {
-                return lazy.Value;
-            }
-        }
-        
-        public List<Entity> Entities;
+
+		public static World GetInstance()
+		{
+
+			return lazy.Value;
+		}
+
+		public List<Entity> Entities;
         //public Dictionary<int, List<Component>> EntityComponents;
         public Dictionary<Type, Dictionary<int, Component>> EntityComponents;
         public SpatialHash Sprites;
@@ -88,8 +86,8 @@ namespace DnDGame.Engine.ECS
 
         public List<int> GetByTypeAndRegion(Rectangle region, params Type[] types)
         {
-            List<int> entitiesInRegion = Instance.Sprites.GetItems(region);
-            List<int> typeEntities = Instance.GetEntitiesByType(types);
+            List<int> entitiesInRegion = GetInstance().Sprites.GetItems(region);
+            List<int> typeEntities = GetInstance().GetEntitiesByType(types);
             return  entitiesInRegion.Intersect(typeEntities).ToList();
         }
 
@@ -118,14 +116,14 @@ namespace DnDGame.Engine.ECS
         /// <typeparam name="T">The type of component to look for.</typeparam>
         /// <param name="entityid">The id of the entity.</param>
         /// <returns>Returns the entity's component if found, otherwise null.</returns>
-        public T GetComponent<T>(int entityid)
+        public T GetComponent<T>(int entityid) where T : Component
         {
             var components = EntityComponents.ContainsKey(typeof(T)) ? EntityComponents[typeof(T)] : null;
             return components == null ? (T)Convert.ChangeType(null, typeof(T)) : (T)Convert.ChangeType(components[entityid], typeof(T));
         }
 
-        public bool HasComponent<T>(int entityid)
-        {
+        public bool HasComponent<T>(int entityid) where T : Component
+		{
             return EntityComponents.ContainsKey(typeof(T)) && EntityComponents[typeof(T)].ContainsKey(entityid);
         }
 

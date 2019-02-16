@@ -64,16 +64,14 @@
     <Compile Include="Engine\ECS\Systems\Input\Movement.cs" />
     <Compile Include="Engine\ECS\Systems\Input\PlayerController.cs" />
     <Compile Include="Engine\ECS\Systems\MazeGen\MazeGen.cs" />
+    <Compile Include="Engine\ECS\Systems\Systems.cs" />
     <Compile Include="Engine\ECS\Systems\Velocity.cs" />
     <Compile Include="Engine\ECS\World.cs" />
     <Compile Include="Engine\ECS\Systems\Input\InputMap.cs" />
-    <Compile Include="Engine\Player\Player.cs" />
     <Compile Include="Engine\Utils\Utils.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Engine\ECS\Systems\Input\InputHelper.cs" />
     <Compile Include="Engine\MazeUtils\DepthFirstGen.cs" />
-    <Compile Include="Engine\Physics\Physics2D.cs" />
-    <Compile Include="Engine\Player\PlayerCharacter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Engine\Drawing\Sprite.cs" />

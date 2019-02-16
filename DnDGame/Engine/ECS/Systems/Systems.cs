@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DnDGame.Engine.Player
+namespace DnDGame.Engine.ECS.Systems
 {
-    public class Player
-    {
-        
-        PlayerCharacter CurrentCharacter;
-    }
+
+
+	class Systems
+	{
+	}
 }

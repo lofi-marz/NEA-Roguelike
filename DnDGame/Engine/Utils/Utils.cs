@@ -6,5 +6,12 @@ using System.Threading.Tasks;
 
 namespace DnDGame.Engine
 {
-
+	public enum Direction
+	{
+		North,
+		East,
+		South,
+		West,
+		None
+	}
 }
