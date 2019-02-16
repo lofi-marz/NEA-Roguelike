@@ -11,18 +11,21 @@ namespace DnDGame.Engine.ECS
 
     public class Transform : Component
     {
-        public Vector2 Pos;
-        public Vector2 Scale;
+
+		public Vector2 Pos;
+
+		public Vector2 Scale;
+
+
+
         public Transform(Vector2 pos, Vector2 scale)
         {
+
             Pos = pos;
             Scale = scale;
+
         }
-        public Transform(Vector2 pos)
-        {
-            Pos = pos;
-            Scale = new Vector2(1f);
-        }
+
     }
 
 

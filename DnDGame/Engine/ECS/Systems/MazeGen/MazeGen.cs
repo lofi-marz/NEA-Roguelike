@@ -14,8 +14,10 @@ namespace DnDGame.Engine.ECS.Systems.MazeGen
         {
             Floor,
             NorthWall,
+			WallTop,
             EastWall,
             SouthWall,
+			SouthWallTop,
             WestWall,
             NorthWestWall,
             NorthEastWall,
@@ -23,6 +25,9 @@ namespace DnDGame.Engine.ECS.Systems.MazeGen
             SouthWestWall
         }
         static Point[] adjacentVectors = new Point[] { new Point(0, -1), new Point(1, 0), new Point(0, 1), new Point(-1, 0) };
+		/// <summary>
+		/// If a wall tile is in the middle of a larger wall, it will have 1  adjacent cell missing, which we can use to identify which direction it is in.
+		/// </summary>
         static Dictionary<Point, CellType> midWallTypes = new Dictionary<Point, CellType>
             {
                 { new Point(0, -1), CellType.NorthWall },
@@ -30,6 +35,17 @@ namespace DnDGame.Engine.ECS.Systems.MazeGen
                 { new Point(0, 1), CellType.SouthWall },
                 { new Point(-1, 0), CellType.WestWall }
             };
+		/// <summary>
+		/// If a wall tile is the corner of a wall, it will have two adjacent cells missing, which we can use to identify which direction it is in.
+		/// </summary>
+		static readonly Dictionary<Point[], CellType> CornerWallTypes = new Dictionary<Point[], CellType>
+		{
+			{ new[] { new Point(-1, 0), new Point(0, -1)}, CellType.NorthWestWall },
+			{ new[] { new Point(1, 0), new Point(0, -1)}, CellType.NorthEastWall },
+			{ new[] { new Point(1, 0), new Point(0, 1)}, CellType.SouthEastWall },
+			{ new[] { new Point(-1, 0), new Point(0, 1)}, CellType.SouthWestWall },
+
+		};
         /// <summary>
         /// Given a list of points comprising a maze, convert it to a dictionary of the point and it's type of cell
         /// </summary>
@@ -37,7 +53,7 @@ namespace DnDGame.Engine.ECS.Systems.MazeGen
         /// <param name="width"></param>
         /// <param name="height"></param>
 
-        public static Dictionary<Point, CellType> ConvertMaze(List<Point> maze, int width, int height)
+        public static List<Tuple<Point, CellType>> ConvertMaze(List<Point> maze, int width, int height)
         {
   
             var MazeGrid = new int[width, height];
@@ -46,7 +62,7 @@ namespace DnDGame.Engine.ECS.Systems.MazeGen
             {
                 MazeGrid[points[i].X, points[i].Y] = 1;
             }
-            var Maze = new Dictionary<Point, CellType>();
+            var Maze = new List<Tuple<Point, CellType>>();
             for (int x = 0; x < width; x++)
             {
                 for (int y = 0; y < height; y++)
@@ -54,20 +70,37 @@ namespace DnDGame.Engine.ECS.Systems.MazeGen
                     if (MazeGrid[x, y] != 1) continue;
                     var currentPoint = new Point(x, y);
                     var adjCells = GetAdjacentCells(new Point(x, y), MazeGrid, width, height);
-                    switch (adjCells.Count())
+					CellType cellType;
+					switch (adjCells.Count())
                     {
+
                         case 4:
-                            Maze.Add(new Point(x, y), CellType.Floor);
+
+                            Maze.Add(new Tuple<Point, CellType>(currentPoint, CellType.Floor));
                             break;
                         case 3:
-                            var cellType = midWallTypes
+							Maze.Add(new Tuple<Point, CellType>(currentPoint, CellType.Floor));
+							cellType = midWallTypes
                                 .Where(v => !adjCells.Contains(currentPoint + v.Key))
                                 .Select(v => midWallTypes[v.Key]).First();
-                            Maze.Add(currentPoint, cellType);
-                            break;
-                        default:
-                            Maze.Add(new Point(x, y), CellType.Floor);
-                            break;
+							Maze.Add(new Tuple<Point, CellType>(currentPoint, cellType));
+							if (cellType == CellType.NorthWall || cellType == CellType.SouthWall)
+							{
+								Maze.Add(new Tuple<Point, CellType>(currentPoint - new Point(0, 1), CellType.WallTop));
+							}
+							break;
+
+						case 2:
+							Maze.Add(new Tuple<Point, CellType>(currentPoint, CellType.Floor));
+							cellType = CornerWallTypes
+									.Where(v => !adjCells.Contains(currentPoint + v.Key[0]) && !adjCells.Contains(currentPoint + v.Key[1]))
+									.Select(v => v.Value)
+									.First();
+							Maze.Add(new Tuple<Point, CellType>(currentPoint, cellType));
+							break;
+						default:
+							Maze.Add(new Tuple<Point, CellType>(currentPoint, CellType.Floor));
+							break;
                     }
                 }
             }

@@ -40,22 +40,27 @@ namespace DnDGame.Engine.ECS.Systems
 
 				List<int> nearbyPotentialCollisions = World.GetInstance().GetByTypeAndRegion(realAABB, typeof(Hitbox));
 				var prevPos = oldPos;
+				
 				foreach (var entity2 in nearbyPotentialCollisions)
 				{
-
 					if (entity == entity2) continue;
-					var hitbox2 = World.GetInstance().GetComponent<Hitbox>(entity2);
-					var trans2 = World.GetInstance().GetComponent<Transform>(entity2);
-					var realHitbox2 = hitbox2.Translate(trans2.Pos).Scale(trans2.Scale);
 					var RealHitbox1 = hitbox.Translate(newPos).Scale(transform.Scale);
+					var trans2 = World.GetInstance().GetComponent<Transform>(entity2);
+					var realHitbox2 = World.GetInstance().GetComponent<Hitbox>(entity2).Translate(trans2.Pos).Scale(trans2.Scale);
+
 					var RectCollisions = realHitbox2.CheckCollidingBoxes(RealHitbox1);
 					if (RectCollisions.Count > 0)
 					{
 						//TODO: Better collision resolving, move it up close instead of just undoing the movement
-
+						/*if (RectCollisions.Count > 1) {
+							RectCollisions = RectCollisions.OrderBy(rect =>
+											Vector2.Distance(rect.Center.ToVector2(), RealHitbox1.AABB.Center.ToVector2())).ToList();
+						}*/
 						foreach (var Rect in RectCollisions)
 						{
+							
 							RealHitbox1 = hitbox.Translate(newPos).Scale(transform.Scale);
+							if (!RealHitbox1.AABB.Intersects(Rect)) continue;
 							Direction collDirection = GetCollisionDirection((Rect.Center - RealHitbox1.AABB.Center).ToVector2());
 							Console.WriteLine(collDirection);
 
@@ -73,7 +78,7 @@ namespace DnDGame.Engine.ECS.Systems
 									newPos.X -= (RealHitbox1.AABB.Right - Rect.Left);
 									newVel.X = 0;
 									break;
-								case Direction.West:
+								case Direction.West: //Colliding with something to the left of us
 									newPos.X -= (RealHitbox1.AABB.Left - Rect.Right);
 									newVel.X = 0;
 									break;
@@ -152,9 +157,9 @@ namespace DnDGame.Engine.ECS.Systems
 		/// <summary>
 		/// Given a vector, return the direction it is moving the most in.
 		/// </summary>
-		/// <param name="Velocity"></param>
+		/// <param name="vector"></param>
 		/// <returns></returns>
-		public static Direction GetCollisionDirection(Vector2 Velocity)
+		public static Direction GetCollisionDirection(Vector2 vector)
 		{
 			Vector2[] compass =
 			{
@@ -167,7 +172,7 @@ namespace DnDGame.Engine.ECS.Systems
 			int bestMatch = 0;
 			for (int i = 0; i < 4; i++)
 			{
-				var dot = Vector2.Dot(Velocity, compass[i]);
+				var dot = Vector2.Dot(vector, compass[i]);
 				if (dot > maxDot)
 				{
 					maxDot = dot;

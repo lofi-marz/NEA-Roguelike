@@ -85,11 +85,7 @@ namespace DnDGame.Engine.Drawing
         }
     }
 
-    public class Tile
-    {
-        Rectangle SourceRect;
-        List<Rectangle> CollisionBoxes;
-    }
+
 
 
 

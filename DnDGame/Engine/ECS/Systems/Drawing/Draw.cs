@@ -21,6 +21,7 @@ namespace DnDGame.Engine.ECS.Systems
             
             //var sprites = entityids.ToDictionary<int, SpriteComponent>(x => (SpriteComponent)World.Instance.GetComponent(x, spriteType)).ToList();
             entityids.Sort((x, y) => World.GetInstance().GetComponent<Sprite>(x).Depth.CompareTo((World.GetInstance().GetComponent<Sprite>(y)).Depth));
+			entityids.Reverse();
             /*foreach (var entity in entityids)
             {
                 //Console.WriteLine(entity);
@@ -40,7 +41,7 @@ namespace DnDGame.Engine.ECS.Systems
                 var sprite = World.GetInstance().GetComponent<Sprite>(entityids[i]);
                 var tileSet = TilesetManager.Tilesets[sprite.SpriteSheet];
                 var SpriteSheet = tileSet.SpriteSheet;
-                var sourceRect = tileSet.GetRect(sprite.Tile);
+                var sourceRect = tileSet.GetSpriteRect(sprite.Tile);
                 var destRect = new Rectangle((int)pos.X, (int)pos.Y, (int)(sprite.Width * scale.X), (int)(sprite.Height * scale.Y));
                 spriteBatch.Draw(SpriteSheet,
                     destRect,
