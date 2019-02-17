@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 namespace DnDGame.Engine.ECS
 {
 
+	/// <summary>
+	/// A component to store an animated sprite.
+	/// </summary>
     public class AnimatedSprite : Component
     {
         public Texture2D SpriteSheet;
@@ -20,6 +23,13 @@ namespace DnDGame.Engine.ECS
         public int CurrentFrame;
         public Vector2 Scale = new Vector2(1f);
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="spriteSheet"></param>
+		/// <param name="scale"></param>
+		/// <param name="height"></param>
+		/// <param name="width"></param>
         public AnimatedSprite(Texture2D spriteSheet,  Vector2 scale, int height = 16, int width = 16)
         { 
             SpriteSheet = spriteSheet;

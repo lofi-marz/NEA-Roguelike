@@ -110,8 +110,8 @@ namespace DnDGame
 
 			var spriteSheet = Content.Load<Texture2D>("Sprites/DungeonTileset");
 
-			var sizeX = 50;
-			var sizeY = 50;
+			var sizeX = 30;
+			var sizeY = 30;
 
 			var maze = DepthFirst.GenDungeon(sizeX, sizeY);
 

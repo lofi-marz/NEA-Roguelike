@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace DnDGame.Engine.ECS
 {
+
     public class Hitbox : Component
     {
 
