@@ -13,7 +13,13 @@ namespace DnDGame.MazeGen.DepthFirst
 
     static class DepthFirst
     {
-
+		enum CellType
+		{
+			Empty,
+			Path,
+			RoomInside,
+			RoomOutside
+		}
         public class Pos
         {
             public int X { get => XY[0]; set => XY[0] = value; }
@@ -43,7 +49,7 @@ namespace DnDGame.MazeGen.DepthFirst
 			{
 				for (int y = 0; y > height; y++)
 				{
-					Grid[x, y] = 0;
+					Grid[x, y] = (int)CellType.Empty;
 				}
 			}
 			for (int i = 0; i < 10; i++)
@@ -63,8 +69,8 @@ namespace DnDGame.MazeGen.DepthFirst
 					
 					try
 					{
-						if (OldGrid[x, y] != 0) return false;
-						NewGrid[x, y] = 2;
+						if (OldGrid[x, y] != (int)CellType.Empty) return false;
+						NewGrid[x, y] = (int)((x == startX || x == startX + width - 1 || y == startY || y == startY + height - 1 )?CellType.RoomOutside : CellType.RoomInside);
 					}
 					catch (Exception)
 					{
@@ -144,9 +150,10 @@ namespace DnDGame.MazeGen.DepthFirst
             {
                 for (int y = 0; y < height; y++)
                 {
-                    if (InitialGrid[x,y] != 0)
+                    if (InitialGrid[x,y] == (int)CellType.RoomInside)
 					{
 						Maze.Push(new Pos(x, y));
+
 					}
                 }
             }

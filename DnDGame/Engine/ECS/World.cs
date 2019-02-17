@@ -43,6 +43,7 @@ namespace DnDGame.Engine.ECS
         /// Retrieve all entities with the given types.
         /// </summary>
         /// <param name="ComponentTypes">A list of components. The returned entities will have all of these./param>
+		/// 
         public List<int> GetEntitiesByType(params Type[] ComponentTypes)
         {
 
@@ -79,11 +80,13 @@ namespace DnDGame.Engine.ECS
             return ValidEntities;
         }
 
-        public List<int> GetByTypeAndRegion(Rectangle region, params Type[] types)
+		
+
+        public IEnumerable<int> GetByTypeAndRegion(Rectangle region, params Type[] types)
         {
             List<int> entitiesInRegion = Instance.Sprites.GetItems(region);
             List<int> typeEntities = Instance.GetEntitiesByType(types);
-            return  entitiesInRegion.Intersect(typeEntities).ToList();
+			return entitiesInRegion.Intersect(typeEntities);
         }
 
         public void AddComponent(int entityid, Component component)
@@ -116,6 +119,8 @@ namespace DnDGame.Engine.ECS
             var components = EntityComponents.ContainsKey(typeof(T)) ? EntityComponents[typeof(T)] : null;
             return components == null ? (T)Convert.ChangeType(null, typeof(T)) : (T)Convert.ChangeType(components[entityid], typeof(T));
         }
+		
+		
 
         public bool HasComponent<T>(int entityid) where T : Component
 		{

@@ -15,8 +15,8 @@ namespace DnDGame.Engine.ECS
         public string Tile;
         public int Height;
         public int Width;
-        public int Depth = 1;
-        public Sprite(string spriteSheet, string tile, int depth = 1, int height = 16, int width = 16)
+        public float Depth = 0f;
+        public Sprite(string spriteSheet, string tile, float depth = 0f, int height = 16, int width = 16)
         {
             SpriteSheet = spriteSheet;
             Tile = tile;

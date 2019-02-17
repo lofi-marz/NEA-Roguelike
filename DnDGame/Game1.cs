@@ -17,6 +17,7 @@ using System;
 
 using Newtonsoft.Json;
 using System.IO;
+using DnDGame.Engine.Initialization;
 
 //TODO
 // - Maze gen needs to be able to support rooms with entrances
@@ -80,26 +81,14 @@ namespace DnDGame
 			// Create a new SpriteBatch, which can be used to draw textures.
 			arial = Content.Load<SpriteFont>("fonts/Arial");
 			spriteBatch = new SpriteBatch(GraphicsDevice);
-			var knightSprite = Content.Load<Texture2D>("Sprites/Knight");
+
 			var tileset = TilesetManager.LoadJson("DungeonTileset");
 			tileset.SpriteSheet = Content.Load<Texture2D>("Sprites/DungeonTileset");
 			TilesetManager.AddSet("dungeon", tileset);
-			var playerSprite = new Engine.Drawing.AnimatedSprite(Content.Load<Texture2D>("Sprites/Knight"), 9, 1)
-			{
-				xScale = 1f,
-				yScale = 1f
-			};
-			var PlayerCollision = new List<Rectangle>
-			{
-				new Rectangle(0, 16, 16, 16)
-			};
-			playerid = World.Instance.CreateEntity(
-				new Transform(new Vector2(-64f, -32f), new Vector2(1f)),
-				new Engine.ECS.Sprite("dungeon", "PlayerDefault", -1, 32, 16),
-				new PhysicsBody(new Vector2(2000f)),
-				TilesetManager.Tilesets["dungeon"].GetSpriteHit("PlayerDefault"));
 
-			Console.WriteLine(playerid);
+
+			playerid = CreateObjects.Player();
+
 			for (int i = 0; i < 4; i++)
 			{
 				var iTemp = i;
@@ -153,28 +142,19 @@ namespace DnDGame
 
 			foreach (var cell in newMaze)
 			{
-				var pos = cell.Item1;
+				var pos = cell.Item1.ToVector2() * new Vector2(16 * 1);
 				var item = cell.Item2;
+				int cellEntity;
+				if (item == MazeCon.CellType.Floor)
+				{
+					cellEntity = CreateObjects.DungeonCell(pos, item, 0f);
+				}
+				else
+				{
+					cellEntity = CreateObjects.DungeonCell(pos, item, 0.1f);
+				}
 
-					int cellEntity;
-					if (item == MazeCon.CellType.Floor)
-					{
-						cellEntity = World.Instance.CreateEntity(
-							new Transform(pos.ToVector2() * new Vector2(16 * 1), new Vector2(1f)),
-							new Engine.ECS.Sprite("dungeon", item.ToString()));
-					}
-					else
-					{
-						cellEntity = World.Instance.CreateEntity(
-							new Transform(pos.ToVector2() * new Vector2(16 * 1), new Vector2(1f)),
-							new Engine.ECS.Sprite("dungeon", item.ToString(), 0),
-							TilesetManager.Tilesets["dungeon"].GetSpriteHit(item.ToString()));
-					}
-
-					World.Instance.Sprites.Add(cellEntity, pos.ToVector2() * new Vector2(16 * 1));
-				
-
-
+				World.Instance.Sprites.Add(cellEntity, pos);
 			}
 			World.Instance.Sprites.Add(playerid, new Vector2(-64, -32));
 		}
@@ -246,7 +226,7 @@ namespace DnDGame
 			int startY = (int)camera.Pos.Y;
 			int width = viewport.Width;
 			int height = viewport.Height;
-			DrawSystem.Update(spriteBatch, new Rectangle(startX, startY, width, height));
+			DrawSystem.Update(ref spriteBatch, new Rectangle(startX, startY, width, height));
 			base.Draw(gameTime);
 			spriteBatch.End();
 		}

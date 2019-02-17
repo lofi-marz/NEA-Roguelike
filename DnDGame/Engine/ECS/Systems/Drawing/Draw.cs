@@ -11,18 +11,23 @@ namespace DnDGame.Engine.ECS.Systems
 {
     public static class DrawSystem
     {
-        public static void Update(SpriteBatch spriteBatch, Rectangle visible)
+        public static void Update(ref SpriteBatch spriteBatch, Rectangle visible)
         {
             
             
             var spriteType = typeof(Sprite);
             var posType = typeof(Transform);
             var entityids = World.Instance.Sprites.GetItems(visible);
-            
+			var spriteEntitys = World.Instance.GetByTypeAndRegion(visible, typeof(Sprite));
+			var entitySprites = spriteEntitys.Select(e =>
+			{
+				(int entity, Sprite sprite) es = (e, World.Instance.GetComponent<Sprite>(e));
+				return es;
+			}).OrderBy(e => e.sprite.Depth);
+
             //var sprites = entityids.ToDictionary<int, SpriteComponent>(x => (SpriteComponent)World.Instance.GetComponent(x, spriteType)).ToList();
-            entityids.Sort((x, y) => World.Instance.GetComponent<Sprite>(x).Depth.CompareTo((World.Instance.GetComponent<Sprite>(y)).Depth));
-			entityids.Reverse();
-            /*foreach (var entity in entityids)
+
+			/*foreach (var entity in entityids)
             {
                 //Console.WriteLine(entity);
                 var pos = ((TransformComponent)World.Instance.GetComponent(entity, posType)).Pos;
@@ -33,20 +38,23 @@ namespace DnDGame.Engine.ECS.Systems
                     destRect,
                     sprite.SourceRect, Color.AliceBlue);
             }*/
-            for (int i = 0; i < entityids.Count(); i++)
-            {
-                var transform = World.Instance.GetComponent<Transform>(entityids[i]);
-                var pos = transform.Pos;
-                var scale = transform.Scale;
-                var sprite = World.Instance.GetComponent<Sprite>(entityids[i]);
-                var tileSet = TilesetManager.Tilesets[sprite.SpriteSheet];
-                var SpriteSheet = tileSet.SpriteSheet;
-                var sourceRect = tileSet.GetSpriteRect(sprite.Tile);
-                var destRect = new Rectangle((int)pos.X, (int)pos.Y, (int)(sprite.Width * scale.X), (int)(sprite.Height * scale.Y));
-                spriteBatch.Draw(SpriteSheet,
-                    destRect,
-                    sourceRect, Color.AliceBlue);
-            }
+
+			foreach (var entitySprite in entitySprites)
+			{
+				var transform = World.Instance.GetComponent<Transform>(entitySprite.entity);
+				var pos = transform.Pos;
+				var scale = transform.Scale;
+				var sprite = entitySprite.sprite;
+				var tileSet = TilesetManager.Tilesets[sprite.SpriteSheet];
+				var SpriteSheet = tileSet.SpriteSheet;
+				var sourceRect = tileSet.GetSpriteRect(sprite.Tile);
+				var destRect = new Rectangle((int)pos.X, (int)pos.Y, (int)(sprite.Width * scale.X), (int)(sprite.Height * scale.Y));
+				spriteBatch.Draw(SpriteSheet,
+					destinationRectangle: destRect,
+					sourceRectangle: sourceRect, color: Color.AliceBlue, layerDepth:entitySprite.sprite.Depth);
+			}
+		
+
         }
 
         

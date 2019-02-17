@@ -13,7 +13,7 @@ namespace DnDGame.Engine.ECS.Systems
 
 		public static void Update(GameTime gameTime, Rectangle region)
 		{
-			List<int> entitiesToUpdate = World.Instance.GetByTypeAndRegion(region, typeof(PhysicsBody));
+			IEnumerable<int> entitiesToUpdate = World.Instance.GetByTypeAndRegion(region, typeof(PhysicsBody));
 
 
 			foreach (int entity in entitiesToUpdate)
@@ -38,7 +38,7 @@ namespace DnDGame.Engine.ECS.Systems
 					(int)(hitbox.AABB.Height * transform.Scale.Y));
 				if (hitbox == null) continue;
 
-				List<int> nearbyPotentialCollisions = World.Instance.GetByTypeAndRegion(realAABB, typeof(Hitbox));
+				IEnumerable<int> nearbyPotentialCollisions = World.Instance.GetByTypeAndRegion(realAABB, typeof(Hitbox));
 				var prevPos = oldPos;
 				
 				foreach (var entity2 in nearbyPotentialCollisions)
@@ -47,7 +47,7 @@ namespace DnDGame.Engine.ECS.Systems
 					var RealHitbox1 = hitbox.Translate(newPos).Scale(transform.Scale);
 					var trans2 = World.Instance.GetComponent<Transform>(entity2);
 					var realHitbox2 = World.Instance.GetComponent<Hitbox>(entity2).Translate(trans2.Pos).Scale(trans2.Scale);
-
+					if (realHitbox2.AABB.Width == 0 && realHitbox2.AABB.Height == 0) continue;
 					var RectCollisions = realHitbox2.CheckCollidingBoxes(RealHitbox1);
 					if (RectCollisions.Count > 0)
 					{

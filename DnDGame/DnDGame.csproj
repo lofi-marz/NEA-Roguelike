@@ -67,6 +67,7 @@
     <Compile Include="Engine\ECS\Systems\Velocity.cs" />
     <Compile Include="Engine\ECS\World.cs" />
     <Compile Include="Engine\ECS\Systems\Input\InputMap.cs" />
+    <Compile Include="Engine\Initialization\CreateObjects\CreatePlayer.cs" />
     <Compile Include="Engine\Utils\Utils.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Engine\ECS\Systems\Input\InputHelper.cs" />
