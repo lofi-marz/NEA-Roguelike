@@ -1,78 +1,1556 @@
 {
+	"cellSize" :  16,
+	"map": {
+		"wall_top_left": {
+			"Pos": [ 16, 0, 16, 16 ]
+			
+		},
 
-  "cellSize": 16,
-  "map": {
-    "WallTop": {
-      "Pos" : [ 1, 0 ],
-      "AABB": [0,11, 4,16]
-    },
+		"wall_top_mid": {
+			"Pos": [ 32, 0, 16, 16 ]
+			
+		},
 
-    "Floor": {
-      "Pos": [ 1, 4 ],
-      "AABB": [0,0]
-    },
+		"wall_top_right": {
+			"Pos": [ 48, 0, 16, 16 ]
+			
+		},
 
-	"NorthWall": {
-    "Pos": [ 1, 1 ],
-    "AABB": [16,16]
-  },
+		"wall_left": {
+			"Pos": [ 16, 16, 16, 16 ]
+			
+		},
 
-  "SouthWall": {
-    "Pos": [ 1, 1 ],
-    "AABB": [13,13,16, 2]
-  },
+		"wall_mid": {
+			"Pos": [ 32, 16, 16, 16 ]
+			
+		},
 
-	"WestWall": {
-    "Pos": [ 1, 8 ],
-    "AABB": [0, 0]
-  },
+		"wall_right": {
+			"Pos": [ 48, 16, 16, 16 ]
+			
+		},
 
-	"EastWall": {
-    "Pos": [ 0, 8 ],
-    "AABB": [11, 0, 5, 16]
-  },
+		"wall_fountain_top": {
+			"Pos": [ 64, 0, 16, 16 ]
+			
+		},
 
-  "NorthWestWallTop": {
-    "Pos" : [ 2, 7 ],
-    "AABB": [0,11, 4,16]
-  },
+		"wall_fountain_mid_red_anim_0": {
+			"Pos": [ 64, 16, 16, 16 ]
+			
+		},
 
-  "NorthWestWall": {
-    "Pos" : [ 2, 8 ],
-    "AABB": [0, 13, 4,16]
-  },
+		"wall_fountain_mid_red_anim_1": {
+			"Pos": [ 80, 16, 16, 16 ]
+			
+		},
 
-  "NorthEastWallTop": {
-    "Pos" : [ 3, 7 ],
-    "AABB": [0,11, 4,16]
-  },
-  
-  "NorthEastWall": {
-    "Pos" : [ 3, 8 ],
-    "AABB": [0, 13, 4,16]
-  },
+		"wall_fountain_mid_red_anim_2": {
+			"Pos": [ 96, 16, 16, 16 ]
+			
+		},
 
-  "SouthEastWallTop": {
-    "Pos" : [ 3, 9 ],
-    "AABB": [10, 0, 5,16]
-  },
-  "SouthEastWall": {
-    "Pos" : [ 3, 10 ],
-    "AABB": [0,11, 4,16]
-  },
-  "SouthWestWallTop": {
-    "Pos" : [ 2, 9 ],
-    "AABB": [0,11, 4,16]
-  },
-  "SouthWestWall": {
-    "Pos" : [ 2, 10 ],
-    "AABB": [0,0, 16,4]
-  },
+		"wall_fountain_basin_red_anim_0": {
+			"Pos": [ 64, 32, 16, 16 ]
+			
+		},
 
-    "PlayerDefault": 
-    { "Pos" : [8, 4, 1, 2],
-      "AABB" : [0, 16, 16, 16]
-    }
-  }
+		"wall_fountain_basin_red_anim_1": {
+			"Pos": [ 80, 32, 16, 16 ]
+			
+		},
+
+		"wall_fountain_basin_red_anim_2": {
+			"Pos": [ 96, 32, 16, 16 ]
+			
+		},
+
+		"wall_fountain_mid_blue_anim_0": {
+			"Pos": [ 64, 48, 16, 16 ]
+			
+		},
+
+		"wall_fountain_mid_blue_anim_1": {
+			"Pos": [ 80, 48, 16, 16 ]
+			
+		},
+
+		"wall_fountain_mid_blue_anim_2": {
+			"Pos": [ 96, 48, 16, 16 ]
+			
+		},
+
+		"wall_fountain_basin_blue_anim_0": {
+			"Pos": [ 64, 64, 16, 16 ]
+			
+		},
+
+		"wall_fountain_basin_blue_anim_1": {
+			"Pos": [ 80, 64, 16, 16 ]
+			
+		},
+
+		"wall_fountain_basin_blue_anim_2": {
+			"Pos": [ 96, 64, 16, 16 ]
+			
+		},
+
+		"wall_hole_1": {
+			"Pos": [ 48, 32, 16, 16 ]
+			
+		},
+
+		"wall_hole_2": {
+			"Pos": [ 48, 48, 16, 16 ]
+			
+		},
+
+		"wall_banner_red": {
+			"Pos": [ 16, 32, 16, 16 ]
+			
+		},
+
+		"wall_banner_blue": {
+			"Pos": [ 32, 32, 16, 16 ]
+			
+		},
+
+		"wall_banner_green": {
+			"Pos": [ 16, 48, 16, 16 ]
+			
+		},
+
+		"wall_banner_yellow": {
+			"Pos": [ 32, 48, 16, 16 ]
+			
+		},
+
+		"column_top": {
+			"Pos": [ 80, 80, 16, 16 ]
+			
+		},
+
+		"column_mid": {
+			"Pos": [ 80, 96, 16, 16 ]
+			
+		},
+
+		"coulmn_base": {
+			"Pos": [ 80, 112, 16, 16 ]
+			
+		},
+
+		"wall_column_top": {
+			"Pos": [ 96, 80, 16, 16 ]
+			
+		},
+
+		"wall_column_mid": {
+			"Pos": [ 96, 96, 16, 16 ]
+			
+		},
+
+		"wall_coulmn_base": {
+			"Pos": [ 96, 112, 16, 16 ]
+			
+		},
+
+		"wall_goo": {
+			"Pos": [ 64, 80, 16, 16 ]
+			
+		},
+
+		"wall_goo_base": {
+			"Pos": [ 64, 96, 16, 16 ]
+			
+		},
+
+		"floor_1": {
+			"Pos": [ 16, 64, 16, 16 ]
+			
+		},
+
+		"floor_2": {
+			"Pos": [ 32, 64, 16, 16 ]
+			
+		},
+
+		"floor_3": {
+			"Pos": [ 48, 64, 16, 16 ]
+			
+		},
+
+		"floor_4": {
+			"Pos": [ 16, 80, 16, 16 ]
+			
+		},
+
+		"floor_5": {
+			"Pos": [ 32, 80, 16, 16 ]
+			
+		},
+
+		"floor_6": {
+			"Pos": [ 48, 80, 16, 16 ]
+			
+		},
+
+		"floor_7": {
+			"Pos": [ 16, 96, 16, 16 ]
+			
+		},
+
+		"floor_8": {
+			"Pos": [ 32, 96, 16, 16 ]
+			
+		},
+
+		"floor_ladder": {
+			"Pos": [ 48, 96, 16, 16 ]
+			
+		},
+
+		"floor_spikes_anim_0": {
+			"Pos": [ 16, 176, 16, 16 ]
+			
+		},
+
+		"floor_spikes_anim_1": {
+			"Pos": [ 32, 176, 16, 16 ]
+			
+		},
+
+		"floor_spikes_anim_2": {
+			"Pos": [ 48, 176, 16, 16 ]
+			
+		},
+
+		"floor_spikes_anim_3": {
+			"Pos": [ 64, 176, 16, 16 ]
+			
+		},
+
+		"wall_side_top_left": {
+			"Pos": [ 0, 112, 16, 16 ]
+			
+		},
+
+		"wall_side_top_right": {
+			"Pos": [ 16, 112, 16, 16 ]
+			
+		},
+
+		"wall_side_mid_left": {
+			"Pos": [ 0, 128, 16, 16 ],
+			"AABB":  [0,0, 5, 16]
+
+		},
+
+		"wall_side_mid_right": {
+			"Pos": [ 16, 128, 16, 16 ],
+			"AABB": [ 11, 0, 5, 16 ]
+
+		},
+
+		"wall_side_front_left": {
+			"Pos": [ 0, 144, 16, 16 ]
+			
+		},
+
+		"wall_side_front_right": {
+			"Pos": [ 16, 144, 16, 16 ]
+			
+		},
+
+		"wall_corner_top_left": {
+			"Pos": [ 32, 112, 16, 16 ]
+			
+		},
+
+		"wall_corner_top_right": {
+			"Pos": [ 48, 112, 16, 16 ]
+			
+		},
+
+		"wall_corner_left": {
+			"Pos": [ 32, 128, 16, 16 ]
+			
+		},
+
+		"wall_corner_right": {
+			"Pos": [ 48, 128, 16, 16 ]
+			
+		},
+
+		"wall_corner_bottom_left": {
+			"Pos": [ 32, 144, 16, 16 ]
+			
+		},
+
+		"wall_corner_bottom_right": {
+			"Pos": [ 48, 144, 16, 16 ]
+			
+		},
+
+		"wall_corner_front_left": {
+			"Pos": [ 32, 160, 16, 16 ]
+			
+		},
+
+		"wall_corner_front_right": {
+			"Pos": [ 48, 160, 16, 16 ]
+			
+		},
+
+		"wall_inner_corner_l_top_left": {
+			"Pos": [ 80, 128, 16, 16 ]
+			
+		},
+
+		"wall_inner_corner_l_top_rigth": {
+			"Pos": [ 64, 128, 16, 16 ]
+			
+		},
+
+		"wall_inner_corner_mid_left": {
+			"Pos": [ 80, 144, 16, 16 ]
+			
+		},
+
+		"wall_inner_corner_mid_rigth": {
+			"Pos": [ 64, 144, 16, 16 ]
+			
+		},
+
+		"wall_inner_corner_t_top_left": {
+			"Pos": [ 80, 160, 16, 16 ]
+			
+		},
+
+		"wall_inner_corner_t_top_rigth": {
+			"Pos": [ 64, 160, 16, 16 ]
+			
+		},
+
+		"edge": {
+			"Pos": [ 96, 128, 16, 16 ]
+			
+		},
+
+		"hole": {
+			"Pos": [ 96, 144, 16, 16 ]
+			
+		},
+
+		"doors_all": {
+			"Pos": [ 16, 221, 64, 35 ]
+			
+		},
+
+		"doors_frame_left": {
+			"Pos": [ 16, 224, 16, 32 ]
+			
+		},
+
+		"doors_frame_top": {
+			"Pos": [ 32, 221, 32, 3 ]
+			
+		},
+
+		"doors_frame_righ": {
+			"Pos": [ 63, 224, 16, 32 ]
+			
+		},
+
+		"doors_leaf_closed": {
+			"Pos": [ 32, 224, 32, 32 ]
+			
+		},
+
+		"doors_leaf_open": {
+			"Pos": [ 80, 224, 32, 32 ]
+			
+		},
+
+		"chest_empty_open_anim_0": {
+			"Pos": [ 240, 208, 16, 16 ]
+			
+		},
+
+		"chest_empty_open_anim_1": {
+			"Pos": [ 256, 208, 16, 16 ]
+			
+		},
+
+		"chest_empty_open_anim_2": {
+			"Pos": [ 272, 208, 16, 16 ]
+			
+		},
+
+		"chest_full_open_anim_0": {
+			"Pos": [ 240, 224, 16, 16 ]
+			
+		},
+
+		"chest_full_open_anim_1": {
+			"Pos": [ 256, 224, 16, 16 ]
+			
+		},
+
+		"chest_full_open_anim_2": {
+			"Pos": [ 272, 224, 16, 16 ]
+			
+		},
+
+		"chest_mimic_open_anim_0": {
+			"Pos": [ 240, 240, 16, 16 ]
+			
+		},
+
+		"chest_mimic_open_anim_1": {
+			"Pos": [ 256, 240, 16, 16 ]
+			
+		},
+
+		"chest_mimic_open_anim_2": {
+			"Pos": [ 272, 240, 16, 16 ]
+			
+		},
+
+		"flask_big_red": {
+			"Pos": [ 288, 224, 16, 16 ]
+			
+		},
+
+		"flask_big_blue": {
+			"Pos": [ 304, 224, 16, 16 ]
+			
+		},
+
+		"flask_big_green": {
+			"Pos": [ 320, 224, 16, 16 ]
+			
+		},
+
+		"flask_big_yellow": {
+			"Pos": [ 336, 224, 16, 16 ]
+			
+		},
+
+		"flask_red": {
+			"Pos": [ 288, 240, 16, 16 ]
+			
+		},
+
+		"flask_blue": {
+			"Pos": [ 304, 240, 16, 16 ]
+			
+		},
+
+		"flask_green": {
+			"Pos": [ 320, 240, 16, 16 ]
+			
+		},
+
+		"flask_yellow": {
+			"Pos": [ 336, 240, 16, 16 ]
+			
+		},
+
+		"skull": {
+			"Pos": [ 224, 224, 16, 16 ]
+			
+		},
+
+		"crate": {
+			"Pos": [ 224, 202, 16, 22 ]
+			
+		},
+
+		"coin_anim_0": {
+			"Pos": [ 288, 272, 8, 8 ]
+			
+		},
+
+		"coin_anim_1": {
+			"Pos": [ 304, 272, 8, 8 ]
+			
+		},
+
+		"coin_anim_2": {
+			"Pos": [ 320, 272, 8, 8 ]
+			
+		},
+
+		"coin_anim_3": {
+			"Pos": [ 336, 272, 8, 8 ]
+			
+		},
+
+		"ui_heart_full": {
+			"Pos": [ 288, 256, 16, 16 ]
+			
+		},
+
+		"ui_heart_half": {
+			"Pos": [ 304, 256, 16, 16 ]
+			
+		},
+
+		"ui_heart_empty": {
+			"Pos": [ 320, 256, 16, 16 ]
+			
+		},
+
+		"weapon_knife": {
+			"Pos": [ 293, 18, 6, 13 ]
+			
+		},
+
+		"weapon_rusty_sword": {
+			"Pos": [ 307, 26, 10, 21 ]
+			
+		},
+
+		"weapon_regular_sword": {
+			"Pos": [ 323, 26, 10, 21 ]
+			
+		},
+
+		"weapon_red_gem_sword": {
+			"Pos": [ 339, 26, 10, 21 ]
+			
+		},
+
+		"weapon_big_hammer": {
+			"Pos": [ 291, 42, 10, 37 ]
+			
+		},
+
+		"weapon_hammer": {
+			"Pos": [ 307, 55, 10, 24 ]
+			
+		},
+
+		"weapon_baton_with_spikes": {
+			"Pos": [ 323, 57, 10, 22 ]
+			
+		},
+
+		"weapon_mace": {
+			"Pos": [ 339, 55, 10, 24 ]
+			
+		},
+
+		"weapon_katana": {
+			"Pos": [ 293, 82, 6, 29 ]
+			
+		},
+
+		"weapon_saw_sword": {
+			"Pos": [ 307, 86, 10, 25 ]
+			
+		},
+
+		"weapon_anime_sword": {
+			"Pos": [ 322, 81, 12, 30 ]
+			
+		},
+
+		"weapon_axe": {
+			"Pos": [ 341, 90, 9, 21 ]
+			
+		},
+
+		"weapon_machete": {
+			"Pos": [ 294, 121, 5, 22 ]
+			
+		},
+
+		"weapon_cleaver": {
+			"Pos": [ 310, 124, 8, 19 ]
+			
+		},
+
+		"weapon_duel_sword": {
+			"Pos": [ 325, 113, 9, 30 ]
+			
+		},
+
+		"weapon_knight_sword": {
+			"Pos": [ 339, 114, 10, 29 ]
+			
+		},
+
+		"weapon_golden_sword": {
+			"Pos": [ 291, 153, 10, 22 ]
+			
+		},
+
+		"weapon_lavish_sword": {
+			"Pos": [ 307, 145, 10, 30 ]
+			
+		},
+
+		"weapon_red_magic_staff": {
+			"Pos": [ 324, 145, 8, 30 ]
+			
+		},
+
+		"weapon_green_magic_staff": {
+			"Pos": [ 340, 145, 8, 30 ]
+			
+		},
+
+		"tiny_zombie_idle_anim_0": {
+			"Pos": [ 368, 16, 16, 16 ]
+			
+		},
+
+		"tiny_zombie_idle_anim_1": {
+			"Pos": [ 384, 16, 16, 16 ]
+			
+		},
+
+		"tiny_zombie_idle_anim_2": {
+			"Pos": [ 400, 16, 16, 16 ]
+			
+		},
+
+		"tiny_zombie_idle_anim_3": {
+			"Pos": [ 416, 16, 16, 16 ]
+			
+		},
+
+		"tiny_zombie_run_anim_0": {
+			"Pos": [ 432, 16, 16, 16 ]
+			
+		},
+
+		"tiny_zombie_run_anim_1": {
+			"Pos": [ 448, 16, 16, 16 ]
+			
+		},
+
+		"tiny_zombie_run_anim_2": {
+			"Pos": [ 464, 16, 16, 16 ]
+			
+		},
+
+		"tiny_zombie_run_anim_3": {
+			"Pos": [ 480, 16, 16, 16 ]
+			
+		},
+
+		"goblin_idle_anim_0": {
+			"Pos": [ 368, 32, 16, 16 ]
+			
+		},
+
+		"goblin_idle_anim_1": {
+			"Pos": [ 384, 32, 16, 16 ]
+			
+		},
+
+		"goblin_idle_anim_2": {
+			"Pos": [ 400, 32, 16, 16 ]
+			
+		},
+
+		"goblin_idle_anim_3": {
+			"Pos": [ 416, 32, 16, 16 ]
+			
+		},
+
+		"goblin_run_anim_0": {
+			"Pos": [ 432, 32, 16, 16 ]
+			
+		},
+
+		"goblin_run_anim_1": {
+			"Pos": [ 448, 32, 16, 16 ]
+			
+		},
+
+		"goblin_run_anim_2": {
+			"Pos": [ 464, 32, 16, 16 ]
+			
+		},
+
+		"goblin_run_anim_3": {
+			"Pos": [ 480, 32, 16, 16 ]
+			
+		},
+
+		"imp_idle_anim_0": {
+			"Pos": [ 368, 48, 16, 16 ]
+			
+		},
+
+		"imp_idle_anim_1": {
+			"Pos": [ 384, 48, 16, 16 ]
+			
+		},
+
+		"imp_idle_anim_2": {
+			"Pos": [ 400, 48, 16, 16 ]
+			
+		},
+
+		"imp_idle_anim_3": {
+			"Pos": [ 416, 48, 16, 16 ]
+			
+		},
+
+		"imp_run_anim_0": {
+			"Pos": [ 432, 48, 16, 16 ]
+			
+		},
+
+		"imp_run_anim_1": {
+			"Pos": [ 448, 48, 16, 16 ]
+			
+		},
+
+		"imp_run_anim_2": {
+			"Pos": [ 464, 48, 16, 16 ]
+			
+		},
+
+		"imp_run_anim_3": {
+			"Pos": [ 480, 48, 16, 16 ]
+			
+		},
+
+		"skelet_idle_anim_0": {
+			"Pos": [ 368, 80, 16, 16 ]
+			
+		},
+
+		"skelet_idle_anim_1": {
+			"Pos": [ 384, 80, 16, 16 ]
+			
+		},
+
+		"skelet_idle_anim_2": {
+			"Pos": [ 400, 80, 16, 16 ]
+			
+		},
+
+		"skelet_idle_anim_3": {
+			"Pos": [ 416, 80, 16, 16 ]
+			
+		},
+
+		"skelet_run_anim_0": {
+			"Pos": [ 432, 80, 16, 16 ]
+			
+		},
+
+		"skelet_run_anim_1": {
+			"Pos": [ 448, 80, 16, 16 ]
+			
+		},
+
+		"skelet_run_anim_2": {
+			"Pos": [ 464, 80, 16, 16 ]
+			
+		},
+
+		"skelet_run_anim_3": {
+			"Pos": [ 480, 80, 16, 16 ]
+			
+		},
+
+		"muddy_idle_anim_0": {
+			"Pos": [ 368, 112, 16, 16 ]
+			
+		},
+
+		"muddy_idle_anim_1": {
+			"Pos": [ 384, 112, 16, 16 ]
+			
+		},
+
+		"muddy_idle_anim_2": {
+			"Pos": [ 400, 112, 16, 16 ]
+			
+		},
+
+		"muddy_idle_anim_3": {
+			"Pos": [ 416, 112, 16, 16 ]
+			
+		},
+
+		"muddy_run_anim_0": {
+			"Pos": [ 368, 112, 16, 16 ]
+			
+		},
+
+		"muddy_run_anim_1": {
+			"Pos": [ 384, 112, 16, 16 ]
+			
+		},
+
+		"muddy_run_anim_2": {
+			"Pos": [ 400, 112, 16, 16 ]
+			
+		},
+
+		"muddy_run_anim_3": {
+			"Pos": [ 416, 112, 16, 16 ]
+			
+		},
+
+		"swampy_idle_anim_0": {
+			"Pos": [ 432, 112, 16, 16 ]
+			
+		},
+
+		"swampy_idle_anim_1": {
+			"Pos": [ 448, 112, 16, 16 ]
+			
+		},
+
+		"swampy_idle_anim_2": {
+			"Pos": [ 464, 112, 16, 16 ]
+			
+		},
+
+		"swampy_idle_anim_3": {
+			"Pos": [ 480, 112, 16, 16 ]
+			
+		},
+
+		"swampy_run_anim_0": {
+			"Pos": [ 432, 112, 16, 16 ]
+			
+		},
+
+		"swampy_run_anim_1": {
+			"Pos": [ 448, 112, 16, 16 ]
+			
+		},
+
+		"swampy_run_anim_2": {
+			"Pos": [ 464, 112, 16, 16 ]
+			
+		},
+
+		"swampy_run_anim_3": {
+			"Pos": [ 480, 112, 16, 16 ]
+			
+		},
+
+		"zombie_idle_anim_0": {
+			"Pos": [ 368, 144, 16, 16 ]
+			
+		},
+
+		"zombie_idle_anim_1": {
+			"Pos": [ 384, 144, 16, 16 ]
+			
+		},
+
+		"zombie_idle_anim_2": {
+			"Pos": [ 400, 144, 16, 16 ]
+			
+		},
+
+		"zombie_idle_anim_3": {
+			"Pos": [ 416, 144, 16, 16 ]
+			
+		},
+
+		"zombie_run_anim_0": {
+			"Pos": [ 368, 144, 16, 16 ]
+			
+		},
+
+		"zombie_run_anim_1": {
+			"Pos": [ 384, 144, 16, 16 ]
+			
+		},
+
+		"zombie_run_anim_2": {
+			"Pos": [ 400, 144, 16, 16 ]
+			
+		},
+
+		"zombie_run_anim_3": {
+			"Pos": [ 416, 144, 16, 16 ]
+			
+		},
+
+		"ice_zombie_idle_anim_0": {
+			"Pos": [ 432, 144, 16, 16 ]
+			
+		},
+
+		"ice_zombie_idle_anim_1": {
+			"Pos": [ 448, 144, 16, 16 ]
+			
+		},
+
+		"ice_zombie_idle_anim_2": {
+			"Pos": [ 464, 144, 16, 16 ]
+			
+		},
+
+		"ice_zombie_idle_anim_3": {
+			"Pos": [ 480, 144, 16, 16 ]
+			
+		},
+
+		"ice_zombie_run_anim_0": {
+			"Pos": [ 432, 144, 16, 16 ]
+			
+		},
+
+		"ice_zombie_run_anim_1": {
+			"Pos": [ 448, 144, 16, 16 ]
+			
+		},
+
+		"ice_zombie_run_anim_2": {
+			"Pos": [ 464, 144, 16, 16 ]
+			
+		},
+
+		"ice_zombie_run_anim_3": {
+			"Pos": [ 480, 144, 16, 16 ]
+			
+		},
+
+		"masked_orc_idle_anim_0": {
+			"Pos": [ 368, 172, 16, 20 ]
+			
+		},
+
+		"masked_orc_idle_anim_1": {
+			"Pos": [ 384, 172, 16, 20 ]
+			
+		},
+
+		"masked_orc_idle_anim_2": {
+			"Pos": [ 400, 172, 16, 20 ]
+			
+		},
+
+		"masked_orc_idle_anim_3": {
+			"Pos": [ 416, 172, 16, 20 ]
+			
+		},
+
+		"masked_orc_run_anim_0": {
+			"Pos": [ 432, 172, 16, 20 ]
+			
+		},
+
+		"masked_orc_run_anim_1": {
+			"Pos": [ 448, 172, 16, 20 ]
+			
+		},
+
+		"masked_orc_run_anim_2": {
+			"Pos": [ 464, 172, 16, 20 ]
+			
+		},
+
+		"masked_orc_run_anim_3": {
+			"Pos": [ 480, 172, 16, 20 ]
+			
+		},
+
+		"orc_warrior_idle_anim_0": {
+			"Pos": [ 368, 204, 16, 20 ]
+			
+		},
+
+		"orc_warrior_idle_anim_1": {
+			"Pos": [ 384, 204, 16, 20 ]
+			
+		},
+
+		"orc_warrior_idle_anim_2": {
+			"Pos": [ 400, 204, 16, 20 ]
+			
+		},
+
+		"orc_warrior_idle_anim_3": {
+			"Pos": [ 416, 204, 16, 20 ]
+			
+		},
+
+		"orc_warrior_run_anim_0": {
+			"Pos": [ 432, 204, 16, 20 ]
+			
+		},
+
+		"orc_warrior_run_anim_1": {
+			"Pos": [ 448, 204, 16, 20 ]
+			
+		},
+
+		"orc_warrior_run_anim_2": {
+			"Pos": [ 464, 204, 16, 20 ]
+			
+		},
+
+		"orc_warrior_run_anim_3": {
+			"Pos": [ 480, 204, 16, 20 ]
+			
+		},
+
+		"orc_shaman_idle_anim_0": {
+			"Pos": [ 368, 236, 16, 20 ]
+			
+		},
+
+		"orc_shaman_idle_anim_1": {
+			"Pos": [ 384, 236, 16, 20 ]
+			
+		},
+
+		"orc_shaman_idle_anim_2": {
+			"Pos": [ 400, 236, 16, 20 ]
+			
+		},
+
+		"orc_shaman_idle_anim_3": {
+			"Pos": [ 416, 236, 16, 20 ]
+			
+		},
+
+		"orc_shaman_run_anim_0": {
+			"Pos": [ 432, 236, 16, 20 ]
+			
+		},
+
+		"orc_shaman_run_anim_1": {
+			"Pos": [ 448, 236, 16, 20 ]
+			
+		},
+
+		"orc_shaman_run_anim_2": {
+			"Pos": [ 464, 236, 16, 20 ]
+			
+		},
+
+		"orc_shaman_run_anim_3": {
+			"Pos": [ 480, 236, 16, 20 ]
+			
+		},
+
+		"necromancer_idle_anim_0": {
+			"Pos": [ 368, 268, 16, 20 ]
+			
+		},
+
+		"necromancer_idle_anim_1": {
+			"Pos": [ 384, 268, 16, 20 ]
+			
+		},
+
+		"necromancer_idle_anim_2": {
+			"Pos": [ 400, 268, 16, 20 ]
+			
+		},
+
+		"necromancer_idle_anim_3": {
+			"Pos": [ 416, 268, 16, 20 ]
+			
+		},
+
+		"necromancer_run_anim_0": {
+			"Pos": [ 368, 268, 16, 20 ]
+			
+		},
+
+		"necromancer_run_anim_1": {
+			"Pos": [ 384, 268, 16, 20 ]
+			
+		},
+
+		"necromancer_run_anim_2": {
+			"Pos": [ 400, 268, 16, 20 ]
+			
+		},
+
+		"necromancer_run_anim_3": {
+			"Pos": [ 416, 268, 16, 20 ]
+			
+		},
+
+		"wogol_idle_anim_0": {
+			"Pos": [ 368, 300, 16, 20 ]
+			
+		},
+
+		"wogol_idle_anim_1": {
+			"Pos": [ 384, 300, 16, 20 ]
+			
+		},
+
+		"wogol_idle_anim_2": {
+			"Pos": [ 400, 300, 16, 20 ]
+			
+		},
+
+		"wogol_idle_anim_3": {
+			"Pos": [ 416, 300, 16, 20 ]
+			
+		},
+
+		"wogol_run_anim_0": {
+			"Pos": [ 432, 300, 16, 20 ]
+			
+		},
+
+		"wogol_run_anim_1": {
+			"Pos": [ 448, 300, 16, 20 ]
+			
+		},
+
+		"wogol_run_anim_2": {
+			"Pos": [ 464, 300, 16, 20 ]
+			
+		},
+
+		"wogol_run_anim_3": {
+			"Pos": [ 480, 300, 16, 20 ]
+			
+		},
+
+		"chort_idle_anim_0": {
+			"Pos": [ 368, 328, 16, 24 ]
+			
+		},
+
+		"chort_idle_anim_1": {
+			"Pos": [ 384, 328, 16, 24 ]
+			
+		},
+
+		"chort_idle_anim_2": {
+			"Pos": [ 400, 328, 16, 24 ]
+			
+		},
+
+		"chort_idle_anim_3": {
+			"Pos": [ 416, 328, 16, 24 ]
+			
+		},
+
+		"chort_run_anim_0": {
+			"Pos": [ 432, 328, 16, 24 ]
+			
+		},
+
+		"chort_run_anim_1": {
+			"Pos": [ 448, 328, 16, 24 ]
+			
+		},
+
+		"chort_run_anim_2": {
+			"Pos": [ 464, 328, 16, 24 ]
+			
+		},
+
+		"chort_run_anim_3": {
+			"Pos": [ 480, 328, 16, 24 ]
+			
+		},
+
+		"big_zombie_idle_anim_0": {
+			"Pos": [ 16, 270, 32, 34 ]
+			
+		},
+
+		"big_zombie_idle_anim_1": {
+			"Pos": [ 32, 270, 32, 34 ]
+			
+		},
+
+		"big_zombie_idle_anim_2": {
+			"Pos": [ 48, 270, 32, 34 ]
+			
+		},
+
+		"big_zombie_idle_anim_3": {
+			"Pos": [ 64, 270, 32, 34 ]
+			
+		},
+
+		"big_zombie_run_anim_0": {
+			"Pos": [ 144, 270, 32, 34 ]
+			
+		},
+
+		"big_zombie_run_anim_1": {
+			"Pos": [ 160, 270, 32, 34 ]
+			
+		},
+
+		"big_zombie_run_anim_2": {
+			"Pos": [ 176, 270, 32, 34 ]
+			
+		},
+
+		"big_zombie_run_anim_3": {
+			"Pos": [ 192, 270, 32, 34 ]
+			
+		},
+
+		"ogre_idle_anim_0": {
+			"Pos": [ 16, 320, 32, 32 ]
+			
+		},
+
+		"ogre_idle_anim_1": {
+			"Pos": [ 32, 320, 32, 32 ]
+			
+		},
+
+		"ogre_idle_anim_2": {
+			"Pos": [ 48, 320, 32, 32 ]
+			
+		},
+
+		"ogre_idle_anim_3": {
+			"Pos": [ 64, 320, 32, 32 ]
+			
+		},
+
+		"ogre_run_anim_0": {
+			"Pos": [ 144, 320, 32, 32 ]
+			
+		},
+
+		"ogre_run_anim_1": {
+			"Pos": [ 160, 320, 32, 32 ]
+			
+		},
+
+		"ogre_run_anim_2": {
+			"Pos": [ 176, 320, 32, 32 ]
+			
+		},
+
+		"ogre_run_anim_3": {
+			"Pos": [ 192, 320, 32, 32 ]
+			
+		},
+
+		"big_demon_idle_anim_0": {
+			"Pos": [ 16, 364, 32, 36 ]
+			
+		},
+
+		"big_demon_idle_anim_1": {
+			"Pos": [ 32, 364, 32, 36 ]
+			
+		},
+
+		"big_demon_idle_anim_2": {
+			"Pos": [ 48, 364, 32, 36 ]
+			
+		},
+
+		"big_demon_idle_anim_3": {
+			"Pos": [ 64, 364, 32, 36 ]
+			
+		},
+
+		"big_demon_run_anim_0": {
+			"Pos": [ 144, 364, 32, 36 ]
+			
+		},
+
+		"big_demon_run_anim_1": {
+			"Pos": [ 160, 364, 32, 36 ]
+			
+		},
+
+		"big_demon_run_anim_2": {
+			"Pos": [ 176, 364, 32, 36 ]
+			
+		},
+
+		"big_demon_run_anim_3": {
+			"Pos": [ 192, 364, 32, 36 ]
+			
+		},
+
+		"elf_f_idle_anim_0": {
+			"Pos": [ 128, 4, 16, 28 ]
+			
+		},
+
+		"elf_f_idle_anim_1": {
+			"Pos": [ 144, 4, 16, 28 ]
+			
+		},
+
+		"elf_f_idle_anim_2": {
+			"Pos": [ 160, 4, 16, 28 ]
+			
+		},
+
+		"elf_f_idle_anim_3": {
+			"Pos": [ 176, 4, 16, 28 ]
+			
+		},
+
+		"elf_f_run_anim_0": {
+			"Pos": [ 192, 4, 16, 28 ]
+			
+		},
+
+		"elf_f_run_anim_1": {
+			"Pos": [ 208, 4, 16, 28 ]
+			
+		},
+
+		"elf_f_run_anim_2": {
+			"Pos": [ 224, 4, 16, 28 ]
+			
+		},
+
+		"elf_f_run_anim_3": {
+			"Pos": [ 240, 4, 16, 28 ]
+			
+		},
+
+		"elf_f_hit_anim_0": {
+			"Pos": [ 256, 4, 16, 28 ]
+			
+		},
+
+		"elf_m_idle_anim_0": {
+			"Pos": [ 128, 36, 16, 28 ]
+			
+		},
+
+		"elf_m_idle_anim_1": {
+			"Pos": [ 144, 36, 16, 28 ]
+			
+		},
+
+		"elf_m_idle_anim_2": {
+			"Pos": [ 160, 36, 16, 28 ]
+			
+		},
+
+		"elf_m_idle_anim_3": {
+			"Pos": [ 176, 36, 16, 28 ]
+			
+		},
+
+		"elf_m_run_anim_0": {
+			"Pos": [ 192, 36, 16, 28 ]
+			
+		},
+
+		"elf_m_run_anim_1": {
+			"Pos": [ 208, 36, 16, 28 ]
+			
+		},
+
+		"elf_m_run_anim_2": {
+			"Pos": [ 224, 36, 16, 28 ]
+			
+		},
+
+		"elf_m_run_anim_3": {
+			"Pos": [ 240, 36, 16, 28 ]
+			
+		},
+
+		"elf_m_hit_anim_0": {
+			"Pos": [ 256, 36, 16, 28 ]
+			
+		},
+
+		"knight_f_idle_anim_0": {
+			"Pos": [ 128, 68, 16, 28 ]
+			
+		},
+
+		"knight_f_idle_anim_1": {
+			"Pos": [ 144, 68, 16, 28 ]
+			
+		},
+
+		"knight_f_idle_anim_2": {
+			"Pos": [ 160, 68, 16, 28 ]
+			
+		},
+
+		"knight_f_idle_anim_3": {
+			"Pos": [ 176, 68, 16, 28 ]
+			
+		},
+
+		"knight_f_run_anim_0": {
+			"Pos": [ 192, 68, 16, 28 ]
+			
+		},
+
+		"knight_f_run_anim_1": {
+			"Pos": [ 208, 68, 16, 28 ]
+			
+		},
+
+		"knight_f_run_anim_2": {
+			"Pos": [ 224, 68, 16, 28 ]
+			
+		},
+
+		"knight_f_run_anim_3": {
+			"Pos": [ 240, 68, 16, 28 ]
+			
+		},
+
+		"knight_f_hit_anim_0": {
+			"Pos": [ 256, 68, 16, 28 ]
+			
+		},
+
+		"knight_m_idle_anim_0": {
+			"Pos": [ 128, 100, 16, 28 ],
+			"AABB": [ 0, 0, 16, 28 ]
+		},
+
+		"knight_m_idle_anim_1": {
+			"Pos": [ 144, 100, 16, 28 ]
+			
+		},
+
+		"knight_m_idle_anim_2": {
+			"Pos": [ 160, 100, 16, 28 ]
+			
+		},
+
+		"knight_m_idle_anim_3": {
+			"Pos": [ 176, 100, 16, 28 ]
+			
+		},
+
+		"knight_m_run_anim_0": {
+			"Pos": [ 192, 100, 16, 28 ]
+			
+		},
+
+		"knight_m_run_anim_1": {
+			"Pos": [ 208, 100, 16, 28 ]
+			
+		},
+
+		"knight_m_run_anim_2": {
+			"Pos": [ 224, 100, 16, 28 ]
+			
+		},
+
+		"knight_m_run_anim_3": {
+			"Pos": [ 240, 100, 16, 28 ]
+			
+		},
+
+		"knight_m_hit_anim_0": {
+			"Pos": [ 256, 100, 16, 28 ]
+			
+		},
+
+		"wizard_f_idle_anim_0": {
+			"Pos": [ 128, 132, 16, 28 ]
+			
+		},
+
+		"wizard_f_idle_anim_1": {
+			"Pos": [ 144, 132, 16, 28 ]
+			
+		},
+
+		"wizard_f_idle_anim_2": {
+			"Pos": [ 160, 132, 16, 28 ]
+			
+		},
+
+		"wizard_f_idle_anim_3": {
+			"Pos": [ 176, 132, 16, 28 ]
+			
+		},
+
+		"wizard_f_run_anim_0": {
+			"Pos": [ 192, 132, 16, 28 ]
+			
+		},
+
+		"wizard_f_run_anim_1": {
+			"Pos": [ 208, 132, 16, 28 ]
+			
+		},
+
+		"wizard_f_run_anim_2": {
+			"Pos": [ 224, 132, 16, 28 ]
+			
+		},
+
+		"wizard_f_run_anim_3": {
+			"Pos": [ 240, 132, 16, 28 ]
+			
+		},
+
+		"wizard_f_hit_anim_0": {
+			"Pos": [ 256, 132, 16, 28 ]
+			
+		},
+
+		"wizard_m_idle_anim_0": {
+			"Pos": [ 128, 164, 16, 28 ]
+			
+		},
+
+		"wizard_m_idle_anim_1": {
+			"Pos": [ 144, 164, 16, 28 ]
+			
+		},
+
+		"wizard_m_idle_anim_2": {
+			"Pos": [ 160, 164, 16, 28 ]
+			
+		},
+
+		"wizard_m_idle_anim_3": {
+			"Pos": [ 176, 164, 16, 28 ]
+			
+		},
+
+		"wizard_m_run_anim_0": {
+			"Pos": [ 192, 164, 16, 28 ]
+			
+		},
+
+		"wizard_m_run_anim_1": {
+			"Pos": [ 208, 164, 16, 28 ]
+			
+		},
+
+		"wizard_m_run_anim_2": {
+			"Pos": [ 224, 164, 16, 28 ]
+			
+		},
+
+		"wizard_m_run_anim_3": {
+			"Pos": [ 240, 164, 16, 28 ]
+			
+		},
+
+		"wizard_m_hit_anim_0": {
+			"Pos": [ 256, 164, 16, 28 ]
+			
+		}
+	}
 }
-

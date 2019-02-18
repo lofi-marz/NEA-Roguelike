@@ -138,14 +138,14 @@ namespace DnDGame
 					}
 				}
 			}
-			var newMaze = MazeCon.ConvertMaze(mazeList, sizeX * scale, sizeY * scale);
+			var newMaze = DungeonGen.ConvertMaze(mazeList, sizeX * scale, sizeY * scale);
 
 			foreach (var cell in newMaze)
 			{
 				var pos = cell.Item1.ToVector2() * new Vector2(16 * 1);
 				var item = cell.Item2;
 				int cellEntity;
-				if (item == MazeCon.CellType.Floor)
+				if (item.StartsWith("floor"))
 				{
 					cellEntity = CreateObjects.DungeonCell(pos, item, 0f);
 				}

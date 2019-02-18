@@ -48,7 +48,11 @@ namespace DnDGame.Engine.ECS.Systems
 				var tileSet = TilesetManager.Tilesets[sprite.SpriteSheet];
 				var SpriteSheet = tileSet.SpriteSheet;
 				var sourceRect = tileSet.GetSpriteRect(sprite.Tile);
-				var destRect = new Rectangle((int)pos.X, (int)pos.Y, (int)(sprite.Width * scale.X), (int)(sprite.Height * scale.Y));
+				
+				var destRect = new Rectangle(
+					(int)Math.Ceiling(pos.X),
+					(int)Math.Ceiling(pos.Y), 
+					(int)(sprite.Width * scale.X), (int)(sprite.Height * scale.Y));
 				spriteBatch.Draw(SpriteSheet,
 					destinationRectangle: destRect,
 					sourceRectangle: sourceRect, color: Color.AliceBlue, layerDepth:entitySprite.sprite.Depth);

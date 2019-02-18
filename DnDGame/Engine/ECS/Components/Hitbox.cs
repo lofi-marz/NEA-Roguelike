@@ -34,6 +34,16 @@ namespace DnDGame.Engine.ECS
             }
             AABB = new Rectangle(x, y, right - x, bottom - y);
         }
+
+		public Hitbox(Rectangle rect)
+		{
+			Boxes = new List<Rectangle>
+			{
+				rect
+			};
+			AABB = rect;
+		}
+
         public Hitbox(int[][] boxes)
         {
             foreach (var box in boxes)

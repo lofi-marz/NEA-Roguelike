@@ -18,14 +18,14 @@ namespace DnDGame.Engine.Drawing
 
         public Rectangle GetSpriteRect(string tile)
         {
-            var pos = Map[tile].Pos.Length == 4 ? Map[tile].Pos : Map[tile].Pos.Concat(new int[] { 1, 1 }).ToArray();
-            pos = pos.Select(x => x * CellSize).ToArray();
+			var pos = Map[tile].Pos;
             var sourceRect = new Rectangle(pos[0], pos[1], pos[2], pos[3]);
             return sourceRect;
         }
 
 		public Hitbox GetSpriteHit(string tile)
 		{
+			if (Map[tile].AABB == null) return new Hitbox(new Rectangle(0, 0, 0, 0));
 			var AABBPoints = Map[tile].AABB;
 			var FullAABBPoints = AABBPoints.Length == 4 ? AABBPoints : new int[] { 0, 0 }.Concat(AABBPoints).ToArray();
 			var AABBRect = new Rectangle(FullAABBPoints[0], FullAABBPoints[1], FullAABBPoints[2], FullAABBPoints[3]);

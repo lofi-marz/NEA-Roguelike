@@ -1,0 +1,82 @@
+{
+
+  "cellSize": 16,
+	"map": {
+		"WallTop": {
+			"Pos": [ 1, 0 ],
+			"AABB": [ 0, 11, 4, 16 ]
+		},
+
+		"Floor": {
+			"Pos": [ 1, 4 ],
+			"AABB": [ 0, 0 ]
+		},
+
+		"NorthWall": {
+			"Pos": [ 1, 1 ],
+			"AABB": [ 16, 16 ]
+		},
+
+		"SouthWall": {
+			"Pos": [ 1, 1 ],
+			"AABB": [ 13, 13, 16, 2 ]
+		},
+
+		"WestWall": {
+			"Pos": [ 1, 8 ],
+			"AABB": [ 0, 0 ]
+		},
+
+		"EastWall": {
+			"Pos": [ 0, 8 ],
+			"AABB": [ 11, 0, 5, 16 ]
+		},
+
+		"NorthWestWallTop": {
+			"Pos": [ 2, 7 ],
+			"AABB": [ 0, 11, 4, 16 ]
+		},
+
+		"NorthWestWall": {
+			"Pos": [ 2, 8 ],
+			"AABB": [ 0, 13, 4, 16 ]
+		},
+
+		"NorthEastWallTop": {
+			"Pos": [ 3, 7 ],
+			"AABB": [ 0, 11, 4, 16 ]
+		},
+
+		"NorthEastWall": {
+			"Pos": [ 3, 8 ],
+			"AABB": [ 0, 13, 4, 16 ]
+		},
+
+		"SouthEastWallTop": {
+			"Pos": [ 3, 9 ],
+			"AABB": [ 10, 0, 5, 16 ]
+		},
+		"SouthEastWall": {
+			"Pos": [ 3, 10 ],
+			"AABB": [ 0, 11, 4, 16 ]
+		},
+		"SouthWestWallTop": {
+			"Pos": [ 2, 9 ],
+			"AABB": [ 0, 11, 4, 16 ]
+		},
+		"SouthWestWall": {
+			"Pos": [ 2, 10 ],
+			"AABB": [ 0, 0, 16, 4 ]
+		},
+
+		"PlayerDefault": {
+			"Pos": [ 8, 4, 1, 2 ],
+			"AABB": [ 0, 16, 16, 16 ]
+		},
+		"PlayerWalk0": {
+			"Pos": [ 8, 4, 1, 2 ],
+			"AABB": [ 0, 16, 16, 16 ]
+		}
+	}
+}
+
