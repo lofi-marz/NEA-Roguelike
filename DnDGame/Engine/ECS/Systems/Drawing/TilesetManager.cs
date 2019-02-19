@@ -18,7 +18,6 @@ namespace DnDGame.Engine.ECS.Systems.Drawing
         const string spritePath = "Tilesets/";
         const string jsonPath = "Content/Tilesets/";
         public static Dictionary<string, Tileset> Tilesets = new Dictionary<string, Tileset>();
-
         public static void AddSet(string name, Tileset set)
         {
             Tilesets.Add(name, set);
@@ -28,8 +27,9 @@ namespace DnDGame.Engine.ECS.Systems.Drawing
         {
             var json = File.ReadAllText($"{jsonPath}{name}.json");
             var tileset = JsonConvert.DeserializeObject<Tileset>(json);
-
+			tileset.GenTileset();
             return tileset;
         }
+		
     }
 }

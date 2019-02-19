@@ -45,7 +45,7 @@
   <ItemGroup>
     <Compile Include="Engine\Drawing\Camera.cs" />
     <Compile Include="Engine\Drawing\Core.cs" />
-    <Compile Include="Engine\Drawing\Tileset.cs" />
+    <Compile Include="Engine\ECS\Systems\Drawing\Tileset.cs" />
     <Compile Include="Engine\ECS\Components\Hitbox.cs" />
     <Compile Include="Engine\ECS\Component.cs" />
     <Compile Include="Engine\ECS\Components\AnimatedSprite.cs" />

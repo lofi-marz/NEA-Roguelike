@@ -20,7 +20,7 @@ namespace DnDGame.Engine.Initialization
 				new Transform(new Vector2(-64f, -32f), new Vector2(1f)),
 				new Sprite("dungeon", "knight_m_idle_anim_0", 0.5f, 32, 16),
 				new PhysicsBody(new Vector2(2000f)),
-				TilesetManager.Tilesets["dungeon"].GetSpriteHit("knight_m_idle_anim_0"));
+				TilesetManager.Tilesets["dungeon"].GetHitbox("knight_m_idle_anim_0"));
 			return playerId;
 		}
 
@@ -29,7 +29,7 @@ namespace DnDGame.Engine.Initialization
 			int cellEntity = World.Instance.CreateEntity(
 				new Transform(pos, new Vector2(1f)),
 				new Sprite("dungeon", item.ToString(), depth),
-				TilesetManager.Tilesets["dungeon"].GetSpriteHit(item.ToString()));
+				TilesetManager.Tilesets["dungeon"].GetHitbox(item.ToString()));
 			return cellEntity;
 		}
 	}

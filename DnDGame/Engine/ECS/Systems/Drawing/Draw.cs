@@ -47,7 +47,7 @@ namespace DnDGame.Engine.ECS.Systems
 				var sprite = entitySprite.sprite;
 				var tileSet = TilesetManager.Tilesets[sprite.SpriteSheet];
 				var SpriteSheet = tileSet.SpriteSheet;
-				var sourceRect = tileSet.GetSpriteRect(sprite.Tile);
+				var sourceRect = tileSet.GetSprite(sprite.Tile);
 				
 				var destRect = new Rectangle(
 					(int)Math.Ceiling(pos.X),

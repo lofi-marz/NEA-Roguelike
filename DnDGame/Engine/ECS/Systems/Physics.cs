@@ -40,55 +40,53 @@ namespace DnDGame.Engine.ECS.Systems
 
 				IEnumerable<int> nearbyPotentialCollisions = World.Instance.GetByTypeAndRegion(realAABB, typeof(Hitbox));
 				var prevPos = oldPos;
-				
+				var AllCollisions = new List<Rectangle>();
+				var RealHitbox1 = hitbox.Translate(newPos).Scale(transform.Scale);
 				foreach (var entity2 in nearbyPotentialCollisions)
 				{
 					if (entity == entity2) continue;
-					var RealHitbox1 = hitbox.Translate(newPos).Scale(transform.Scale);
 					var trans2 = World.Instance.GetComponent<Transform>(entity2);
 					var realHitbox2 = World.Instance.GetComponent<Hitbox>(entity2).Translate(trans2.Pos).Scale(trans2.Scale);
 					if (realHitbox2.AABB.Width == 0 && realHitbox2.AABB.Height == 0) continue;
 					var RectCollisions = realHitbox2.CheckCollidingBoxes(RealHitbox1);
 					if (RectCollisions.Count > 0)
 					{
-						//TODO: Better collision resolving, move it up close instead of just undoing the movement
-						/*if (RectCollisions.Count > 1) {
-							RectCollisions = RectCollisions.OrderBy(rect =>
-											Vector2.Distance(rect.Center.ToVector2(), RealHitbox1.AABB.Center.ToVector2())).ToList();
-						}*/
-						foreach (var Rect in RectCollisions)
-						{
-							
-							RealHitbox1 = hitbox.Translate(newPos).Scale(transform.Scale);
-							if (!RealHitbox1.AABB.Intersects(Rect)) continue;
-							Direction collDirection = GetCollisionDirection((Rect.Center - RealHitbox1.AABB.Center).ToVector2());
-							Console.WriteLine(collDirection);
-
-							switch (collDirection)
-							{
-								case Direction.South: //Colliding with something below us
-									newPos.Y -= (RealHitbox1.AABB.Bottom - Rect.Top);
-									newVel.Y = 0;
-									break;
-								case Direction.North: //Colliding with something above us
-									newPos.Y -= (RealHitbox1.AABB.Top - Rect.Bottom);
-									newVel.Y = 0;
-									break;
-								case Direction.East: //Colliding with something to the right of us
-									newPos.X -= (RealHitbox1.AABB.Right - Rect.Left);
-									newVel.X = 0;
-									break;
-								case Direction.West: //Colliding with something to the left of us
-									newPos.X -= (RealHitbox1.AABB.Left - Rect.Right);
-									newVel.X = 0;
-									break;
-							}
-						}
-						
+						AllCollisions.AddRange(RectCollisions);
 					}
 
 				}
 
+				var OrderedCollisionRects = AllCollisions.OrderBy(rect => ((rect.Center - RealHitbox1.AABB.Center).ToVector2().Length()));
+				foreach (var rect in OrderedCollisionRects)
+				{
+					RealHitbox1 = hitbox.Translate(newPos).Scale(transform.Scale);
+					if (!RealHitbox1.AABB.Intersects(rect)) continue;
+
+					Direction collDirection = GetCollisionDirection((rect.Center - RealHitbox1.AABB.Center).ToVector2());
+					Rectangle intersect = Rectangle.Intersect(RealHitbox1.AABB, rect);
+					if (intersect.Width == 0 && intersect.Height == 0) continue;
+					Console.WriteLine(collDirection);
+					switch (collDirection)
+					{
+						case Direction.South: //Colliding with something below us
+							newPos.Y -= intersect.Height;
+							newVel.Y = 0;
+							break;
+						case Direction.North: //Colliding with something above us
+							newPos.Y += intersect.Height;
+							newVel.Y = 0;
+							break;
+						case Direction.East: //Colliding with something to the right of us
+							newPos.X -= intersect.Width;
+							newVel.X = 0;
+							break;
+						case Direction.West: //Colliding with something to the left of us
+							newPos.X += intersect.Width;
+							newVel.X = 0;
+							break;
+					}
+				}
+				
 				transform.Pos = newPos;
 				pBody.Velocity = newVel;
 

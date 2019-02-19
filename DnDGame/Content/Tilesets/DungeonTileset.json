@@ -1,6 +1,6 @@
 {
 	"cellSize" :  16,
-	"map": {
+	"pointMap": {
 		"wall_top_left": {
 			"Pos": [ 16, 0, 16, 16 ]
 			
