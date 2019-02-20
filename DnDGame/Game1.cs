@@ -5,12 +5,11 @@ using Microsoft.Xna.Framework.Input;
 
 using DnDGame.Engine;
 using DnDGame.Engine.Drawing;
-using DnDGame.Engine.ECS;
-using DnDGame.Engine.ECS.Systems;
-using DnDGame.Engine.ECS.Systems.Input;
-using DnDGame.Engine.ECS.Systems.MazeGen;
-using DnDGame.Engine.ECS.Systems.Drawing;
-using DnDGame.Engine.ECS.Components;
+using DnDGame.Engine.Systems;
+using DnDGame.Engine.Systems.Input;
+using DnDGame.Engine.Systems.MazeGen;
+using DnDGame.Engine.Systems.Drawing;
+using DnDGame.Engine.Components;
 using DnDGame.MazeGen.DepthFirst;
 using System.Collections.Generic;
 using System;

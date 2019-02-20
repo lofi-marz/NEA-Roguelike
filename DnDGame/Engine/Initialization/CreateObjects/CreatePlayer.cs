@@ -1,7 +1,7 @@
-﻿using DnDGame.Engine.ECS;
-using DnDGame.Engine.ECS.Components;
-using DnDGame.Engine.ECS.Systems.Drawing;
-using DnDGame.Engine.ECS.Systems.MazeGen;
+﻿using DnDGame.Engine;
+using DnDGame.Engine.Components;
+using DnDGame.Engine.Systems.Drawing;
+using DnDGame.Engine.Systems.MazeGen;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;

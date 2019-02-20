@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DnDGame.Engine.ECS.Systems.Input
+namespace DnDGame.Engine.Systems.Input
 {
 
     public enum ActionType

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DnDGame.Engine.ECS.Components
+namespace DnDGame.Engine.Components
 {
     public class PhysicsBody : Component
     {

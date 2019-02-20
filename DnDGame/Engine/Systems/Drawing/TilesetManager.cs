@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json.Serialization;
 
-namespace DnDGame.Engine.ECS.Systems.Drawing
+namespace DnDGame.Engine.Systems.Drawing
 {
     public static class TilesetManager
     {

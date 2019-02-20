@@ -1,5 +1,5 @@
-﻿using DnDGame.Engine.ECS.Components;
-using DnDGame.Engine.ECS.Systems.Drawing;
+﻿using DnDGame.Engine.Components;
+using DnDGame.Engine.Systems.Drawing;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DnDGame.Engine.ECS.Systems.Input
+namespace DnDGame.Engine.Systems.Input
 {
     public static class Movement
     {

@@ -1,4 +1,4 @@
-﻿using DnDGame.Engine.ECS.Systems.Drawing;
+﻿using DnDGame.Engine.Systems.Drawing;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DnDGame.Engine.ECS.Systems
+namespace DnDGame.Engine.Systems
 {
     public static class DrawSystem
     {

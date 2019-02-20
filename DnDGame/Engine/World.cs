@@ -1,4 +1,4 @@
-﻿using DnDGame.Engine.ECS.Systems;
+﻿using DnDGame.Engine.Systems;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DnDGame.Engine.ECS
+namespace DnDGame.Engine
 {
 	public sealed class World
 	{

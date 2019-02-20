@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using DnDGame.MazeGen.DepthFirst;
 using Microsoft.Xna.Framework;
 
-namespace DnDGame.Engine.ECS.Systems.MazeGen
+namespace DnDGame.Engine.Systems.MazeGen
 {
     static class DungeonGen
     {

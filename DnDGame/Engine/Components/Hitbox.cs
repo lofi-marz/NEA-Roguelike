@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DnDGame.Engine.ECS
+namespace DnDGame.Engine
 {
 
     public class Hitbox : Component

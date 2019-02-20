@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DnDGame.Engine.ECS.Systems
+namespace DnDGame.Engine.Systems
 {
     public class SpatialHash
     {

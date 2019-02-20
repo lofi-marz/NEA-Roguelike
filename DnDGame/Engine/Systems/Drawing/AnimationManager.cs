@@ -1,4 +1,4 @@
-﻿using DnDGame.Engine.ECS.Components;
+﻿using DnDGame.Engine.Components;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DnDGame.Engine.ECS.Systems.Drawing
+namespace DnDGame.Engine.Systems.Drawing
 {
 	public static class AnimationManager
 	{
