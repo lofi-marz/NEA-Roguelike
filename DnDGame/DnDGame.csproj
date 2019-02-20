@@ -44,7 +44,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Engine\Drawing\Camera.cs" />
-    <Compile Include="Engine\Drawing\Core.cs" />
+    <Compile Include="Engine\ECS\Components\CharacterStats.cs" />
+    <Compile Include="Engine\ECS\Components\PlayerCharacterAttributes.cs" />
+    <Compile Include="Engine\ECS\Systems\Drawing\AnimationManager.cs" />
     <Compile Include="Engine\ECS\Systems\Drawing\Tileset.cs" />
     <Compile Include="Engine\ECS\Components\Hitbox.cs" />
     <Compile Include="Engine\ECS\Component.cs" />
@@ -70,8 +72,6 @@
     <Compile Include="Engine\MazeUtils\DepthFirstGen.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Engine\Drawing\Sprite.cs" />
-    <Compile Include="Engine\Drawing\Tile.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

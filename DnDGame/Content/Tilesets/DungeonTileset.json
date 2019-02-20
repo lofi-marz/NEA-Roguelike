@@ -1420,7 +1420,8 @@
 
 		"knight_m_idle_anim_0": {
 			"Pos": [ 128, 100, 16, 28 ],
-			"AABB": [ 0, 0, 16, 28 ]
+			"AABB": [ 0, 0, 16, 28 ],
+			"Length": 0.2
 		},
 
 		"knight_m_idle_anim_1": {

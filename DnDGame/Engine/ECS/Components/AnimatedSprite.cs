@@ -6,24 +6,41 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DnDGame.Engine.ECS
+namespace DnDGame.Engine.ECS.Components
 {
 
-	public class AnimatedSprite : Component
+	public class AnimationPlayer : Component
 	{
 		public string SpriteSheet;
-		public string Tile;
-		public Dictionary<string, int[]> Anims;
+
+		public float ElapsedTime;
+		public float FrameLength;
 		public int CurrentFrame;
-		public int Height;
-		public int Width;
-		public float Depth = 0f;
-		public AnimatedSprite(string spriteSheet, float depth = 0f, int height = 16, int width = 16)
+
+		public string DefaultAnim;
+		public string CurrentAnim;
+		public string NextAnim;
+
+		public Queue<string> QueuedAnims;
+
+		public AnimationPlayer(string spriteSheet, string defaultAnim, string startAnim, float frameLength = 0.5f)
 		{
 			SpriteSheet = spriteSheet;
-			Height = height;
-			Width = width;
-			Depth = depth;
+			ElapsedTime = 0f;
+			FrameLength = frameLength;
+			CurrentFrame = 0;
+			CurrentAnim = startAnim;
+			DefaultAnim = defaultAnim;
+			NextAnim = "";
+			QueuedAnims = new Queue<string>();
+		}
+
+		public void GetNextFrame()
+		{
+			
+			CurrentFrame++;
+
+
 		}
 	}
 

@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-
+using Newtonsoft.Json.Serialization;
 
 namespace DnDGame.Engine.ECS.Systems.Drawing
 {
@@ -25,8 +25,13 @@ namespace DnDGame.Engine.ECS.Systems.Drawing
 
         public static Tileset LoadJson(string name)
         {
+			ITraceWriter traceWriter = new MemoryTraceWriter();
             var json = File.ReadAllText($"{jsonPath}{name}.json");
-            var tileset = JsonConvert.DeserializeObject<Tileset>(json);
+            var tileset = JsonConvert.DeserializeObject<Tileset>(json, new JsonSerializerSettings
+			{
+				TraceWriter = traceWriter
+			});
+			Console.WriteLine(traceWriter);
 			tileset.GenTileset();
             return tileset;
         }

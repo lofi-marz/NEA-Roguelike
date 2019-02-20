@@ -20,7 +20,8 @@ namespace DnDGame.Engine.Initialization
 				new Transform(new Vector2(-64f, -32f), new Vector2(1f)),
 				new Sprite("dungeon", "knight_m_idle_anim_0", 0.5f, 32, 16),
 				new PhysicsBody(new Vector2(2000f)),
-				TilesetManager.Tilesets["dungeon"].GetHitbox("knight_m_idle_anim_0"));
+				TilesetManager.Tilesets["dungeon"].GetHitbox("knight_m_idle_anim_0"),
+				new AnimationPlayer("dungeon", "knight_m_idle", "knight_m_idle"));
 			return playerId;
 		}
 

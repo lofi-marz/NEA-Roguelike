@@ -1,4 +1,5 @@
 ﻿using DnDGame.Engine.ECS.Components;
+using DnDGame.Engine.ECS.Systems.Drawing;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -10,9 +11,10 @@ namespace DnDGame.Engine.ECS.Systems.Input
 {
     public static class Movement
     {
-        public static void MoveEntity(int entityid, Direction direction)
+        public static void MoveEntity(int entity, Direction direction)
         {
-            PhysicsBody pBody = World.Instance.GetComponent<PhysicsBody>(entityid);
+            PhysicsBody pBody = World.Instance.GetComponent<PhysicsBody>(entity);
+			AnimationPlayer player = World.Instance.GetComponent<AnimationPlayer>(entity);
             float PushForce = pBody.DefaultAcc.X;
             float x = pBody.Acc.X;
             float y = pBody.Acc.Y;
@@ -34,10 +36,12 @@ namespace DnDGame.Engine.ECS.Systems.Input
                     x = 0f;
                     y = 0f;
                     break;
+
             }
+			AnimationManager.PlayNext(entity, "knight_m_run");
             pBody.Acc = new Vector2(x, y);
             //((MovementComponent)World.Instance.EntityComponents[typeof(MovementComponent)][entityid]).Velocity += acc;
-            World.Instance.SetComponent(entityid, pBody);
+            World.Instance.SetComponent(entity, pBody);
         }
     }
 }

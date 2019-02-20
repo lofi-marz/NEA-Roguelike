@@ -198,6 +198,7 @@ namespace DnDGame
 			VisibleRegion = new Rectangle(startX, startY, width, height);
 			//Velocity.Update(gameTime);
 			Physics.Update(gameTime, VisibleRegion);
+			AnimationManager.Update(gameTime, VisibleRegion);
 			var newPos = World.Instance.GetComponent<Transform>(playerid).Pos;
 			base.Update(gameTime);
 		}

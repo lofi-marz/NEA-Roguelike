@@ -9,16 +9,19 @@ namespace DnDGame.Engine.ECS.Systems.Drawing
 {
 	public class Tileset
 	{
+		const float DEFAULT_ANIM_LENGTH = 0.1f;
 		public Texture2D SpriteSheet;
 		public int CellSize;
 		public Dictionary<string, TilePoints> PointMap;
 		public Dictionary<string, Tile> Map;
 		public Dictionary<string, List<Tile>> Anims;
-							
+		public Dictionary<string, float> AnimLengths;
+				
 		public void GenTileset()
 		{
 			Map = new Dictionary<string, Tile>();
 			Anims = new Dictionary<string, List<Tile>>();
+			AnimLengths = new Dictionary<string, float>();
 			foreach (var tilePoint in PointMap)
 			{
 				var tileName = tilePoint.Key;
@@ -37,7 +40,7 @@ namespace DnDGame.Engine.ECS.Systems.Drawing
 				if (animPattern.IsMatch(tileName))
 				{
 					int frameNo = int.Parse(frameCountPattern.Match(tileName).ToString());
-					
+
 					if (frameNo == 0)
 					{
 						Anims[animName] = new List<Tile>
@@ -48,6 +51,8 @@ namespace DnDGame.Engine.ECS.Systems.Drawing
 								AABB = GetHitbox(tileName)
 							}
 						};
+
+						AnimLengths[animName] = tilePoint.Value.Length == 0f ? DEFAULT_ANIM_LENGTH : tilePoint.Value.Length;
 					}
 					else {
 						Anims[animName].Add(new Tile
@@ -56,6 +61,7 @@ namespace DnDGame.Engine.ECS.Systems.Drawing
 							AABB = GetHitbox(tileName)
 						});
 					}
+					
 				}
 			}
 
@@ -97,11 +103,12 @@ namespace DnDGame.Engine.ECS.Systems.Drawing
 	{
 		public int[] Pos;
 		public int[] AABB;
-		public TilePoints(int[] pos, int[] aabb)
+		public float Length;
+		/*public TilePoints(int[] pos, int[] aabb)
 		{
 			Pos = pos;
 			AABB = aabb;
-		}
+		}*/
 
 	}
 

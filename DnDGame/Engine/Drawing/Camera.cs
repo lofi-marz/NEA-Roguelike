@@ -9,9 +9,10 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DnDGame.Engine.Drawing
 {
-    public class Camera : GameObject
+    public class Camera 
     {
-        
+		public Vector2 Pos;
+		public Vector2 Scale;
         public float Bounds;
         public float Rotation;
         public Viewport Viewport;
