@@ -28,7 +28,7 @@ namespace DnDGame.Engine.Systems
         /// <param name="displacement">The displacement the moving hitbox is about to undergo.</param>
         /// <returns></returns>
         /// 
-        public static bool TestCollision(Hitbox box1, Hitbox box2, Transform transform1, Transform transform2, Vector2 displacement) 
+        public static bool TestCollision(CollisionBox box1, CollisionBox box2, Transform transform1, Transform transform2, Vector2 displacement) 
         {
             var actualBox1 = box1.Translate(transform1.Pos + displacement).Scale(transform1.Scale);
             var actualBox2 = box2.Translate(transform2.Pos).Scale(transform2.Scale);

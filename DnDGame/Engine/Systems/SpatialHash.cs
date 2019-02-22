@@ -10,7 +10,7 @@ namespace DnDGame.Engine.Systems
     public class SpatialHash
     {
         const int CELL_SIZE = 32;
-        const int PADDING = CELL_SIZE/2;
+        const int PADDING = CELL_SIZE;
 
         public Dictionary<string, List<int>> Hash;
 
@@ -53,13 +53,13 @@ namespace DnDGame.Engine.Systems
             return GetCell(x, y);
         }
 
-        public List<int> GetItems(Rectangle region)
+        public List<int> GetItems(Rectangle region, bool pad)
         {
             var VisibleItemLists = new List<List<int>>();
-            var startX = region.X - PADDING;
-            var startY = region.Y - PADDING;
-            var endX = region.Right + PADDING;
-            var endY = region.Bottom + PADDING;
+            var startX = region.X - (pad ? PADDING:0);
+            var startY = region.Y - (pad ? PADDING : 0);
+            var endX = region.Right + (pad ? PADDING : 0);
+            var endY = region.Bottom + (pad ? PADDING : 0);
             for (int x = startX; x < endX; x += CELL_SIZE)
             {
                 for (int y = startY; y < endY; y += CELL_SIZE)

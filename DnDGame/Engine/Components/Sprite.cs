@@ -15,7 +15,8 @@ namespace DnDGame.Engine
         public string Tile;
         public int Height;
         public int Width;
-        public float Depth = 0f;
+		public float Depth = 0f;
+		public Direction Facing;
         public Sprite(string spriteSheet, string tile, float depth = 0f, int height = 16, int width = 16)
         {
             SpriteSheet = spriteSheet;
@@ -24,6 +25,7 @@ namespace DnDGame.Engine
             Height = height;
             Width = width;
             Depth = depth;
+			Facing = Direction.East;
         }
     }
 

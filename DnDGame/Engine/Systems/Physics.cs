@@ -13,7 +13,7 @@ namespace DnDGame.Engine.Systems
 
 		public static void Update(GameTime gameTime, Rectangle region)
 		{
-			IEnumerable<int> entitiesToUpdate = World.Instance.GetByTypeAndRegion(region, typeof(PhysicsBody));
+			IEnumerable<int> entitiesToUpdate = World.Instance.GetByTypeAndRegion(region, true, typeof(PhysicsBody));
 
 
 			foreach (int entity in entitiesToUpdate)
@@ -30,7 +30,7 @@ namespace DnDGame.Engine.Systems
 				var displacement = 0.5f * (oldVel + newVel) * delta;
 				var newPos = oldPos + displacement;
 				//pBody.Acc = newAcc;
-				Hitbox hitbox = World.Instance.GetComponent<Hitbox>(entity);
+				CollisionBox hitbox = World.Instance.GetComponent<CollisionBox>(entity);
 				var realAABB = new Rectangle(
 					(int)(hitbox.AABB.X + newPos.X),
 					(int)(hitbox.AABB.Y + newPos.Y),
@@ -38,7 +38,7 @@ namespace DnDGame.Engine.Systems
 					(int)(hitbox.AABB.Height * transform.Scale.Y));
 				if (hitbox == null) continue;
 
-				IEnumerable<int> nearbyPotentialCollisions = World.Instance.GetByTypeAndRegion(realAABB, typeof(Hitbox));
+				IEnumerable<int> nearbyPotentialCollisions = World.Instance.GetByTypeAndRegion(realAABB, true, typeof(CollisionBox));
 				var prevPos = oldPos;
 				var AllCollisions = new List<Rectangle>();
 				var RealHitbox1 = hitbox.Translate(newPos).Scale(transform.Scale);
@@ -46,7 +46,7 @@ namespace DnDGame.Engine.Systems
 				{
 					if (entity == entity2) continue;
 					var trans2 = World.Instance.GetComponent<Transform>(entity2);
-					var realHitbox2 = World.Instance.GetComponent<Hitbox>(entity2).Translate(trans2.Pos).Scale(trans2.Scale);
+					var realHitbox2 = World.Instance.GetComponent<CollisionBox>(entity2).Translate(trans2.Pos).Scale(trans2.Scale);
 					if (realHitbox2.AABB.Width == 0 && realHitbox2.AABB.Height == 0) continue;
 					var RectCollisions = realHitbox2.CheckCollidingBoxes(RealHitbox1);
 					if (RectCollisions.Count > 0)
@@ -65,7 +65,7 @@ namespace DnDGame.Engine.Systems
 					Direction collDirection = GetCollisionDirection((rect.Center - RealHitbox1.AABB.Center).ToVector2());
 					Rectangle intersect = Rectangle.Intersect(RealHitbox1.AABB, rect);
 					if (intersect.Width == 0 && intersect.Height == 0) continue;
-					Console.WriteLine(collDirection);
+					//Console.WriteLine(collDirection);
 					switch (collDirection)
 					{
 						case Direction.South: //Colliding with something below us
@@ -122,21 +122,21 @@ namespace DnDGame.Engine.Systems
 		}
 
 
-		public static bool CheckCollision(Hitbox hit1, Transform trans1, Hitbox hit2, Transform trans2)
+		public static bool CheckCollision(CollisionBox hit1, Transform trans1, CollisionBox hit2, Transform trans2)
 		{
 			var realHit1 = hit1.Scale(trans1.Scale).Translate(trans1.Pos);
 			var realHit2 = hit2.Scale(trans2.Scale).Translate(trans2.Pos);
 			return IsColliding(hit1, hit2);
 		}
 
-		public static int CheckCollisionSide(Hitbox hit1, Transform trans1, Hitbox hit2, Transform trans2)
+		public static int CheckCollisionSide(CollisionBox hit1, Transform trans1, CollisionBox hit2, Transform trans2)
 		{
 			var realHit1 = hit1.Scale(trans1.Scale).Translate(trans1.Pos);
 			var realHit2 = hit2.Scale(trans2.Scale).Translate(trans2.Pos);
 			return 1;
 		}
 
-		public static bool IsColliding(Hitbox hit1, Hitbox hit2)
+		public static bool IsColliding(CollisionBox hit1, CollisionBox hit2)
 		{
 
 			foreach (var box1 in hit1.Boxes)

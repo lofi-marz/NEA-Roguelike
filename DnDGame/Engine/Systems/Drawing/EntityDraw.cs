@@ -9,16 +9,15 @@ using System.Threading.Tasks;
 
 namespace DnDGame.Engine.Systems
 {
-    public static class DrawSystem
+    public static class EntityDrawSystem
     {
         public static void Update(ref SpriteBatch spriteBatch, Rectangle visible)
         {
-            
-            
+
             var spriteType = typeof(Sprite);
             var posType = typeof(Transform);
-            var entityids = World.Instance.Sprites.GetItems(visible);
-			var spriteEntitys = World.Instance.GetByTypeAndRegion(visible, typeof(Sprite));
+            var entityids = World.Instance.Sprites.GetItems(visible, true);
+			var spriteEntitys = World.Instance.GetByTypeAndRegion(visible, true, typeof(Sprite));
 			var entitySprites = spriteEntitys.Select(e =>
 			{
 				(int entity, Sprite sprite) es = (e, World.Instance.GetComponent<Sprite>(e));
@@ -55,7 +54,7 @@ namespace DnDGame.Engine.Systems
 					(int)(sprite.Width * scale.X), (int)(sprite.Height * scale.Y));
 				spriteBatch.Draw(SpriteSheet,
 					destinationRectangle: destRect,
-					sourceRectangle: sourceRect, color: Color.AliceBlue, layerDepth:entitySprite.sprite.Depth);
+					sourceRectangle: sourceRect, color: Color.AliceBlue, layerDepth:entitySprite.sprite.Depth, effects: (sprite.Facing == Direction.East)? SpriteEffects.None:SpriteEffects.FlipHorizontally);
 			}
 		
 

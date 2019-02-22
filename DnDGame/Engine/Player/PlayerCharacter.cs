@@ -1,0 +1,53 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DnDGame.Engine.Player
+{
+	public enum Gender
+	{
+		Male,
+		Female
+	}
+
+	public enum Class
+	{
+		Elf,
+		Knight,
+		Wizard
+	}
+
+
+	public enum Race
+	{
+		Human,
+		Orc,
+		Elf
+	}
+
+	public class PlayerCharacter
+	{
+		public int Entity;
+		public Class Class;
+		public Race Race;
+		public Gender Gender;
+		public PlayerCharacter(Class pclass, Race race, Gender gender)
+		{
+			Class = pclass;
+			Race = race;
+			Gender = gender;
+		}
+
+		public string GetClassName()
+		{
+			return Class.ToString().ToLower();
+		}
+
+		public char GetGenderName()
+		{
+			return Gender.ToString().ToLower()[0];
+		}
+	}
+}

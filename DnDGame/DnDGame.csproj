@@ -43,20 +43,30 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Engine\Components\Follower.cs" />
+    <Compile Include="Engine\Components\Hurtbox.cs" />
+    <Compile Include="Engine\Components\Text.cs" />
     <Compile Include="Engine\Drawing\Camera.cs" />
     <Compile Include="Engine\Components\CharacterStats.cs" />
     <Compile Include="Engine\Components\PlayerCharacterAttributes.cs" />
+    <Compile Include="Engine\Initialization\Input.cs" />
+    <Compile Include="Engine\Player\PlayerCharacter.cs" />
+    <Compile Include="Engine\System.cs" />
+    <Compile Include="Engine\Systems\ActionBoxes\AttackManager.cs" />
     <Compile Include="Engine\Systems\Drawing\AnimationManager.cs" />
+    <Compile Include="Engine\Systems\Drawing\StringDraw.cs" />
     <Compile Include="Engine\Systems\Drawing\Tileset.cs" />
-    <Compile Include="Engine\Components\Hitbox.cs" />
+    <Compile Include="Engine\Components\CollisionBox.cs" />
     <Compile Include="Engine\Component.cs" />
     <Compile Include="Engine\Components\AnimatedSprite.cs" />
     <Compile Include="Engine\Components\PhysicsBody.cs" />
     <Compile Include="Engine\Components\Transform.cs" />
     <Compile Include="Engine\Components\Sprite.cs" />
     <Compile Include="Engine\Entity.cs" />
+    <Compile Include="Engine\Systems\DungeonGame.cs" />
+    <Compile Include="Engine\Systems\NPC\NPCController.cs" />
     <Compile Include="Engine\Systems\Physics.cs" />
-    <Compile Include="Engine\Systems\Drawing\Draw.cs" />
+    <Compile Include="Engine\Systems\Drawing\EntityDraw.cs" />
     <Compile Include="Engine\Systems\SpatialHash.cs" />
     <Compile Include="Engine\Systems\Drawing\TilesetManager.cs" />
     <Compile Include="Engine\Systems\Input\Movement.cs" />
@@ -67,7 +77,7 @@
     <Compile Include="Engine\Systems\Input\InputMap.cs" />
     <Compile Include="Engine\Initialization\CreateObjects\CreatePlayer.cs" />
     <Compile Include="Engine\Utils\Utils.cs" />
-    <Compile Include="Game1.cs" />
+    <Compile Include="MainGame.cs" />
     <Compile Include="Engine\Systems\Input\InputHelper.cs" />
     <Compile Include="Engine\MazeUtils\DepthFirstGen.cs" />
     <Compile Include="Program.cs" />
@@ -76,6 +86,9 @@
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\MonoGame\v3.0\Assemblies\DesktopGL\MonoGame.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Myra, Version=0.8.3.162, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Myra.0.8.3.162\lib\net45\Myra.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -139,6 +152,9 @@
     </None>
     <None Include="app.manifest">
       <SubType>Designer</SubType>
+    </None>
+    <None Include="Content\Tilesets\DungeonTileset - Copy.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Content\Tilesets\DungeonTileset.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

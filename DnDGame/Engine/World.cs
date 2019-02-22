@@ -14,8 +14,12 @@ namespace DnDGame.Engine
 		public static World Instance { get => lazy.Value; }
 
 		public List<Entity> Entities;
-        //public Dictionary<int, List<Component>> EntityComponents;
+		public List<System> Systems;
+
         public Dictionary<Type, Dictionary<int, Component>> EntityComponents;
+
+
+
         public SpatialHash Sprites;
         private int entityI;
         public World()
@@ -49,16 +53,21 @@ namespace DnDGame.Engine
 
             List<int> Entities = new List<int>();
             List<int> ValidEntities = new List<int>();
-            /*foreach (var type in ComponentTypes)
+			/*foreach (var type in ComponentTypes)
             {
                Entities.AddRange(EntityComponents[type].Select(x => x.Key));
             }*/
+			if (!EntityComponents.ContainsKey(ComponentTypes[0]))
+			{
+				return new List<int>();
+			}
             foreach (var entity in EntityComponents[ComponentTypes[0]]) {
                 int count = 1;
                 for (int i = 1; i < ComponentTypes.Length; i++)
                 {
                     if (EntityComponents[ComponentTypes[i]].ContainsKey(entity.Key))
                     {
+
                         count++;
                     }
  
@@ -82,10 +91,11 @@ namespace DnDGame.Engine
 
 		
 
-        public IEnumerable<int> GetByTypeAndRegion(Rectangle region, params Type[] types)
+        public IEnumerable<int> GetByTypeAndRegion(Rectangle region, bool pad, params Type[] types)
         {
-            List<int> entitiesInRegion = Instance.Sprites.GetItems(region);
+            List<int> entitiesInRegion = Instance.Sprites.GetItems(region, pad);
             List<int> typeEntities = Instance.GetEntitiesByType(types);
+
 			return entitiesInRegion.Intersect(typeEntities);
         }
 

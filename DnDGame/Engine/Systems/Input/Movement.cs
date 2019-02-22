@@ -14,7 +14,7 @@ namespace DnDGame.Engine.Systems.Input
         public static void MoveEntity(int entity, Direction direction)
         {
             PhysicsBody pBody = World.Instance.GetComponent<PhysicsBody>(entity);
-			AnimationPlayer player = World.Instance.GetComponent<AnimationPlayer>(entity);
+			Sprite sprite = World.Instance.GetComponent<Sprite>(entity);
             float PushForce = pBody.DefaultAcc.X;
             float x = pBody.Acc.X;
             float y = pBody.Acc.Y;
@@ -22,26 +22,34 @@ namespace DnDGame.Engine.Systems.Input
             {
                 case Direction.North:
                     y = -PushForce;
+					
                     break;
                 case Direction.South:
                     y = PushForce;
                     break;
                 case Direction.West:
                     x = -PushForce;
-                    break;
+					sprite.Facing = Direction.West;
+
+					break;
                 case Direction.East:
                     x = PushForce;
-                    break;
+					sprite.Facing = Direction.East;
+					break;
                 case Direction.None:
                     x = 0f;
                     y = 0f;
                     break;
 
             }
-			AnimationManager.PlayNext(entity, "knight_m_run");
+			
             pBody.Acc = new Vector2(x, y);
+
             //((MovementComponent)World.Instance.EntityComponents[typeof(MovementComponent)][entityid]).Velocity += acc;
             World.Instance.SetComponent(entity, pBody);
         }
+
+
+		
     }
 }

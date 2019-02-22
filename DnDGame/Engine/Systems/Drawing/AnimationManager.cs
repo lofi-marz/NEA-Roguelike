@@ -18,7 +18,7 @@ namespace DnDGame.Engine.Systems.Drawing
 		/// <param name="region"></param>
 		public static void Update(GameTime gameTime, Rectangle region)
 		{
-			var animEntities = World.Instance.GetByTypeAndRegion(region, typeof(AnimationPlayer));
+			var animEntities = World.Instance.GetByTypeAndRegion(region, true, typeof(AnimationPlayer));
 
 			foreach (var entity in animEntities)
 			{

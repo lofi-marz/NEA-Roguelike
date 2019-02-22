@@ -30,7 +30,7 @@ namespace DnDGame.Engine.Systems.Drawing
 				Map[tilePoint.Key] = new Tile
 				{
 					Sprite = GenSpriteRect(tileSpritePos),
-					AABB = (tileHitPoints == null) ? new Hitbox(new Rectangle(0,0,0,0)) : new Hitbox(GenSpriteRect(tileHitPoints)) 
+					AABB = (tileHitPoints == null) ? new CollisionBox(new Rectangle(0,0,0,0)) : new CollisionBox(GenSpriteRect(tileHitPoints)) 
 				};
 
 				var animPattern = new Regex(".+_anim_[0-9]+");
@@ -48,7 +48,7 @@ namespace DnDGame.Engine.Systems.Drawing
 							new Tile
 							{
 								Sprite = GetSprite(tileName),
-								AABB = GetHitbox(tileName)
+								AABB = GetCollisionBox(tileName)
 							}
 						};
 
@@ -58,7 +58,7 @@ namespace DnDGame.Engine.Systems.Drawing
 						Anims[animName].Add(new Tile
 						{
 							Sprite = GetSprite(tileName),
-							AABB = GetHitbox(tileName)
+							AABB = GetCollisionBox(tileName)
 						});
 					}
 					
@@ -74,12 +74,12 @@ namespace DnDGame.Engine.Systems.Drawing
 			return sourceRect;
 		}
 
-		public Hitbox GenSpriteHit(int[] points)
+		public CollisionBox GenSpriteHit(int[] points)
 		{
 			var AABBPoints = points;
 			var FullAABBPoints = AABBPoints.Length == 4 ? AABBPoints : new int[] { 0, 0 }.Concat(AABBPoints).ToArray();
 			var AABBRect = new Rectangle(FullAABBPoints[0], FullAABBPoints[1], FullAABBPoints[2], FullAABBPoints[3]);
-			return new Hitbox(new List<Rectangle> { AABBRect });
+			return new CollisionBox(new List<Rectangle> { AABBRect });
 		}
 
 		public Rectangle GetSprite(string tile)
@@ -87,7 +87,7 @@ namespace DnDGame.Engine.Systems.Drawing
 			return Map[tile].Sprite;
 		}
 
-		public Hitbox GetHitbox(string tile)
+		public CollisionBox GetCollisionBox(string tile)
 		{
 			return Map[tile].AABB;
 		}
@@ -115,7 +115,7 @@ namespace DnDGame.Engine.Systems.Drawing
 	public class Tile
 	{
 		public Rectangle Sprite;
-		public Hitbox AABB;
+		public CollisionBox AABB;
 	}
 
 	public class Anim

@@ -8,20 +8,12 @@ using System.Threading.Tasks;
 namespace DnDGame.Engine
 {
 
-    public class Hitbox : Component
+    public class CollisionBox : Component
     {
-
-        enum Direction
-        {
-            North,
-            East,
-            South,
-            West
-        }
 
         public List<Rectangle> Boxes;
         public Rectangle AABB;
-        public Hitbox(List<Rectangle> boxes)
+        public CollisionBox(List<Rectangle> boxes)
         {
             Boxes = boxes;
             int x = boxes[0].X, y = boxes[0].Y, right = boxes[0].Right, bottom = boxes[0].Bottom;
@@ -35,7 +27,7 @@ namespace DnDGame.Engine
             AABB = new Rectangle(x, y, right - x, bottom - y);
         }
 
-		public Hitbox(Rectangle rect)
+		public CollisionBox(Rectangle rect)
 		{
 			Boxes = new List<Rectangle>
 			{
@@ -44,7 +36,7 @@ namespace DnDGame.Engine
 			AABB = rect;
 		}
 
-        public Hitbox(int[][] boxes)
+        public CollisionBox(int[][] boxes)
         {
             foreach (var box in boxes)
             {
@@ -52,17 +44,17 @@ namespace DnDGame.Engine
             }
         }
 
-        public Hitbox Translate(Vector2 vector)
+        public CollisionBox Translate(Vector2 vector)
         {
             List<Rectangle> newPoly = new List<Rectangle>();
             for (int i = 0; i < Boxes.Count; i++)
             {
                 newPoly.Add(new Rectangle(Boxes[i].X + (int)vector.X, Boxes[i].Y + (int)vector.Y, Boxes[i].Width, Boxes[i].Height));
             }
-            return new Hitbox(newPoly);
+            return new CollisionBox(newPoly);
         }
 
-        public static bool IsColliding(Hitbox hit1, Hitbox hit2)
+        public static bool IsColliding(CollisionBox hit1, CollisionBox hit2)
         {
 
             foreach (var box1 in hit1.Boxes)
@@ -83,7 +75,7 @@ namespace DnDGame.Engine
         /// </summary>
         /// <param name="hit1"></param>
         /// <returns></returns>
-        public List<Rectangle> CheckCollidingBoxes(Hitbox hit2)
+        public List<Rectangle> CheckCollidingBoxes(CollisionBox hit2)
         {
             var CollidingBoxes = new List<Rectangle>();
             foreach (var rect1 in this.Boxes)
@@ -99,14 +91,14 @@ namespace DnDGame.Engine
             return CollidingBoxes;
         }
 
-        public Hitbox Scale(Vector2 vector)
+        public CollisionBox Scale(Vector2 vector)
         {
             List<Rectangle> newPoly = new List<Rectangle>();
             for (int i = 0; i < Boxes.Count; i++)
             {
                 newPoly.Add(new Rectangle(Boxes[i].X, Boxes[i].Y, (int)(Boxes[i].Width * vector.X), (int)(Boxes[i].Height * vector.Y)));
             }
-            return new Hitbox(newPoly);
+            return new CollisionBox(newPoly);
         }
 
     }

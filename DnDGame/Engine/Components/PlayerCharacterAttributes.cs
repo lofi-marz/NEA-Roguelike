@@ -14,5 +14,7 @@ namespace DnDGame.Engine.Components
 		public float Intelligence;
 		public float Wisdom;
 		public float Charisma;
+
+
 	}
 }
