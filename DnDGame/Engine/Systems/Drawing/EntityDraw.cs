@@ -51,7 +51,7 @@ namespace DnDGame.Engine.Systems
 				var destRect = new Rectangle(
 					(int)Math.Ceiling(pos.X),
 					(int)Math.Ceiling(pos.Y), 
-					(int)(sprite.Width * scale.X), (int)(sprite.Height * scale.Y));
+					(int)(sourceRect.X * scale.X), (int)(sourceRect.Y * scale.Y));
 				spriteBatch.Draw(SpriteSheet,
 					destinationRectangle: destRect,
 					sourceRectangle: sourceRect, color: Color.AliceBlue, layerDepth:entitySprite.sprite.Depth, effects: (sprite.Facing == Direction.East)? SpriteEffects.None:SpriteEffects.FlipHorizontally);

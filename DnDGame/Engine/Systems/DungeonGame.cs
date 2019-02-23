@@ -14,6 +14,7 @@ using DnDGame.MazeGen.DepthFirst;
 using DnDGame.Engine.Systems.MazeGen;
 using DnDGame.Engine.Player;
 using DnDGame.Engine.Components;
+using DnDGame.Engine.Initialization.CreateObjects;
 
 namespace DnDGame.Engine.Systems
 {
@@ -38,7 +39,7 @@ namespace DnDGame.Engine.Systems
 
 		public void LoadContent()
 		{
-			Player.Entity = CreateObjects.Player(Vector2.Zero, Player);
+			Player.Entity = CreatePlayer.Init(Vector2.Zero, Player);
 			InputAssign.AssignMovementController(Player, ref InputController);
 
 		}
@@ -80,12 +81,12 @@ namespace DnDGame.Engine.Systems
 				List<int> cellEntities = new List<int>();
 				if (item.StartsWith("floor"))
 				{
-					cellEntities.Add(CreateObjects.DungeonCell(pos, item, 0f));
-					if (rnd.Next(0,1000) < 5) cellEntities.Add(CreateObjects.NPC(pos, "orc_shaman"));
+					cellEntities.Add(CreateCell.Init(pos, item, 0f));
+					if (rnd.Next(0,1000) < 5) cellEntities.Add(CreateNPC.Init(pos, "orc_shaman"));
 				}
 				else
 				{
-					cellEntities.Add(CreateObjects.DungeonCell(pos, item, 0.1f));
+					cellEntities.Add(CreateCell.Init(pos, item, 0.1f));
 				}
 				cellEntities.ForEach(e => World.Instance.Sprites.Add(e, pos));
 				

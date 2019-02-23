@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Myra;
 
 using DnDGame.Engine;
 
@@ -18,8 +17,10 @@ using System;
 using Newtonsoft.Json;
 using System.IO;
 using DnDGame.Engine.Initialization;
-using Myra.Graphics2D.UI;
 using DnDGame.Engine.Player;
+using GeonBit.UI.Entities;
+using GeonBit.UI;
+using static DnDGame.Engine.Components.CharacterStats;
 
 
 //TODO
@@ -45,7 +46,6 @@ namespace DnDGame
 		public int playerid;
 		public DungeonGame CurrentGame;
 		public Vector2 globalScale;
-		private Desktop _host;
 		SpriteFont arial;
 		public MainGame()
 		{
@@ -64,6 +64,8 @@ namespace DnDGame
 		/// </summary>
 		protected override void Initialize()
 		{
+			UserInterface.Initialize(Content, BuiltinThemes.hd);
+			UserInterface.Active.UseRenderTarget = true;
 			// TODO: Add your initialization logic here
 			//input = new InputHelper();
 			CurrentGame = new DungeonGame();
@@ -71,7 +73,7 @@ namespace DnDGame
 			graphics.PreferredBackBufferWidth = 1280;  // set this value to the desired width of your window
 			graphics.PreferredBackBufferHeight = 720;   // set this value to the desired height of your window
 			graphics.ApplyChanges();
-
+			
 
 			base.Initialize();
 		}
@@ -82,53 +84,27 @@ namespace DnDGame
 		/// </summary>
 		protected override void LoadContent()
 		{
-			// Create a new SpriteBatch, which can be used to draw textures.
-			MyraEnvironment.Game = this;
-			var mainMenu = new Grid
-			{
-				RowSpacing = 8,
-				ColumnSpacing = 8
-			};
-			mainMenu.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
-			mainMenu.RowsProportions.Add(new Grid.Proportion(Grid.ProportionType.Auto));
-			var startButton = new Button
-			{
-
-				GridColumn = 0,
-				GridRow = 0,
-				Text = "Start Game"
-			};
-
-			var Button = new Button
-			{
-
-				GridColumn = 1,
-				GridRow = 0,
-				Text = "Start"
-			};
-
-			startButton.Click += (s, a) =>
-			{
-				StartGame();
-			};
-
-			mainMenu.Widgets.Add(startButton);
-
-			_host = new Desktop();
-			_host.Widgets.Add(mainMenu);
-
-			arial = Content.Load<SpriteFont>("fonts/Arial");
-
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 			var tileset = TilesetManager.LoadJson("DungeonTileset");
 			
 			tileset.SpriteSheet = Content.Load<Texture2D>("Sprites/DungeonTileset");
 			TilesetManager.AddSet("dungeon", tileset);
 
-
-
-
+			var MainMenu = Menus.MainMenu.Init();
+			MainMenu.Find("start").OnClick += (GeonBit.UI.Entities.Entity btn) => {
+				StartGame();
+				var playerStatsBox = Menus.PlayerStats.Init(CurrentGame.Player.Entity);
+				UserInterface.Active.AddEntity(playerStatsBox);
+	
+				btn.Parent.Visible = false;
+			};
 			
+			MainMenu.Find("exit").OnClick += (GeonBit.UI.Entities.Entity btn) => { Exit(); };
+			UserInterface.Active.AddEntity(MainMenu);
+
+
+
+
 
 
 
@@ -150,8 +126,9 @@ namespace DnDGame
 		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		protected override void Update(GameTime gameTime)
 		{
-
 			CurrentGame.Update();
+			UserInterface.Active.Update(gameTime);
+
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 				Exit();
 
@@ -166,6 +143,7 @@ namespace DnDGame
 				AnimationManager.Update(gameTime, VisibleRegion);
 				NPCController.Update(gameTime, VisibleRegion);
 				AttackManager.Update(gameTime, VisibleRegion);
+				LifeTimerManager.Update(gameTime);
 			}
 
 
@@ -180,10 +158,9 @@ namespace DnDGame
 		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		protected override void Draw(GameTime gameTime)
 		{
+			UserInterface.Active.Draw(spriteBatch);
 			GraphicsDevice.Clear(Color.CornflowerBlue);
-			_host.Bounds = new Rectangle(0, 0, GraphicsDevice.PresentationParameters.BackBufferWidth,
-  GraphicsDevice.PresentationParameters.BackBufferHeight);
-			_host.Render();
+
 			// TODO: Add your drawing code here
 			if (CurrentGame.GameStarted)
 			{
@@ -193,9 +170,9 @@ namespace DnDGame
 				CurrentGame.Draw(ref spriteBatch, viewport, gameTime);
 				spriteBatch.End();
 			}
-			
+			UserInterface.Active.DrawMainRenderTarget(spriteBatch);
 
-			
+
 
 			//spriteBatch.DrawString(arial, $"{camera.Pos.X}, {camera.Pos.Y}", camera.Pos, Color.Black);
 

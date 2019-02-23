@@ -43,12 +43,31 @@ namespace DnDGame.Engine
             return entityI++;
         }
 
-        /// <summary>
-        /// Retrieve all entities with the given types.
-        /// </summary>
-        /// <param name="ComponentTypes">A list of components. The returned entities will have all of these./param>
+		public void DestroyEntity(int entity)
+		{
+			foreach (var e in Entities)
+			{
+				if (e.Id == entity)
+				{
+					Entities.Remove(e);
+					break;
+				}
+			}
+			foreach (var componentList in EntityComponents)
+			{
+				if (componentList.Value.ContainsKey(entity))
+				{
+					EntityComponents[componentList.Key].Remove(entity);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Retrieve all entities with the given types.
+		/// </summary>
+		/// <param name="ComponentTypes">A list of components. The returned entities will have all of these./param>
 		/// 
-        public List<int> GetEntitiesByType(params Type[] ComponentTypes)
+		public IEnumerable<int> GetEntitiesByType(params Type[] ComponentTypes)
         {
 
             List<int> Entities = new List<int>();
@@ -93,8 +112,8 @@ namespace DnDGame.Engine
 
         public IEnumerable<int> GetByTypeAndRegion(Rectangle region, bool pad, params Type[] types)
         {
-            List<int> entitiesInRegion = Instance.Sprites.GetItems(region, pad);
-            List<int> typeEntities = Instance.GetEntitiesByType(types);
+            IEnumerable<int> entitiesInRegion = Instance.Sprites.GetItems(region, pad);
+            IEnumerable<int> typeEntities = Instance.GetEntitiesByType(types);
 
 			return entitiesInRegion.Intersect(typeEntities);
         }

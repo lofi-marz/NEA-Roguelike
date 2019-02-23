@@ -53,7 +53,7 @@ namespace DnDGame.Engine.Systems
             return GetCell(x, y);
         }
 
-        public List<int> GetItems(Rectangle region, bool pad)
+        public IEnumerable<int> GetItems(Rectangle region, bool pad)
         {
             var VisibleItemLists = new List<List<int>>();
             var startX = region.X - (pad ? PADDING:0);

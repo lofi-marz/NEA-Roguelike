@@ -25,8 +25,6 @@ namespace DnDGame.Engine.Systems.Input
         }
 
 
-
-
         public void AddAction(GameAction gameAction, Action action, ActionType type = ActionType.Down)
         {
             switch (type)

@@ -12,9 +12,9 @@ using System.Threading.Tasks;
 
 namespace DnDGame.Engine.Initialization
 {
-	static class CreateObjects
+	static class CreatePlayer
 	{
-		public static int Player(Vector2 startPos, PlayerCharacter player)
+		public static int Init(Vector2 startPos, PlayerCharacter player)
 		{
 			int playerId;
 			var AABB = TilesetManager.Tilesets["dungeon"].GetCollisionBox($"{player.GetClassName()}_{player.GetGenderName()}_idle_anim_0").AABB;
@@ -24,7 +24,9 @@ namespace DnDGame.Engine.Initialization
 				AABB = AABB,
 				OnHurt = (int hit, int hurt) =>
 				{
-					Console.WriteLine($"{hit} hurt");
+					var MyStats = World.Instance.GetComponent<CharacterStats>(hurt);
+					var HitboxStats = World.Instance.GetComponent<CharacterStats>(hit);
+					MyStats.CurrentStats["health"] -= HitboxStats.CurrentStats["dps"] * (1f/60f);
 				}
 			};
 
@@ -34,6 +36,7 @@ namespace DnDGame.Engine.Initialization
 				new PhysicsBody(new Vector2(2000f)),
 				TilesetManager.Tilesets["dungeon"].GetCollisionBox($"{player.GetClassName()}_{player.GetGenderName()}_idle_anim_0"),
 				new AnimationPlayer("dungeon", $"{player.GetClassName()}_{player.GetGenderName()}_idle", $"{player.GetClassName()}_{player.GetGenderName()}_idle"),
+				new CharacterStats((Race)Enum.Parse(typeof(Race), player.GetClassName(), true)),
 				hurtBox);
 			World.Instance.Sprites.Add(playerId, startPos);
 			return playerId;
@@ -41,40 +44,9 @@ namespace DnDGame.Engine.Initialization
 
 		
 
-		public static int DungeonCell(Vector2 pos, string item, float depth)
-		{
-			int cellEntity = World.Instance.CreateEntity(
-				new Transform(pos, new Vector2(1f)),
-				new Sprite("dungeon", item.ToString(), depth),
-				TilesetManager.Tilesets["dungeon"].GetCollisionBox(item.ToString()));
-			return cellEntity;
-		}
 
 
-		public static int NPC(Vector2 startPos, string type)
-		{
-			var defaultSprite = type + "_idle_anim_0";
-			var defaultAnim = type + "_idle";
-			var AABB = TilesetManager.Tilesets["dungeon"].GetCollisionBox(defaultSprite).AABB;
-			AABB.Inflate(1.1f, 1.1f);
-			var hitBox = new Hitbox()
-			{
-				AABB = AABB,
-				OnHit = (int hit, int hurt) =>
-				{
-					Console.WriteLine($"{hit} hit");
-				}
-			};
-			int npcid = World.Instance.CreateEntity(
-				new Transform(startPos, new Vector2(1f)),
-				new Sprite("dungeon", defaultSprite, 0.5f),
-				new PhysicsBody(new Vector2(1000f)),
-				TilesetManager.Tilesets["dungeon"].GetCollisionBox(defaultSprite),
-				new AnimationPlayer("dungeon", defaultAnim, defaultAnim),
-				new Follower(100),
-				hitBox
-				);
-			return npcid;
-		}
+
+
 	}
 }
