@@ -32,7 +32,7 @@ namespace DnDGame.Engine.Initialization
 
 			playerId = World.Instance.CreateEntity(
 				new Transform(new Vector2(-64f, -32f), new Vector2(1f)),
-				new Sprite("dungeon", $"{player.GetClassName()}_{player.GetGenderName()}_idle_anim_0", 0.5f, 32, 16),
+				new Sprite("dungeon", $"{player.GetClassName()}_{player.GetGenderName()}_idle_anim_0", 0.5f),
 				new PhysicsBody(new Vector2(2000f)),
 				TilesetManager.Tilesets["dungeon"].GetCollisionBox($"{player.GetClassName()}_{player.GetGenderName()}_idle_anim_0"),
 				new AnimationPlayer("dungeon", $"{player.GetClassName()}_{player.GetGenderName()}_idle", $"{player.GetClassName()}_{player.GetGenderName()}_idle"),

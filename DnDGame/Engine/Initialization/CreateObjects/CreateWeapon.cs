@@ -11,7 +11,7 @@ namespace DnDGame.Engine.Initialization.CreateObjects
 {
 	static class CreateWeapon
 	{
-		static void Init(Vector2 pos, string type, Direction direction)
+		static int Init(Vector2 pos, string type, Direction direction)
 		{
 			int weaponId;
 			int parentId;
@@ -29,7 +29,7 @@ namespace DnDGame.Engine.Initialization.CreateObjects
 				TilesetManager.Tilesets["dungeon"].GetCollisionBox($"type"),
 				hitbox);
 			World.Instance.Sprites.Add(weaponId, pos);
-			return playerId;
+			return weaponId;
 		}
 	}
 }
