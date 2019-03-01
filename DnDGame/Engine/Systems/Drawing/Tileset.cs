@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace DnDGame.Engine.Systems.Drawing
 {
-	public class Tileset
+	public class TileAtlas
 	{
 		const float DEFAULT_ANIM_LENGTH = 0.1f;
 		public Texture2D SpriteSheet;

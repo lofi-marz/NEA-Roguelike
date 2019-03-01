@@ -12,6 +12,9 @@ using System.Threading.Tasks;
 
 namespace DnDGame.Engine.Initialization
 {
+	/// <summary>
+	/// Creates a player character in the world.
+	/// </summary>
 	static class CreatePlayer
 	{
 		public static int Init(Vector2 startPos, PlayerCharacter player)

@@ -10,8 +10,18 @@ using System.Threading.Tasks;
 
 namespace DnDGame.Engine.Initialization.CreateObjects
 {
+	/// <summary>
+	/// Creates an NPC in the world.
+	/// This is a simple enemy with a transform, animated sprite, collisionbox and hitbox.
+	/// </summary>
 	static class CreateNPC
 	{
+		/// <summary>
+		/// Initialize the NPC of the given type in the given starting position.
+		/// </summary>
+		/// <param name="startPos">The starting position of the NPC.</param>
+		/// <param name="type">The type of NPC to create.</param>
+		/// <returns>The Id of the NPC created.</returns>
 		public static int Init(Vector2 startPos, string type)
 		{
 			var defaultSprite = type + "_idle_anim_0";

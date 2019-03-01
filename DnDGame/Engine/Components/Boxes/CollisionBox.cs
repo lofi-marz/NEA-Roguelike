@@ -8,11 +8,20 @@ using System.Threading.Tasks;
 namespace DnDGame.Engine
 {
 
+	/// <summary>
+	/// A component used to store the collision rectangles for an object. Used for physics collisions.
+	/// </summary>
     public class CollisionBox : Component
     {
-
+		/// <summary>
+		/// The list of rectangles which make up the object's collision polygon.
+		/// </summary>
         public List<Rectangle> Boxes;
+		/// <summary>
+		/// A rectangle which encompasses the entire collision polygon.
+		/// </summary>
         public Rectangle AABB;
+
         public CollisionBox(List<Rectangle> boxes)
         {
             Boxes = boxes;
@@ -44,6 +53,11 @@ namespace DnDGame.Engine
             }
         }
 
+		/// <summary>
+		/// Given a vector, translate the entire CollisionBox by this vector.
+		/// </summary>
+		/// <param name="vector">The vector to translate the CollisonBox by.</param>
+		/// <returns>The translated CollisionBox.</returns>
         public CollisionBox Translate(Vector2 vector)
         {
             List<Rectangle> newPoly = new List<Rectangle>();
@@ -54,27 +68,12 @@ namespace DnDGame.Engine
             return new CollisionBox(newPoly);
         }
 
-        public static bool IsColliding(CollisionBox hit1, CollisionBox hit2)
-        {
-
-            foreach (var box1 in hit1.Boxes)
-            {
-                foreach (var box2 in hit2.Boxes)
-                {
-                    if (box1.Intersects(box2))
-                    {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
 
         /// <summary>
-        /// Check if any of the rectangles of a Hitbox are colliding with the given hitbox and return them.
+        /// Check if any of the rectangles of a CollisionBox are colliding with the given CollisionBox and if so, return them.
         /// </summary>
-        /// <param name="hit1"></param>
-        /// <returns></returns>
+        /// <param name="hit2">The CollisionBox to check collisions against.</param>
+        /// <returns>Any of the rectangles in the current CollisionBox that are in contact with the second.</returns>
         public List<Rectangle> CheckCollidingBoxes(CollisionBox hit2)
         {
             var CollidingBoxes = new List<Rectangle>();
@@ -90,7 +89,11 @@ namespace DnDGame.Engine
             }
             return CollidingBoxes;
         }
-
+		/// <summary>
+		/// Given a vector, scale every rectangle in Boxes by this vector.
+		/// </summary>
+		/// <param name="vector">The vector to scale the CollisionBox by.</param>
+		/// <returns>The scaled CollisionBox.</returns>
         public CollisionBox Scale(Vector2 vector)
         {
             List<Rectangle> newPoly = new List<Rectangle>();

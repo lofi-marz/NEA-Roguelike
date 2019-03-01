@@ -12,6 +12,11 @@ namespace DnDGame.Engine.Initialization
 {
 	public static class InputAssign
 	{
+		/// <summary>
+		/// Assign a movement controller to an entity.
+		/// </summary>
+		/// <param name="player">The player character to be controlled.</param>
+		/// <param name="playerInput">The inputs to be register the actions with.</param>
 		public static void AssignMovementController(PlayerCharacter player, ref PlayerController playerInput)
 		{
 			for (int i = 0; i < 4; i++)

@@ -14,7 +14,6 @@ namespace DnDGame.Engine
 		public static World Instance { get => lazy.Value; }
 
 		public List<Entity> Entities;
-		public List<System> Systems;
 
         public Dictionary<Type, Dictionary<int, Component>> EntityComponents;
 

@@ -11,7 +11,7 @@ namespace DnDGame.Engine.Systems.Stats
 
 	public static class StatsManager
 	{
-		public enum StatLevel
+		public enum CharLevel
 		{
 			VeryLow,
 			Low,

@@ -104,7 +104,7 @@ namespace DnDGame.Engine.Systems
 			if (!GameStarted) return;
 			//SpriteBatch.DrawString(arial, $"{camera.Pos.X}, {camera.Pos.Y}", camera.Pos, Color.Black);
 
-			EntityDrawSystem.Update(ref spriteBatch, GetVisibleRegion(viewport));
+			SpriteDrawSystem.Update(ref spriteBatch, GetVisibleRegion(viewport));
 
 		}
 

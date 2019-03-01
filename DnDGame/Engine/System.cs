@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace DnDGame.Engine
 {
-	public class System
+	public interface ISystem
 	{
+
 	}
 }

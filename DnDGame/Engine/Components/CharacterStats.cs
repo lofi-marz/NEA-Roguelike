@@ -9,13 +9,19 @@ using static DnDGame.Engine.Systems.Stats.StatsManager;
 namespace DnDGame.Engine.Components
 {
 	/// <summary>
-	/// A component to store the varying stats
+	/// A component to store the varying stats for an entity.
 	/// </summary>
-	/// 
 
 	public class CharacterStats : Component
 	{
-		public Dictionary<string, StatLevel> Chars;
+
+		/// <summary>
+		/// The characteristics for a character. These are used to influence the stats.
+		/// </summary>
+		public Dictionary<string, CharLevel> Chars;
+		/// <summary>
+		/// The values for the stats of an object.
+		/// </summary>
 		public Dictionary<string, float> CurrentStats { get
 			{
 				OnStatChange?.Invoke(new StatChangeArgs()
@@ -34,7 +40,14 @@ namespace DnDGame.Engine.Components
 				_currentStats = value;
 			} }
 		private Dictionary<string, float> _currentStats;
+		/// <summary>
+		/// The current max stats for a character. CurrentStats may vary; these are the max values.
+		/// </summary>
 		public Dictionary<string, float> MaxStats;
+		/// <summary>
+		/// The function to run on a stat change.
+		/// </summary>
+		/// <param name="e">StatChangeArgs; The current stats and their max values.</param>
 		public delegate void StatChange(StatChangeArgs e);
 		public event StatChange OnStatChange;
 		public class StatChangeArgs : EventArgs
@@ -42,6 +55,11 @@ namespace DnDGame.Engine.Components
 			public Dictionary<string, float> CurrentStats;
 			public Dictionary<string, float> MaxStats;
 		}
+
+		/// <summary>
+		/// Create a default character of the given race.
+		/// </summary>
+		/// <param name="race">The race of the character.</param>
 		public CharacterStats(Race race)
 		{
 
@@ -70,13 +88,21 @@ namespace DnDGame.Engine.Components
 		}
 	}
 
+	/// <summary>
+	/// Given a character's characteristics from its race, calculate its max stats.
+	/// </summary>
 	static class CalcStats
 	{
 		const float BASEHEALTH = 100;
 		const float BASEMANA = 50;
 		const float BASESTAMINA = 50;
 		const float BASEDPS = 10;
-		public static float Health(Dictionary<string, StatLevel> Levels)
+		/// <summary>
+		/// Calculate the maximum health of a character.
+		/// </summary>
+		/// <param name="Levels">The character's characteristics.</param>
+		/// <returns>The calculated max health.</returns>
+		public static float Health(Dictionary<string, CharLevel> Levels)
 		{
 			var health = BASEHEALTH;
 			var strValue = (int)Levels["str"] - 2;
@@ -86,7 +112,12 @@ namespace DnDGame.Engine.Components
 			return health;
 		}
 
-		public static float Mana(Dictionary<string, StatLevel> Levels)
+		/// <summary>
+		/// Calculate the maximum mana of a character.
+		/// </summary>
+		/// <param name="Levels">The character's characteristics.</param>
+		/// <returns>The calculated max mana.</returns>
+		public static float Mana(Dictionary<string, CharLevel> Levels)
 		{
 			var mana = BASEMANA;
 
@@ -100,7 +131,12 @@ namespace DnDGame.Engine.Components
 			return mana;
 		}
 
-		public static float Stamina(Dictionary<string, StatLevel> Levels)
+		/// <summary>
+		/// Calculate the maximum stamina of a character.
+		/// </summary>
+		/// <param name="Levels">The character's characteristics.</param>
+		/// <returns>The calculated max stamina.</returns>
+		public static float Stamina(Dictionary<string, CharLevel> Levels)
 		{
 			var stamina = BASESTAMINA;
 
@@ -113,7 +149,12 @@ namespace DnDGame.Engine.Components
 			return stamina;
 		}
 
-		public static float DPS(Dictionary<string, StatLevel> levels)
+		/// <summary>
+		/// Calculate the maximum damage per second of a character.
+		/// </summary>
+		/// <param name="Levels">The character's characteristics.</param>
+		/// <returns>The calculated max DPS.</returns>
+		public static float DPS(Dictionary<string, CharLevel> levels)
 		{
 			var dps = BASEDPS;
 			var stamina = BASESTAMINA;
@@ -128,36 +169,39 @@ namespace DnDGame.Engine.Components
 		}
 	}
 
+	/// <summary>
+	/// Stores the default characteristics for each race.
+	/// </summary>
 	static class RaceChars
 	{
-		public static readonly Dictionary<string, StatLevel> Elf = new Dictionary<string, StatLevel>()
+		public static readonly Dictionary<string, CharLevel> Elf = new Dictionary<string, CharLevel>()
 		{
-			{ "str", StatLevel.High},
-			{ "dex", StatLevel.VeryHigh},
-			{ "con", StatLevel.VeryLow},
-			{ "int", StatLevel.Average},
-			{ "wis", StatLevel.Average},
-			{ "cha", StatLevel.Average},
+			{ "str", CharLevel.High},
+			{ "dex", CharLevel.VeryHigh},
+			{ "con", CharLevel.VeryLow},
+			{ "int", CharLevel.Average},
+			{ "wis", CharLevel.Average},
+			{ "cha", CharLevel.Average},
 		};
 
-		public static readonly Dictionary<string, StatLevel> Human = new Dictionary<string, StatLevel>()
+		public static readonly Dictionary<string, CharLevel> Human = new Dictionary<string, CharLevel>()
 		{
-			{ "str", StatLevel.Low},
-			{ "dex", StatLevel.Average},
-			{ "con", StatLevel.Low},
-			{ "int", StatLevel.VeryHigh},
-			{ "wis", StatLevel.High},
-			{ "cha", StatLevel.Average},
+			{ "str", CharLevel.Low},
+			{ "dex", CharLevel.Average},
+			{ "con", CharLevel.Low},
+			{ "int", CharLevel.VeryHigh},
+			{ "wis", CharLevel.High},
+			{ "cha", CharLevel.Average},
 		};
 
-		public static readonly Dictionary<string, StatLevel> Orc = new Dictionary<string, StatLevel>()
+		public static readonly Dictionary<string, CharLevel> Orc = new Dictionary<string, CharLevel>()
 		{
-			{ "str", StatLevel.VeryHigh},
-			{ "dex", StatLevel.VeryLow},
-			{ "con", StatLevel.VeryHigh},
-			{ "int", StatLevel.Low},
-			{ "wis", StatLevel.Low},
-			{ "cha", StatLevel.Low},
+			{ "str", CharLevel.VeryHigh},
+			{ "dex", CharLevel.VeryLow},
+			{ "con", CharLevel.VeryHigh},
+			{ "int", CharLevel.Low},
+			{ "wis", CharLevel.Low},
+			{ "cha", CharLevel.Low},
 		};
 	}
 }

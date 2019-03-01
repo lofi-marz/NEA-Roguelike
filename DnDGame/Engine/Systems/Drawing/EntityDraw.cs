@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DnDGame.Engine.Systems
 {
-    public static class EntityDrawSystem
+    public static class SpriteDrawSystem
     {
         public static void Update(ref SpriteBatch spriteBatch, Rectangle visible)
         {

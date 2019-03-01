@@ -58,7 +58,6 @@
     <Compile Include="Engine\System.cs" />
     <Compile Include="Engine\Systems\ActionBoxes\AttackManager.cs" />
     <Compile Include="Engine\Systems\Drawing\AnimationManager.cs" />
-    <Compile Include="Engine\Systems\Drawing\StringDraw.cs" />
     <Compile Include="Engine\Systems\Drawing\Tileset.cs" />
     <Compile Include="Engine\Components\Boxes\CollisionBox.cs" />
     <Compile Include="Engine\Component.cs" />

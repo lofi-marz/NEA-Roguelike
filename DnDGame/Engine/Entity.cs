@@ -10,7 +10,7 @@ namespace DnDGame.Engine
 {
 
 
-    public class Entity
+    public struct Entity
     {
         public int Id;
         //public BitArray ComponentFlags;
@@ -18,6 +18,7 @@ namespace DnDGame.Engine
         public Entity(int id)
         {
             Id = id;
+			Group = "";
             //ComponentFlags = new BitArray(Enum.GetNames(typeof(ComponentType)).Length);
         }
 
