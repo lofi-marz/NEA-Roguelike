@@ -27,6 +27,9 @@ namespace DnDGame.Engine.Player
 		Elf
 	}
 
+	/// <summary>
+	/// Store the information required for a player character
+	/// </summary>
 	public class PlayerCharacter
 	{
 		public int Entity;

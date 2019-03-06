@@ -15,6 +15,7 @@ using DnDGame.Engine.Systems.MazeGen;
 using DnDGame.Engine.Player;
 using DnDGame.Engine.Components;
 using DnDGame.Engine.Initialization.CreateObjects;
+using static DnDGame.Engine.Systems.MazeGen.DungeonGen;
 
 namespace DnDGame.Engine.Systems
 {
@@ -55,23 +56,26 @@ namespace DnDGame.Engine.Systems
 
 		public void CreateDungeon(int width, int height, int pathWidth)
 		{
-			var maze = DepthFirst.GenDungeon(width, height);
+			var (Grid, Maze) = DepthFirst.GenDungeon(width, height);
 			var mazeList = new List<Point>();
-			var rnd = new Random();
-			foreach (var point in maze)
+			var rnd = new Random(); 
+			for (int x = 0; x < width; x++)
 			{
-				for (int i = 1; i <= pathWidth; i++)
+				for (int y = 0; y < width; y++)
 				{
-					for (int j = 1; j <= pathWidth; j++)
+					if (Grid[x, y] == (int)DepthFirst.CellType.Empty) continue;
+					for (int i = 1; i <= pathWidth; i++)
 					{
-						var xPos = point.X * pathWidth - i;
-						var yPos = point.Y * pathWidth - j;
-						mazeList.Add(new Point(xPos, yPos));
-
+						for (int j = 1; j <= pathWidth; j++)
+						{
+							var xPos = x * pathWidth - i;
+							var yPos = y * pathWidth - j;
+							mazeList.Add(new Point(xPos, yPos));
+						}
 					}
 				}
 			}
-
+		
 			var realDungeon = DungeonGen.ConvertMaze(mazeList, width * pathWidth, height * pathWidth);
 
 			foreach (var cell in realDungeon)
