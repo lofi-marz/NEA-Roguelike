@@ -10,7 +10,7 @@ namespace DnDGame.Engine.Components
 	/// <summary>
 	/// A component to store the information required for the simple physics system.
 	/// </summary>
-    public class PhysicsBody : Component
+    public class PhysicsBody : IComponent
     {
 		/// <summary>
 		/// The current velocity of the object.
@@ -24,6 +24,10 @@ namespace DnDGame.Engine.Components
 		/// The default acceleration of the object. When moving an object, acceleration will be set to this.
 		/// </summary>
         public Vector2 DefaultAcc;
+		/// <summary>
+		/// The default acceleration for the body.
+		/// </summary>
+		/// <param name="acc"></param>
         public PhysicsBody(Vector2 acc)
         {
             Velocity = new Vector2();

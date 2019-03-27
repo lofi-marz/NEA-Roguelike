@@ -142,7 +142,7 @@ namespace DnDGame
 				Physics.Update(gameTime, VisibleRegion);
 				AnimationManager.Update(gameTime, VisibleRegion);
 				NPCController.Update(gameTime, VisibleRegion);
-				AttackManager.Update(gameTime, VisibleRegion);
+				HitHurtCollisionManager.Update(gameTime, VisibleRegion);
 				LifeTimerManager.Update(gameTime);
 			}
 

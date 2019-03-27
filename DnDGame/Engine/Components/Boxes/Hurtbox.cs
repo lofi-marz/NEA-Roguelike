@@ -12,7 +12,7 @@ namespace DnDGame.Engine.Components
 	/// <summary>
 	/// A rectangle used to register collisions with Hitboxes.
 	/// </summary>
-	public class Hurtbox : Component
+	public class Hurtbox : IComponent
 	{
 		/// <summary>
 		/// The hurt rectangle to register collisions in.
@@ -27,7 +27,7 @@ namespace DnDGame.Engine.Components
 	/// <summary>
 	/// A rectangle used to register collisions with Hurtboxes.
 	/// </summary>
-	public class Hitbox : Component
+	public class Hitbox : IComponent
 	{
 		/// <summary>
 		/// The hit rectangle to register collisions in.

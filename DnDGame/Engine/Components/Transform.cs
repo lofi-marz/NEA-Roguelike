@@ -11,7 +11,7 @@ namespace DnDGame.Engine
 	/// <summary>
 	/// A component used to store the information used to place an object in the game.
 	/// </summary>
-    public class Transform : Component
+    public class Transform : IComponent
     {
 		/// <summary>
 		/// The current position of the object in the world.

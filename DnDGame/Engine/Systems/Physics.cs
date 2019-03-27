@@ -89,7 +89,7 @@ namespace DnDGame.Engine.Systems
 				
 				transform.Pos = newPos;
 				pBody.Velocity = newVel;
-
+				pBody.Acc *= 0.1f;
 				pBody.Velocity *= 0.9f;
 
 				if (oldPos != transform.Pos)

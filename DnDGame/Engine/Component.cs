@@ -10,29 +10,12 @@ namespace DnDGame.Engine
 {
   
 
-    public enum ComponentType
-    {
-        Position,
-        Velocity,
-        Drag,
-        Acceleration,
-        Sprite,
-    }
-
-    public class Component
+    public interface IComponent
     {
 
     }
 
 
 
-    public static class ComponentUtils
-    {
-        public static ComponentType GetEnum(Type componentType)
-        {
-            var typeName = componentType.ToString().Replace("Component", "");
-            Enum.TryParse(typeName, out ComponentType type);
-            return type;
-        }
-    }
+
 }

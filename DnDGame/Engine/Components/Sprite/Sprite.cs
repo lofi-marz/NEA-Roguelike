@@ -12,7 +12,7 @@ namespace DnDGame.Engine
 	/// <summary>
 	/// A component to store the information for the sprite to display for an entity.
 	/// </summary>
-    public class Sprite : Component
+    public class Sprite : IComponent
     {
 		/// <summary>
 		/// The name of the sprite sheet to retrieve the sprite from.
@@ -32,14 +32,14 @@ namespace DnDGame.Engine
 		/// </summary>
 		public Direction Facing;
 
-        public Sprite(string spriteSheet, string tile, float depth = 0f)
+        public Sprite(string spriteSheet, string tile, float depth = 0f, Direction facing = Direction.East)
         {
             SpriteSheet = spriteSheet;
             Tile = tile;
 
 
             Depth = depth;
-			Facing = Direction.East;
+			Facing = facing;
         }
     }
 

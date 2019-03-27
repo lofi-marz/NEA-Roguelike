@@ -14,9 +14,16 @@ namespace DnDGame.Engine.Initialization
 {
 	/// <summary>
 	/// Creates a player character in the world.
+	/// 
 	/// </summary>
 	static class CreatePlayer
 	{
+		/// <summary>
+		/// Initialze a player with a given start position and a given player character class, which provides all the infomration for creating the character.
+		/// </summary>
+		/// <param name="startPos"></param>
+		/// <param name="player"></param>
+		/// <returns></returns>
 		public static int Init(Vector2 startPos, PlayerCharacter player)
 		{
 			int playerId;
@@ -27,9 +34,8 @@ namespace DnDGame.Engine.Initialization
 				AABB = AABB,
 				OnHurt = (int hit, int hurt) =>
 				{
-					var MyStats = World.Instance.GetComponent<CharacterStats>(hurt);
-					var HitboxStats = World.Instance.GetComponent<CharacterStats>(hit);
-					MyStats.CurrentStats["health"] -= HitboxStats.CurrentStats["dps"] * (1f/60f);
+					var MyHurtQueue = World.Instance.GetComponent<HurtQueue>(hurt);
+					MyHurtQueue.HittingEntities.Enqueue(hit);
 				}
 			};
 

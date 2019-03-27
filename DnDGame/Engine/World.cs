@@ -15,7 +15,7 @@ namespace DnDGame.Engine
 
 		public List<Entity> Entities;
 
-        public Dictionary<Type, Dictionary<int, Component>> EntityComponents;
+        public Dictionary<Type, Dictionary<int, IComponent>> EntityComponents;
 
 
 
@@ -24,14 +24,14 @@ namespace DnDGame.Engine
         public World()
         {
             Entities = new List<Entity>();
-            EntityComponents = new Dictionary<Type, Dictionary<int, Component>>();
+            EntityComponents = new Dictionary<Type, Dictionary<int, IComponent>>();
             entityI = 0;
             Sprites = new SpatialHash();
         }
 
 
 
-        public int CreateEntity(params Component[] components)
+        public int CreateEntity(params IComponent[] components)
         {
             Entities.Add(new Entity(entityI));
             foreach (var component in components)
@@ -117,22 +117,18 @@ namespace DnDGame.Engine
 			return entitiesInRegion.Intersect(typeEntities);
         }
 
-        public void AddComponent(int entityid, Component component)
+        public void AddComponent(int entityid, IComponent component)
         {
 
             var componentType = component.GetType();
             if (!EntityComponents.ContainsKey(componentType))
             {
-                EntityComponents.Add(componentType, new Dictionary<int, Component>());
+                EntityComponents.Add(componentType, new Dictionary<int, IComponent>());
             }
-            if (!EntityComponents[componentType].ContainsKey(entityid))
-            {
-                EntityComponents[componentType].Add(entityid, component);
-            }
-            Type type = component.GetType();
-            
-            var i = (int)(ComponentUtils.GetEnum(type));
-
+			if (!EntityComponents[componentType].ContainsKey(entityid))
+			{
+				EntityComponents[componentType].Add(entityid, component);
+			}
             //Entities[entityid].ComponentFlags[i] = true;
         }
 
@@ -142,7 +138,7 @@ namespace DnDGame.Engine
         /// <typeparam name="T">The type of component to look for.</typeparam>
         /// <param name="entityid">The id of the entity.</param>
         /// <returns>Returns the entity's component if found, otherwise null.</returns>
-        public T GetComponent<T>(int entityid) where T : Component
+        public T GetComponent<T>(int entityid) where T : IComponent
         {
             var components = EntityComponents.ContainsKey(typeof(T)) ? EntityComponents[typeof(T)] : null;
             return components == null ? (T)Convert.ChangeType(null, typeof(T)) : (T)Convert.ChangeType(components[entityid], typeof(T));
@@ -150,12 +146,12 @@ namespace DnDGame.Engine
 		
 		
 
-        public bool HasComponent<T>(int entityid) where T : Component
+        public bool HasComponent<T>(int entityid) where T : IComponent
 		{
             return EntityComponents.ContainsKey(typeof(T)) && EntityComponents[typeof(T)].ContainsKey(entityid);
         }
 
-        public void SetComponent(int entityid, Component newComponent)
+        public void SetComponent(int entityid, IComponent newComponent)
         {
             Type componentType = newComponent.GetType();
             EntityComponents[componentType][entityid] = newComponent;

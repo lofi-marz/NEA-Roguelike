@@ -11,7 +11,7 @@ namespace DnDGame.Engine.Components
 	/// <summary>
 	/// A component to store the information needed to manage animations for an entity.
 	/// </summary>
-	public class AnimationPlayer : Component
+	public class AnimationPlayer : IComponent
 	{
 		/// <summary>
 		/// The name of the sprite sheet to retrieve animations from.

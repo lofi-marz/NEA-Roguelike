@@ -12,7 +12,7 @@ namespace DnDGame.Engine.Components
 	/// A component to store the varying stats for an entity.
 	/// </summary>
 
-	public class CharacterStats : Component
+	public class CharacterStats : IComponent
 	{
 
 		/// <summary>
@@ -81,7 +81,7 @@ namespace DnDGame.Engine.Components
 				{"health", CalcStats.Health(Chars)},
 				{"stamina", CalcStats.Stamina(Chars) },
 				{"mana", CalcStats.Mana(Chars) },
-				{"dps", CalcStats.DPS(Chars) }
+				{"dps", CalcStats.Attack(Chars) }
 			};
 			MaxStats = _currentStats;
 			CurrentStats = _currentStats;
@@ -96,7 +96,7 @@ namespace DnDGame.Engine.Components
 		const float BASEHEALTH = 100;
 		const float BASEMANA = 50;
 		const float BASESTAMINA = 50;
-		const float BASEDPS = 10;
+		const float BASEATTACK = 10;
 		/// <summary>
 		/// Calculate the maximum health of a character.
 		/// </summary>
@@ -154,9 +154,9 @@ namespace DnDGame.Engine.Components
 		/// </summary>
 		/// <param name="Levels">The character's characteristics.</param>
 		/// <returns>The calculated max DPS.</returns>
-		public static float DPS(Dictionary<string, CharLevel> levels)
+		public static float Attack(Dictionary<string, CharLevel> levels)
 		{
-			var dps = BASEDPS;
+			var dps = BASEATTACK;
 			var stamina = BASESTAMINA;
 
 			var strValue = (int)levels["str"] - 2;

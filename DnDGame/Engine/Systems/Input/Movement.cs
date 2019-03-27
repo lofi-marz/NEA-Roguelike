@@ -37,8 +37,7 @@ namespace DnDGame.Engine.Systems.Input
 					sprite.Facing = Direction.East;
 					break;
                 case Direction.None:
-                    x = 0f;
-                    y = 0f;
+
                     break;
 
             }
@@ -48,6 +47,19 @@ namespace DnDGame.Engine.Systems.Input
             //((MovementComponent)World.Instance.EntityComponents[typeof(MovementComponent)][entityid]).Velocity += acc;
             World.Instance.SetComponent(entity, pBody);
         }
+
+		public static void MoveEntity(int entity, Vector2 direction)
+		{
+			PhysicsBody pBody = World.Instance.GetComponent<PhysicsBody>(entity);
+			Sprite sprite = World.Instance.GetComponent<Sprite>(entity);
+			Vector2 PushForce = pBody.DefaultAcc;
+			float x = pBody.Acc.X;
+			float y = pBody.Acc.Y;
+			direction.Normalize();
+			Vector2 move = pBody.DefaultAcc * direction;
+			pBody.Acc = move;
+			World.Instance.SetComponent(entity, pBody);
+		}
 
 
 		

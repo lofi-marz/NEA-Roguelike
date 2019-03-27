@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,8 +9,9 @@ namespace DnDGame.Engine.Components
 {
 	/// <summary>
 	/// A component to store the information needed for an entity to follow another entity.
+	/// This differs from the parent component, as this will move the child towards the parent using acceleration, whereas the parent will simply update the position to be the same distance fromm the parent.
 	/// </summary>
-	public class Follower : Component
+	public class Follower : IComponent
 	{
 		/// <summary>
 		/// The max range of the follower. The parent must be within this to be visible.
@@ -23,8 +25,10 @@ namespace DnDGame.Engine.Components
 		/// The id of the parent entity to follow.
 		/// </summary>
 		public int Parent;
-		public Follower(int max, int min = 5)
+		public Vector2 StartPos;
+		public Follower(Vector2 startPos, int max, int min = 5)
 		{
+			StartPos = startPos;
 			MaxRange = max;
 			MinRange = min;
 		}

@@ -24,7 +24,7 @@ namespace DnDGame.Engine.Initialization.CreateObjects
 		/// <returns>The Id of the NPC created.</returns>
 		public static int Init(Vector2 startPos, string type)
 		{
-			var defaultSprite = type + "_idle_anim_0";
+			var defaultSprite = type + "_idle_anim_0"; 
 			var defaultAnim = type + "_idle";
 			var AABB = TilesetManager.Tilesets["dungeon"].GetCollisionBox(defaultSprite).AABB;
 			AABB.Inflate(1.1f, 1.1f);
@@ -43,7 +43,7 @@ namespace DnDGame.Engine.Initialization.CreateObjects
 				new PhysicsBody(new Vector2(1000f)),
 				TilesetManager.Tilesets["dungeon"].GetCollisionBox(defaultSprite),
 				new AnimationPlayer("dungeon", defaultAnim, defaultAnim),
-				new Follower(100),
+				new Follower(startPos, 100, 10),
 				CharacterStats,
 				hitBox
 				);

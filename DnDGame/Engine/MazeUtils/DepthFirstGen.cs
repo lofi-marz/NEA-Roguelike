@@ -153,8 +153,8 @@ namespace DnDGame.MazeGen.DepthFirst
 
 				int width = rnd.Next(minSize, maxSize + 1);
 				int height = rnd.Next(minSize, maxSize + 1);
-				int x = rnd.Next(0, grid.GetLength(0) - (width));
-				int y = rnd.Next(0, grid.GetLength(1) - (height));
+				int x = rnd.Next(1, grid.GetLength(0) - (width+1));
+				int y = rnd.Next(1, grid.GetLength(1) - (height+1));
 				bool added = AddRoom(ref grid, x, y, width, height);
 				if (!added)
 				{

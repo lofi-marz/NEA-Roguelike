@@ -46,7 +46,10 @@
     <Compile Include="Engine\Components\AttackStats.cs" />
     <Compile Include="Engine\Components\Follower.cs" />
     <Compile Include="Engine\Components\Boxes\Hurtbox.cs" />
+    <Compile Include="Engine\Components\HitQueue.cs" />
     <Compile Include="Engine\Components\Lifespan.cs" />
+    <Compile Include="Engine\Components\Parent.cs" />
+    <Compile Include="Engine\Components\StatChangeQueue.cs" />
     <Compile Include="Engine\Components\WeaponStats.cs" />
     <Compile Include="Engine\Drawing\Camera.cs" />
     <Compile Include="Engine\Components\CharacterStats.cs" />
@@ -56,7 +59,7 @@
     <Compile Include="Engine\Initialization\Input.cs" />
     <Compile Include="Engine\Player\PlayerCharacter.cs" />
     <Compile Include="Engine\System.cs" />
-    <Compile Include="Engine\Systems\ActionBoxes\AttackManager.cs" />
+    <Compile Include="Engine\Systems\ActionBoxes\HitHurtCollisionManager.cs" />
     <Compile Include="Engine\Systems\Drawing\AnimationManager.cs" />
     <Compile Include="Engine\Systems\Drawing\Tileset.cs" />
     <Compile Include="Engine\Components\Boxes\CollisionBox.cs" />
@@ -68,6 +71,7 @@
     <Compile Include="Engine\Entity.cs" />
     <Compile Include="Engine\Systems\DungeonGame.cs" />
     <Compile Include="Engine\Systems\Input\Attack.cs" />
+    <Compile Include="Engine\Systems\ISystem.cs" />
     <Compile Include="Engine\Systems\LifeTimerManager.cs" />
     <Compile Include="Engine\Systems\NPC\NPCController.cs" />
     <Compile Include="Engine\Systems\Physics.cs" />
@@ -77,6 +81,8 @@
     <Compile Include="Engine\Systems\Input\Movement.cs" />
     <Compile Include="Engine\Systems\Input\PlayerController.cs" />
     <Compile Include="Engine\Systems\MazeGen\DungeonGen.cs" />
+    <Compile Include="Engine\Systems\Stats\StatChangeCalculator.cs" />
+    <Compile Include="Engine\Systems\Stats\StatChangeUpdater.cs" />
     <Compile Include="Engine\Systems\Stats\StatsManager.cs" />
     <Compile Include="Engine\Systems\Velocity.cs" />
     <Compile Include="Engine\World.cs" />

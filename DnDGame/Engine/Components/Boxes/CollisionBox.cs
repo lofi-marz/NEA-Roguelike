@@ -11,7 +11,7 @@ namespace DnDGame.Engine
 	/// <summary>
 	/// A component used to store the collision rectangles for an object. Used for physics collisions.
 	/// </summary>
-    public class CollisionBox : Component
+    public class CollisionBox : IComponent
     {
 		/// <summary>
 		/// The list of rectangles which make up the object's collision polygon.

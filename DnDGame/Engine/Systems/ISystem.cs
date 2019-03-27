@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DnDGame.Engine.Components
+namespace DnDGame.Engine.Systems
 {
-	public class WeaponStats : IComponent
+	public abstract class System
 	{
-		public float DPS;
+		public abstract void Update();
 	}
 }

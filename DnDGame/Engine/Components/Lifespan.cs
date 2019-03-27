@@ -9,7 +9,7 @@ namespace DnDGame.Engine.Components
 	/// <summary>
 	/// A component to give entities a lifespan, after which they will be destroyed.
 	/// </summary>
-	public class LifeTimer : Component
+	public class LifeTimer : IComponent
 	{
 		/// <summary>
 		/// The lifespan of the entity in seconds.

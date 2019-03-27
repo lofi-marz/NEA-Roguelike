@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DnDGame.Engine.Systems
 {
-	public static class AttackManager
+	public static class HitHurtCollisionManager
 	{
 
 

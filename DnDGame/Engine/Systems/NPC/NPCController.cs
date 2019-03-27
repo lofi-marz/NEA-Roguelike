@@ -22,27 +22,12 @@ namespace DnDGame.Engine.Systems
 				var distance = Vector2.Distance(followerPos, parentPos);
 				if (distance > followerControl.MaxRange || distance < followerControl.MinRange)
 				{
-					Movement.MoveEntity(follower, Direction.None);
+					//Movement.MoveEntity(follower, Direction.None);
 					continue;
 				}
 
 				var vectorToParent = (parentPos - followerPos);
-				if (vectorToParent.Y < 0)
-				{
-					Movement.MoveEntity(follower, Direction.North);
-				}
-				if (vectorToParent.Y > 0)
-				{
-					Movement.MoveEntity(follower, Direction.South);
-				}
-				if (vectorToParent.X > 0)
-				{
-					Movement.MoveEntity(follower, Direction.East);
-				}
-				if (vectorToParent.X < 0)
-				{
-					Movement.MoveEntity(follower, Direction.West);
-				}
+				Movement.MoveEntity(follower, vectorToParent);
 			}
 		}
 
