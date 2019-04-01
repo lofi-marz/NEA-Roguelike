@@ -11,6 +11,11 @@ namespace DnDGame.Engine.Systems.Input
 {
     public static class Movement
     {
+		/// <summary>
+		/// Move the given entity in the given direciton.
+		/// </summary>
+		/// <param name="entity">The given entity.</param>
+		/// <param name="direction">The direction to move them in.</param>
         public static void MoveEntity(int entity, Direction direction)
         {
             PhysicsBody pBody = World.Instance.GetComponent<PhysicsBody>(entity);
@@ -22,7 +27,6 @@ namespace DnDGame.Engine.Systems.Input
             {
                 case Direction.North:
                     y = -PushForce;
-					
                     break;
                 case Direction.South:
                     y = PushForce;
@@ -43,11 +47,14 @@ namespace DnDGame.Engine.Systems.Input
             }
 			
             pBody.Acc = new Vector2(x, y);
-
-            //((MovementComponent)World.Instance.EntityComponents[typeof(MovementComponent)][entityid]).Velocity += acc;
             World.Instance.SetComponent(entity, pBody);
         }
 
+		/// <summary>
+		/// Move the given entity in the direction of the given vector.
+		/// </summary>
+		/// <param name="entity">The entity to move.</param>
+		/// <param name="direction">The vector to move along.</param>
 		public static void MoveEntity(int entity, Vector2 direction)
 		{
 			PhysicsBody pBody = World.Instance.GetComponent<PhysicsBody>(entity);

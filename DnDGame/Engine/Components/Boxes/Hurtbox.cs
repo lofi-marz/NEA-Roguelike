@@ -1,9 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace DnDGame.Engine.Components
 {
@@ -22,6 +19,11 @@ namespace DnDGame.Engine.Components
 		/// The function to run on a collision with a Hitbox.
 		/// </summary>
 		public ManageHit OnHurt;
+		public List<int> HittingEntities;
+		public Hurtbox()
+		{
+			HittingEntities = new List<int>();
+		}
 	}
 
 	/// <summary>
@@ -37,6 +39,11 @@ namespace DnDGame.Engine.Components
 		/// The function to run on collision with a Hurtbox.
 		/// </summary>
 		public ManageHit OnHit;
+		public List<int> HurtingEntities;
+		public Hitbox()
+		{
+			HurtingEntities = new List<int>();
+		}
 	}
 
 	/// <summary>

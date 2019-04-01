@@ -21,6 +21,7 @@ using DnDGame.Engine.Player;
 using GeonBit.UI.Entities;
 using GeonBit.UI;
 using static DnDGame.Engine.Components.CharacterStats;
+using DnDGame.Engine.Systems.Stats;
 
 
 //TODO
@@ -33,9 +34,6 @@ namespace DnDGame
 	/// This is the main type for your game.
 	/// </summary>
 
-	//Goals
-	//Set up enemies
-	//Character animation
 	public class MainGame : Game
 	{
 		
@@ -49,7 +47,7 @@ namespace DnDGame
 		SpriteFont arial;
 		public MainGame()
 		{
-			IsMouseVisible = true;
+			IsMouseVisible = false;
 			graphics = new GraphicsDeviceManager(this);
 
 			Content.RootDirectory = "Content";
@@ -61,17 +59,19 @@ namespace DnDGame
 		/// This is where it can query for any required services and load any non-graphic
 		/// related content.  Calling base.Initialize will enumerate through any components
 		/// and initialize them as well.
+		/// 
 		/// </summary>
 		protected override void Initialize()
 		{
+			
 			UserInterface.Initialize(Content, BuiltinThemes.hd);
 			UserInterface.Active.UseRenderTarget = true;
 			// TODO: Add your initialization logic here
 			//input = new InputHelper();
 			CurrentGame = new DungeonGame();
 			globalScale = new Vector2(2f);
-			graphics.PreferredBackBufferWidth = 1280;  // set this value to the desired width of your window
-			graphics.PreferredBackBufferHeight = 720;   // set this value to the desired height of your window
+			graphics.PreferredBackBufferWidth = 1280;  
+			graphics.PreferredBackBufferHeight = 720;  
 			graphics.ApplyChanges();
 			
 
@@ -81,15 +81,19 @@ namespace DnDGame
 		/// <summary>
 		/// LoadContent will be called once per game and is the place to load
 		/// all of your content.
+		/// 
 		/// </summary>
 		protected override void LoadContent()
 		{
+
 			spriteBatch = new SpriteBatch(GraphicsDevice);
+			//Loading the dungeon tileset
 			var tileset = TilesetManager.LoadJson("DungeonTileset");
 			
 			tileset.SpriteSheet = Content.Load<Texture2D>("Sprites/DungeonTileset");
 			TilesetManager.AddSet("dungeon", tileset);
 
+			//Creating the main menu
 			var MainMenu = Menus.MainMenu.Init();
 			MainMenu.Find("start").OnClick += (GeonBit.UI.Entities.Entity btn) => {
 				StartGame();
@@ -126,6 +130,7 @@ namespace DnDGame
 		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		protected override void Update(GameTime gameTime)
 		{
+
 			CurrentGame.Update();
 			UserInterface.Active.Update(gameTime);
 
@@ -136,6 +141,7 @@ namespace DnDGame
 
 			var centre = new Vector2(viewport.Width * 0.5f, viewport.Height * 0.5f);
 
+			//While the game is in progress, update all of the systems.
 			if (CurrentGame.GameStarted)
 			{
 				VisibleRegion = CurrentGame.GetVisibleRegion(viewport);
@@ -144,6 +150,20 @@ namespace DnDGame
 				NPCController.Update(gameTime, VisibleRegion);
 				HitHurtCollisionManager.Update(gameTime, VisibleRegion);
 				LifeTimerManager.Update(gameTime);
+				StatChangeCalculator.Update();
+				StatChangeUpdater.Update();
+				ChildPropertyUpdater.Update();
+
+			}
+
+			//If the game has ended, go to the end game menu.
+			if (CurrentGame.EndGame)
+			{
+				UserInterface.Active.Clear();
+				var endGame = Menus.EndGame.Init();
+				endGame.Find("exit").OnClick += (GeonBit.UI.Entities.Entity btn) => { Exit(); };
+				UserInterface.Active.AddEntity(endGame);
+				
 			}
 
 
@@ -159,11 +179,12 @@ namespace DnDGame
 		protected override void Draw(GameTime gameTime)
 		{
 			UserInterface.Active.Draw(spriteBatch);
-			GraphicsDevice.Clear(Color.CornflowerBlue);
+			GraphicsDevice.Clear(Color.Black);
 
-			// TODO: Add your drawing code here
+			// While the game is in progress
 			if (CurrentGame.GameStarted)
 			{
+				//Draw the game with the current transform created by the camera.
 				var viewport = GraphicsDevice.Viewport;
 				spriteBatch.Begin(samplerState: SamplerState.PointWrap, transformMatrix: CurrentGame.Camera.GetTransform(viewport));
 

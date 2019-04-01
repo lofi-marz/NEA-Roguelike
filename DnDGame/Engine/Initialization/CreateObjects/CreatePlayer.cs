@@ -34,8 +34,13 @@ namespace DnDGame.Engine.Initialization
 				AABB = AABB,
 				OnHurt = (int hit, int hurt) =>
 				{
+					var hitParent = World.Instance.GetComponent<ParentController>(hit);
+					if ((hitParent != null) && hitParent.ParentId == hurt) return;
 					var MyHurtQueue = World.Instance.GetComponent<HurtQueue>(hurt);
+					var animPlayer = World.Instance.GetComponent<AnimationPlayer>(hurt);
+					AnimationManager.PlayNext(player.Entity, $"{player.GetClassName()}_{player.GetGenderName()}_hit");
 					MyHurtQueue.HittingEntities.Enqueue(hit);
+					World.Instance.SetComponent(hurt, MyHurtQueue);
 				}
 			};
 
@@ -46,8 +51,10 @@ namespace DnDGame.Engine.Initialization
 				TilesetManager.Tilesets["dungeon"].GetCollisionBox($"{player.GetClassName()}_{player.GetGenderName()}_idle_anim_0"),
 				new AnimationPlayer("dungeon", $"{player.GetClassName()}_{player.GetGenderName()}_idle", $"{player.GetClassName()}_{player.GetGenderName()}_idle"),
 				new CharacterStats((Race)Enum.Parse(typeof(Race), player.GetClassName(), true)),
+				new HurtQueue(),
+				new StatChangeQueue(),
 				hurtBox);
-			World.Instance.Sprites.Add(playerId, startPos);
+			World.Instance.SpriteHash.Add(playerId, startPos);
 			return playerId;
 		}
 

@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DnDGame.MazeGen.DepthFirst;
 using Microsoft.Xna.Framework;
 
 namespace DnDGame.Engine.Systems.MazeGen
 {
-    static class DungeonGen
+	static class DungeonGen
     {
+		/// <summary>
+		/// All the different types of cell within the maze.
+		/// </summary>
         public enum CellType
         {
             Floor,
@@ -28,7 +27,14 @@ namespace DnDGame.Engine.Systems.MazeGen
             SouthWestWall,
 			SouthWestWallTop
         }
+
+		/// <summary>
+		/// North, east, south, west
+		/// </summary>
         static Point[] adjacentVectors = new Point[] { new Point(0, -1), new Point(1, 0), new Point(0, 1), new Point(-1, 0) };
+		/// <summary>
+		/// NW, NE, SE, SW
+		/// </summary>
 		static Point[] diagAdjacentVectors = new Point[] { new Point(-1, -1), new Point(1, -1), new Point(1, 1), new Point(-1, 1) };
 		/// <summary>
 		/// If a wall tile is in the middle of a larger wall, it will have 1  adjacent cell missing, which we can use to identify which direction it is in.
@@ -55,10 +61,10 @@ namespace DnDGame.Engine.Systems.MazeGen
 		/// Given a list of points comprising a maze, convert it to a dictionary of the point and it's type of cell
 		/// </summary>
 		/// <param name="maze">The generated maze</param>
-		/// <param name="width"></param>
-		/// <param name="height"></param>
+		/// <param name="width">The width of the maze to generate</param>
+		/// <param name="height">The height of the maze to generate</param>
 
-		public static List<Tuple<Point, string>> ConvertMaze(List<Point> maze, int width, int height)
+		public static List<(Point Pos, string Item)> ConvertMaze(List<Point> maze, int width, int height)
 		{
 
 			var MazeGrid = new int[width, height];
@@ -67,7 +73,7 @@ namespace DnDGame.Engine.Systems.MazeGen
 			{
 				MazeGrid[points[i].X, points[i].Y] = 1;
 			}
-			var Maze = new List<Tuple<Point, string>>();
+			var Maze = new List<(Point Pos, string Item)>();
 			for (int x = 0; x < width; x++)
 			{
 				for (int y = 0; y < height; y++)
@@ -87,11 +93,11 @@ namespace DnDGame.Engine.Systems.MazeGen
 								var missingCell = diagAdjacentVectors.Where(v => !diagAdjCells.Contains(currentPoint + v)).First() + currentPoint;
 								if (missingCell.X > currentPoint.X && missingCell.Y > currentPoint.Y)
 								{
-									Maze.Add(new Tuple<Point, string>(currentPoint, "wall_side_mid_right"));
+									Maze.Add((currentPoint, "wall_side_mid_right"));
 								}
 								if (missingCell.X < currentPoint.X && missingCell.Y > currentPoint.Y)
 								{
-									Maze.Add(new Tuple<Point, string>(currentPoint, "wall_side_mid_left"));
+									Maze.Add((currentPoint, "wall_side_mid_left"));
 								}
 							}
 							break;
@@ -103,11 +109,11 @@ namespace DnDGame.Engine.Systems.MazeGen
 							cellType = midTypePair.Value;
 							isTop = midTypePair.Key == new Point(0, -1);
 		
-							Maze.Add(new Tuple<Point, string>(currentPoint - new Point(0, isTop?1:0), cellType));
+							Maze.Add((currentPoint - new Point(0, isTop?1:0), cellType));
 
 							if (cellType == "wall_mid" || cellType == "wall_corner_right")
 							{
-								Maze.Add(new Tuple<Point, string>(currentPoint - new Point(0, isTop?2:1), "wall_top_mid"));
+								Maze.Add((currentPoint - new Point(0, isTop?2:1), "wall_top_mid"));
 							}
 							break;
 
@@ -118,46 +124,41 @@ namespace DnDGame.Engine.Systems.MazeGen
 									.First();
 							cellType = cornerTypePair.Value;
 							isTop = cornerTypePair.Key.Contains(new Point(0, -1));
-							Maze.Add(new Tuple<Point, string>(currentPoint - new Point(0, isTop?1:0), cellType));
+							Maze.Add((currentPoint - new Point(0, isTop?1:0), cellType));
 							if (cellType == "wall_corner_left")
 							{
-								Maze.Add(new Tuple<Point, string>(currentPoint - new Point(0, 2), "wall_corner_top_left"));
-								Maze.Add(new Tuple<Point, string>(currentPoint - new Point(0, 0), "wall_side_mid_left"));
+								Maze.Add((currentPoint - new Point(0, 2), "wall_corner_top_left"));
+								Maze.Add((currentPoint - new Point(0, 0), "wall_side_mid_left"));
 							}
 							if (cellType == "wall_corner_right")
 							{
-								Maze.Add(new Tuple<Point, string>(currentPoint - new Point(0, 2), "wall_corner_top_right"));
-								Maze.Add(new Tuple<Point, string>(currentPoint - new Point(0, 0), "wall_side_mid_right"));
+								Maze.Add((currentPoint - new Point(0, 2), "wall_corner_top_right"));
+								Maze.Add((currentPoint - new Point(0, 0), "wall_side_mid_right"));
 							}
 							if (cellType == "wall_corner_front_left")
 							{
-								Maze.Add(new Tuple<Point, string>(currentPoint - new Point(0, 1), "wall_corner_bottom_left"));
+								Maze.Add((currentPoint - new Point(0, 1), "wall_corner_bottom_left"));
 							}
 							if (cellType == "wall_corner_front_right")
 							{
-								Maze.Add(new Tuple<Point, string>(currentPoint - new Point(0, 1), "wall_corner_bottom_right"));
+								Maze.Add((currentPoint - new Point(0, 1), "wall_corner_bottom_right"));
 							}
 							var cellName = cellType.ToString();
-							//var cellTop = (CellType)Enum.Parse(typeof(CellType), cellType + "Top");
-							//Maze.Add(new Tuple<Point, CellType>(currentPoint - new Point(0,1) , cellTop));
+
 							break;
 						default:
 							break;
 
                     }
-					Maze.Add(new Tuple<Point, string>(currentPoint, "floor_1"));
+					Maze.Add((currentPoint, "floor_1"));
 				}
             }
             return Maze;
         }
 
-        static Point GetCell(Point startCell,  Point trans, int width, int height)
-        {
-            var cell = new Point();
-    
-
-            return cell;
-        }
+		/// <summary>
+		/// FInd and return any cells diagonally adjacent to a cell.
+		/// </summary>
 
         static List<Point> GetDiagAdjacentCells(Point cell, int[,] grid, int width, int height)
         {
@@ -174,6 +175,10 @@ namespace DnDGame.Engine.Systems.MazeGen
             }
             return DiagAdjacentCells;
         }
+
+		/// <summary>
+		/// Get and return any cells adjacent to a cell.
+		/// </summary>
 
 		static List<Point> GetAdjacentCells(Point cell, int[,] grid, int width, int height)
 		{

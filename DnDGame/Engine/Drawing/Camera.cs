@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DnDGame.Engine;
+﻿
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -26,7 +21,7 @@ namespace DnDGame.Engine.Drawing
 		/// The current rotation of the camera in radians.
 		/// </summary>
         public float Rotation;
-        //public Vector2 Zoom { get => Scale; set => value = Scale; }
+
         public Camera(Vector2 centre)
         {
 			Centre = centre;
@@ -37,7 +32,7 @@ namespace DnDGame.Engine.Drawing
 		/// Calculates the transform matrix to transform a viewport to the view defined by the camera.
 		/// </summary>
 		/// <param name="viewport">The viewport to generate a transform matrix for.</param>
-		/// <returns></returns>
+		/// <returns>Returns the transform matrix to generate the view defined by the camera.</returns>
         public Matrix GetTransform(Viewport viewport)
         {
             var transform = Matrix.CreateTranslation(new Vector3(-Centre.X, -Centre.Y, 0)) *
@@ -46,8 +41,5 @@ namespace DnDGame.Engine.Drawing
 							Matrix.CreateScale(new Vector3(Scale, Scale, 1));
             return transform;
         }
-
-
-        
     }
 }

@@ -10,27 +10,47 @@ namespace DnDGame.Engine
 {
 	public sealed class World
 	{
-		private static Lazy<World> lazy = new Lazy<World>(() => new World());
+		private static Lazy<World> lazy = new Lazy<World>(() => new World()); //If there is no instance of the world, create one, otherwise return the instance
+
+		/// <summary>
+		/// The current instance of the world object.
+		/// </summary>
 		public static World Instance { get => lazy.Value; }
 
+		/// <summary>
+		/// The list of entities in the world.
+		/// </summary>
 		public List<Entity> Entities;
 
+		/// <summary>
+		/// All of the component instances, organised into dictionaries by type.
+		/// </summary>
         public Dictionary<Type, Dictionary<int, IComponent>> EntityComponents;
 
+		/// <summary>
+		/// The Spatial Hash system used to organise the world's objects.
+		/// </summary>
+        public SpatialHash SpriteHash;
 
-
-        public SpatialHash Sprites;
+		/// <summary>
+		/// The id to give the next entity created.
+		/// </summary>
         private int entityI;
+
         public World()
         {
             Entities = new List<Entity>();
             EntityComponents = new Dictionary<Type, Dictionary<int, IComponent>>();
             entityI = 0;
-            Sprites = new SpatialHash();
+            SpriteHash = new SpatialHash();
         }
 
 
-
+		/// <summary>
+		/// Create an entity with the given components, and the id of the value in entityI
+		/// </summary>
+		/// <param name="components">THe components to assign to the entity.</param>
+		/// <returns>Returns the id of the entity created.</returns>
         public int CreateEntity(params IComponent[] components)
         {
             Entities.Add(new Entity(entityI));
@@ -42,6 +62,27 @@ namespace DnDGame.Engine
             return entityI++;
         }
 
+		/// <summary>
+		/// Create an entity with the given components, and the id of the value in entityI, and assign it to a group.
+		/// </summary>
+		/// <param name="group">The group to assign to the entity.</param>
+		/// <param name="components">The components to assign to the entity.</param>
+		/// <returns>Returns the id of the entity created.</returns>
+		public int CreateEntity(string group, params IComponent[] components)
+		{
+			Entities.Add(new Entity(entityI, group));
+			foreach (var component in components)
+			{
+				AddComponent(entityI, component);
+			}
+
+			return entityI++;
+		}
+
+		/// <summary>
+		/// Removes the entity from the Entities list, and removes all of the components assigned to it.
+		/// </summary>
+		/// <param name="entity">The id of the entity to destroy.</param>
 		public void DestroyEntity(int entity)
 		{
 			foreach (var e in Entities)
@@ -71,10 +112,6 @@ namespace DnDGame.Engine
 
             List<int> Entities = new List<int>();
             List<int> ValidEntities = new List<int>();
-			/*foreach (var type in ComponentTypes)
-            {
-               Entities.AddRange(EntityComponents[type].Select(x => x.Key));
-            }*/
 			if (!EntityComponents.ContainsKey(ComponentTypes[0]))
 			{
 				return new List<int>();
@@ -95,31 +132,32 @@ namespace DnDGame.Engine
                     ValidEntities.Add(entity.Key);
                 }
             }
-            
-            /*var ValidEntities = Entities.GroupBy(r => r)
-                .Select(grp => new
-                {
-                    Value = grp.Key,
-                    Count = grp.Count()
-                })
-                .Where(x => x.Count >= ComponentTypes.Length)
-                .Select(x => x.Value).ToList();*/
             return ValidEntities;
         }
 
 		
-
+		/// <summary>
+		/// Get
+		/// </summary>
+		/// <param name="region">The rectangular region to retrieve entitiesfrom.</param>
+		/// <param name="pad">Whether or not to check a certain region outside of the given one.</param>
+		/// <param name="types">The components the entities must have to be retrieved.</param>
+		/// <returns>Returns a list of entities that are in the given region, with the given components.</returns>
         public IEnumerable<int> GetByTypeAndRegion(Rectangle region, bool pad, params Type[] types)
         {
-            IEnumerable<int> entitiesInRegion = Instance.Sprites.GetItems(region, pad);
+            IEnumerable<int> entitiesInRegion = Instance.SpriteHash.GetItems(region, pad);
             IEnumerable<int> typeEntities = Instance.GetEntitiesByType(types);
 
 			return entitiesInRegion.Intersect(typeEntities);
         }
 
+		/// <summary>
+		/// Add a component to the world and assign it to the given entity.
+		/// </summary>
+		/// <param name="entityid">The entity to assign the component to.</param>
+		/// <param name="component">The component to assign to the entity.</param>
         public void AddComponent(int entityid, IComponent component)
         {
-
             var componentType = component.GetType();
             if (!EntityComponents.ContainsKey(componentType))
             {
@@ -129,7 +167,6 @@ namespace DnDGame.Engine
 			{
 				EntityComponents[componentType].Add(entityid, component);
 			}
-            //Entities[entityid].ComponentFlags[i] = true;
         }
 
         /// <summary>
@@ -140,17 +177,27 @@ namespace DnDGame.Engine
         /// <returns>Returns the entity's component if found, otherwise null.</returns>
         public T GetComponent<T>(int entityid) where T : IComponent
         {
-            var components = EntityComponents.ContainsKey(typeof(T)) ? EntityComponents[typeof(T)] : null;
-            return components == null ? (T)Convert.ChangeType(null, typeof(T)) : (T)Convert.ChangeType(components[entityid], typeof(T));
+            var componentsOfTypeT = EntityComponents.ContainsKey(typeof(T)) ? EntityComponents[typeof(T)] : null;
+			if (componentsOfTypeT == null)
+			{
+				return (T)Convert.ChangeType(null, typeof(T));
+			}
+			else if (!componentsOfTypeT.ContainsKey(entityid))
+			{
+				return (T)Convert.ChangeType(null, typeof(T));
+			}
+			else
+			{
+				return (T)Convert.ChangeType(componentsOfTypeT[entityid], typeof(T));
+			}
         }
 		
-		
 
-        public bool HasComponent<T>(int entityid) where T : IComponent
-		{
-            return EntityComponents.ContainsKey(typeof(T)) && EntityComponents[typeof(T)].ContainsKey(entityid);
-        }
-
+		/// <summary>
+		/// Update the component belonging to the given entity, and replace it with the given component.
+		/// </summary>
+		/// <param name="entityid">The entity to update.</param>
+		/// <param name="newComponent">The component to update it with.</param>
         public void SetComponent(int entityid, IComponent newComponent)
         {
             Type componentType = newComponent.GetType();
@@ -158,9 +205,5 @@ namespace DnDGame.Engine
             
         }
 
-        /*public List<int> FilterEntities(Type type)
-        {
-            return EntityComponents[ComponentUtils.GetEnum(type)]
-        }*/
     }
 }

@@ -22,6 +22,10 @@ namespace DnDGame.Engine
 		/// </summary>
         public Rectangle AABB;
 
+		/// <summary>
+		/// Initialize the Collisionbox using the given list of rectangles, and calculate a bounding box which encloses them all.
+		/// </summary>
+		/// <param name="boxes">The list of rectangles used to create the CollisionBox/AABB.</param>
         public CollisionBox(List<Rectangle> boxes)
         {
             Boxes = boxes;
@@ -36,6 +40,10 @@ namespace DnDGame.Engine
             AABB = new Rectangle(x, y, right - x, bottom - y);
         }
 
+		/// <summary>
+		/// Initialize the Collisionbox using the given rectangle.
+		/// </summary>
+		/// <param name="rect">The rectangle to create the CollisionBox with.</param>
 		public CollisionBox(Rectangle rect)
 		{
 			Boxes = new List<Rectangle>
@@ -45,13 +53,7 @@ namespace DnDGame.Engine
 			AABB = rect;
 		}
 
-        public CollisionBox(int[][] boxes)
-        {
-            foreach (var box in boxes)
-            {
-                Boxes.Add(new Rectangle(box[0], box[1], box[2], box[3]));
-            }
-        }
+
 
 		/// <summary>
 		/// Given a vector, translate the entire CollisionBox by this vector.

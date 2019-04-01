@@ -1,5 +1,4 @@
-﻿using DnDGame.Engine;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,14 +6,38 @@ using System.Text.RegularExpressions;
 
 namespace DnDGame.Engine.Systems.Drawing
 {
+	/// <summary>
+	/// A class to store information about a given SpriteSheet, as well as the spritesheet itself.
+	/// </summary>
 	public class TileAtlas
 	{
+		/// <summary>
+		/// The default aniamtion length for animation frames.
+		/// </summary>
 		const float DEFAULT_ANIM_LENGTH = 0.1f;
+		/// <summary>
+		/// The sprite sheet 
+		/// </summary>
 		public Texture2D SpriteSheet;
+		/// <summary>
+		/// The default height and width of a tile in the sprite sheet.
+		/// </summary>
 		public int CellSize;
+		/// <summary>
+		/// Stores the raw values for the entry in the TextureAtlas.
+		/// </summary>
 		public Dictionary<string, TilePoints> PointMap;
+		/// <summary>
+		/// Stores the generated tiles which will be retrieved for drawing.
+		/// </summary>
 		public Dictionary<string, Tile> Map;
+		/// <summary>
+		/// Stores any found animations, and each of their frames.
+		/// </summary>
 		public Dictionary<string, List<Tile>> Anims;
+		/// <summary>
+		/// Stores the lengths of the animations.
+		/// </summary>
 		public Dictionary<string, float> AnimLengths;
 				
 		public void GenTileset()
@@ -22,6 +45,7 @@ namespace DnDGame.Engine.Systems.Drawing
 			Map = new Dictionary<string, Tile>();
 			Anims = new Dictionary<string, List<Tile>>();
 			AnimLengths = new Dictionary<string, float>();
+
 			foreach (var tilePoint in PointMap)
 			{
 				var tileName = tilePoint.Key;
@@ -33,6 +57,7 @@ namespace DnDGame.Engine.Systems.Drawing
 					AABB = (tileHitPoints == null) ? new CollisionBox(new Rectangle(0,0,0,0)) : new CollisionBox(GenSpriteRect(tileHitPoints)) 
 				};
 
+				//All animations have the same name format, which we can use regex toidentify.
 				var animPattern = new Regex(".+_anim_[0-9]+");
 				var frameSuffixPattern = new Regex("_anim_[0-9]+");
 				var frameCountPattern = new Regex("[0-9]+");
@@ -43,6 +68,7 @@ namespace DnDGame.Engine.Systems.Drawing
 
 					if (frameNo == 0)
 					{
+						//For the first frame in the animation
 						Anims[animName] = new List<Tile>
 						{
 							new Tile
@@ -55,6 +81,7 @@ namespace DnDGame.Engine.Systems.Drawing
 						AnimLengths[animName] = tilePoint.Value.Length == 0f ? DEFAULT_ANIM_LENGTH : tilePoint.Value.Length;
 					}
 					else {
+						//For any subsequent frames
 						Anims[animName].Add(new Tile
 						{
 							Sprite = GetSprite(tileName),
@@ -104,11 +131,6 @@ namespace DnDGame.Engine.Systems.Drawing
 		public int[] Pos;
 		public int[] AABB;
 		public float Length;
-		/*public TilePoints(int[] pos, int[] aabb)
-		{
-			Pos = pos;
-			AABB = aabb;
-		}*/
 
 	}
 

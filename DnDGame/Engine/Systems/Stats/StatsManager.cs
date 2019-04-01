@@ -19,15 +19,5 @@ namespace DnDGame.Engine.Systems.Stats
 			High,
 			VeryHigh
 		}
-
-		public static void Update(GameTime gameTime)
-		{
-			/*float delta = (float)(gameTime.ElapsedGameTime.TotalMilliseconds / 1000);
-			var entities = World.Instance.GetEntitiesByType(typeof(CharacterStats));
-			foreach (var entity in entities)
-			{
-				var stats = World.Instance.GetComponent<CharacterStats>
-			}*/
-		}
 	}
 }

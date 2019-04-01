@@ -16,6 +16,7 @@ using DnDGame.Engine.Player;
 using DnDGame.Engine.Components;
 using DnDGame.Engine.Initialization.CreateObjects;
 using static DnDGame.Engine.Systems.MazeGen.DungeonGen;
+using static DnDGame.Engine.Components.CharacterStats;
 
 namespace DnDGame.Engine.Systems
 {
@@ -26,15 +27,18 @@ namespace DnDGame.Engine.Systems
 		PlayerController InputController;
 		public Camera Camera;
 		List<int> DungeonSprites;
-
+		public bool EndGame;
 		public void Initialize()
 		{
 			
 			InputController = new PlayerController();
+
+			Camera = new Camera(new Vector2(0))
+			{
+				Scale = 2f
+			};
 			
-			Camera = new Camera(new Vector2(0));
-			Camera.Scale = 2f;
-			
+
 		}
 
 
@@ -42,8 +46,21 @@ namespace DnDGame.Engine.Systems
 		{
 			Player.Entity = CreatePlayer.Init(Vector2.Zero, Player);
 			InputAssign.AssignMovementController(Player, ref InputController);
+			InputAssign.AssignWeaponController(Player, ref InputController);
+
+			var playerStats = World.Instance.GetComponent<CharacterStats>(Player.Entity);
+			playerStats.CurrentStats = playerStats.MaxStats;
+			playerStats.OnStatChange += (StatChangeArgs e) =>
+			{
+				if (e.CurrentStats["health"] <= 0)
+				{
+					EndGame = true;
+				}
+			};
+			World.Instance.SetComponent(Player.Entity, playerStats);
 
 		}
+
 
 		public void Update()
 		{
@@ -56,6 +73,7 @@ namespace DnDGame.Engine.Systems
 
 		public void CreateDungeon(int width, int height, int pathWidth)
 		{
+			bool playerAdded = false;
 			var (Grid, Maze) = DepthFirst.GenDungeon(width, height);
 			var mazeList = new List<Point>();
 			var rnd = new Random(); 
@@ -78,21 +96,37 @@ namespace DnDGame.Engine.Systems
 		
 			var realDungeon = DungeonGen.ConvertMaze(mazeList, width * pathWidth, height * pathWidth);
 
-			foreach (var cell in realDungeon)
+			foreach (var (Pos, Item) in realDungeon)
 			{
-				var pos = cell.Item1.ToVector2() * new Vector2(16 * 1);
-				var item = cell.Item2;
+
+				var realPos = Pos.ToVector2() * new Vector2(16 * 1);
 				List<int> cellEntities = new List<int>();
-				if (item.StartsWith("floor"))
+				if (Item.StartsWith("floor"))
 				{
-					cellEntities.Add(CreateCell.Init(pos, item, 0f));
-					if (rnd.Next(0,1000) < 5) cellEntities.Add(CreateNPC.Init(pos, "orc_shaman"));
+					cellEntities.Add(CreateCell.Init(realPos, Item, 0f));
+					if (rnd.Next(0,1000) < 5) cellEntities.Add(CreateNPC.Init(realPos, "orc_shaman"));
+					if (!playerAdded)
+					{
+						bool addPlayer = (rnd.Next(1, 10) == 1);
+						
+						if (addPlayer)
+						{
+							var nonFloorItems = realDungeon.Where(x => x.Pos == Pos && x.Item != "floor");
+							if (nonFloorItems.Count() <= 1)
+							{
+								playerAdded = true;
+								var transform = World.Instance.GetComponent<Transform>(Player.Entity);
+								transform.Pos = Pos.ToVector2() * new Vector2(16 * 1);
+								World.Instance.SetComponent(Player.Entity, transform);
+							}
+						}
+					}
 				}
 				else
 				{
-					cellEntities.Add(CreateCell.Init(pos, item, 0.1f));
+					cellEntities.Add(CreateCell.Init(realPos, Item, 0.1f));
 				}
-				cellEntities.ForEach(e => World.Instance.Sprites.Add(e, pos));
+				cellEntities.ForEach(e => World.Instance.SpriteHash.Add(e, realPos));
 				
 			}
 			foreach (var follower in World.Instance.GetEntitiesByType(typeof(Follower)))

@@ -8,13 +8,16 @@ using System.Threading.Tasks;
 
 namespace DnDGame.Engine.Systems
 {
+	/// <summary>
+	/// Check for any collisions between hitboxes and hurtboxes, and invoke their OnCollision functions if so.
+	/// </summary>
 	public static class HitHurtCollisionManager
 	{
-
-
-
-
-	
+		/// <summary>
+		/// Checking for collisions.
+		/// </summary>
+		/// <param name="gameTime"></param>
+		/// <param name="region">The region to check for collisions in.</param>
 		public static void Update(GameTime gameTime, Rectangle region)
 		{
 			var Hitboxes = World.Instance.GetByTypeAndRegion(region, true, typeof(Hitbox))
@@ -26,6 +29,7 @@ namespace DnDGame.Engine.Systems
 
 			foreach (var (hitEntity, hitbox, hitTransform) in Hitboxes)
 			{
+				bool collChange = false;
 				var realHitboxAABB = new Rectangle(
 					(int)(hitbox.AABB.X + hitTransform.Pos.X), 
 					(int)(hitbox.AABB.Y + hitTransform.Pos.Y),
@@ -38,7 +42,7 @@ namespace DnDGame.Engine.Systems
 					(hurtEntity: e,
 					hurtbox: World.Instance.GetComponent<Hurtbox>(e),
 					hurttransform: World.Instance.GetComponent<Transform>(e)
-					));
+					)).Where(e =>e.hurtbox != null && e.hurttransform != null);
 				foreach (var (hurtentity, hurtbox, hurttransform) in nearbyHurtboxes)
 				{
 
@@ -49,9 +53,37 @@ namespace DnDGame.Engine.Systems
 						(int)(hurtbox.AABB.Height * hurttransform.Scale.Y));
 					if (realHitboxAABB.Intersects(realHurtboxAABB))
 					{
-						hitbox.OnHit(hitEntity, hurtentity);
-						hurtbox.OnHurt(hitEntity, hurtentity);
-						
+						if (!hitbox.HurtingEntities.Contains(hurtentity))
+						{
+							hitbox.OnHit(hitEntity, hurtentity);
+							hitbox.HurtingEntities.Add(hitEntity);
+							collChange = true;
+						}
+						if (!hurtbox.HittingEntities.Contains(hitEntity))
+						{
+							hurtbox.OnHurt(hitEntity, hurtentity);
+							hurtbox.HittingEntities.Add(hitEntity);
+							collChange = true;
+						}
+					}
+					else
+					{
+						if (hitbox.HurtingEntities.Contains(hurtentity))
+						{
+							hitbox.HurtingEntities.Remove(hurtentity);
+							collChange = true;
+						}
+						if (hurtbox.HittingEntities.Contains(hitEntity))
+						{
+
+							hurtbox.HittingEntities.Remove(hitEntity);
+							collChange = true;
+						}
+					}
+					if (collChange)
+					{
+						World.Instance.SetComponent(hitEntity, hitbox);
+						World.Instance.SetComponent(hurtentity, hurtbox);
 					}
 				}
 

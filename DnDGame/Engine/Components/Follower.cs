@@ -25,8 +25,20 @@ namespace DnDGame.Engine.Components
 		/// The id of the parent entity to follow.
 		/// </summary>
 		public int Parent;
+		/// <summary>
+		/// The starting position of the follower.
+		/// </summary>
 		public Vector2 StartPos;
-		public Follower(Vector2 startPos, int max, int min = 5)
+		/// <summary>
+		/// The event to invoke when the entity first enters the range of the parent.
+		/// </summary>
+		public RangeTrigger EnteredRange;
+		public delegate void RangeTrigger(int npcid);
+
+
+		public bool inRange;
+		
+		public Follower(Vector2 startPos, int max, int min = 10)
 		{
 			StartPos = startPos;
 			MaxRange = max;

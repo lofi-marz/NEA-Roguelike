@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DnDGame.Engine.Player;
 using static DnDGame.Engine.Systems.Stats.StatsManager;
 
@@ -22,6 +19,13 @@ namespace DnDGame.Engine.Components
 		/// <summary>
 		/// The values for the stats of an object.
 		/// </summary>
+
+		/// <summary>
+		/// The predefined race for a character. These decide the starting characteristics.
+		/// </summary>
+		public Race Race;
+
+
 		public Dictionary<string, float> CurrentStats { get
 			{
 				OnStatChange?.Invoke(new StatChangeArgs()
@@ -44,12 +48,20 @@ namespace DnDGame.Engine.Components
 		/// The current max stats for a character. CurrentStats may vary; these are the max values.
 		/// </summary>
 		public Dictionary<string, float> MaxStats;
+
+		
 		/// <summary>
-		/// The function to run on a stat change.
+		/// The delegate type for a stat change event.
 		/// </summary>
-		/// <param name="e">StatChangeArgs; The current stats and their max values.</param>
+		/// <param name="e"></param>
 		public delegate void StatChange(StatChangeArgs e);
+
+		/// <summary>
+		/// The event to be triggered whenever there is a stat change.
+		/// </summary>
 		public event StatChange OnStatChange;
+
+		/// <param name="e">StatChangeArgs; The current stats and their max values.</param>
 		public class StatChangeArgs : EventArgs
 		{
 			public Dictionary<string, float> CurrentStats;
@@ -62,7 +74,7 @@ namespace DnDGame.Engine.Components
 		/// <param name="race">The race of the character.</param>
 		public CharacterStats(Race race)
 		{
-
+			Race = race;
 			switch (race)
 			{
 				case Race.Human:
@@ -81,7 +93,7 @@ namespace DnDGame.Engine.Components
 				{"health", CalcStats.Health(Chars)},
 				{"stamina", CalcStats.Stamina(Chars) },
 				{"mana", CalcStats.Mana(Chars) },
-				{"dps", CalcStats.Attack(Chars) }
+				{"attack", CalcStats.Attack(Chars) }
 			};
 			MaxStats = _currentStats;
 			CurrentStats = _currentStats;
@@ -156,16 +168,15 @@ namespace DnDGame.Engine.Components
 		/// <returns>The calculated max DPS.</returns>
 		public static float Attack(Dictionary<string, CharLevel> levels)
 		{
-			var dps = BASEATTACK;
-			var stamina = BASESTAMINA;
+			var attack = BASEATTACK;
 
 			var strValue = (int)levels["str"] - 2;
 			var dexValue = (int)levels["dex"] - 2;
 
-			stamina += (dexValue + 2);
-			stamina += (2 * strValue);
+			attack += (dexValue + 3);
+			attack += (2 * strValue);
 
-			return dps;
+			return attack;
 		}
 	}
 
@@ -176,7 +187,7 @@ namespace DnDGame.Engine.Components
 	{
 		public static readonly Dictionary<string, CharLevel> Elf = new Dictionary<string, CharLevel>()
 		{
-			{ "str", CharLevel.High},
+			{ "str", CharLevel.High}, 
 			{ "dex", CharLevel.VeryHigh},
 			{ "con", CharLevel.VeryLow},
 			{ "int", CharLevel.Average},

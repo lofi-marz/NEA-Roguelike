@@ -12,6 +12,9 @@ using static DnDGame.Engine.Components.CharacterStats;
 
 namespace DnDGame.Menus
 {
+	/// <summary>
+	/// A box to display the player health, mana and stamina in the bottom left corner.
+	/// </summary>
 	public static class PlayerStats
 	{
 		public static Panel Init(int player)

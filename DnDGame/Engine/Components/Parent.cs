@@ -7,10 +7,12 @@ using System.Threading.Tasks;
 
 namespace DnDGame.Engine.Components
 {
+
 	/// <summary>
 	/// A component used to give an object a static position relative to another object in the world.
 	/// </summary>
-	public class Parent : IComponent
+	
+	public class ParentController : IComponent
 	{
 		/// <summary>
 		/// The ID of the parent object to be placed relative to.
@@ -20,10 +22,12 @@ namespace DnDGame.Engine.Components
 		/// The relative position of the child object to the parent.
 		/// </summary>
 		public Vector2 Offset;
-		public Parent(int parentId)
+		public AnchorPoint AnchorPoint;
+		public ParentController(int parentId, Vector2 offset, AnchorPoint anchorPoint = AnchorPoint.Centre)
 		{
 			ParentId = parentId;
-			Offset = new Vector2(0);
+			Offset = offset;
+			AnchorPoint = anchorPoint;
 		}
 	}
 }

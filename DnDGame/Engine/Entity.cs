@@ -8,27 +8,18 @@ using System.Threading.Tasks;
 
 namespace DnDGame.Engine
 {
-
-
+	/// <summary>
+	/// An entity is a simple object which components are assigned to. By itself it is simply a unique identifier and a group identifier.
+	/// </summary>
     public struct Entity
     {
         public int Id;
-        //public BitArray ComponentFlags;
         public string Group;
-        public Entity(int id)
+        public Entity(int id, string group = null)
         {
             Id = id;
-			Group = "";
-            //ComponentFlags = new BitArray(Enum.GetNames(typeof(ComponentType)).Length);
+			Group = group;
         }
-
-
     }
 
-    
-
-   
-
-
- 
 }

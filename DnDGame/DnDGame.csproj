@@ -7,7 +7,7 @@
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{AD746AB8-AAA9-4C66-9067-8A570A3140E7}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DnDGame</RootNamespace>
     <AssemblyName>DnDGame</AssemblyName>
@@ -42,15 +42,16 @@
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Engine\Components\AttackStats.cs" />
     <Compile Include="Engine\Components\Follower.cs" />
     <Compile Include="Engine\Components\Boxes\Hurtbox.cs" />
-    <Compile Include="Engine\Components\HitQueue.cs" />
+    <Compile Include="Engine\Components\HurtQueue.cs" />
     <Compile Include="Engine\Components\Lifespan.cs" />
     <Compile Include="Engine\Components\Parent.cs" />
     <Compile Include="Engine\Components\StatChangeQueue.cs" />
-    <Compile Include="Engine\Components\WeaponStats.cs" />
     <Compile Include="Engine\Drawing\Camera.cs" />
     <Compile Include="Engine\Components\CharacterStats.cs" />
     <Compile Include="Engine\Initialization\CreateObjects\CreateCell.cs" />
@@ -60,6 +61,7 @@
     <Compile Include="Engine\Player\PlayerCharacter.cs" />
     <Compile Include="Engine\System.cs" />
     <Compile Include="Engine\Systems\ActionBoxes\HitHurtCollisionManager.cs" />
+    <Compile Include="Engine\Systems\ChildPropertyUpdater.cs" />
     <Compile Include="Engine\Systems\Drawing\AnimationManager.cs" />
     <Compile Include="Engine\Systems\Drawing\Tileset.cs" />
     <Compile Include="Engine\Components\Boxes\CollisionBox.cs" />
@@ -84,14 +86,14 @@
     <Compile Include="Engine\Systems\Stats\StatChangeCalculator.cs" />
     <Compile Include="Engine\Systems\Stats\StatChangeUpdater.cs" />
     <Compile Include="Engine\Systems\Stats\StatsManager.cs" />
-    <Compile Include="Engine\Systems\Velocity.cs" />
     <Compile Include="Engine\World.cs" />
     <Compile Include="Engine\Systems\Input\InputMap.cs" />
     <Compile Include="Engine\Initialization\CreateObjects\CreatePlayer.cs" />
-    <Compile Include="Engine\Utils\Utils.cs" />
+    <Compile Include="Engine\Utils\Direction.cs" />
     <Compile Include="MainGame.cs" />
     <Compile Include="Engine\Systems\Input\InputHelper.cs" />
     <Compile Include="Engine\MazeUtils\DepthFirstGen.cs" />
+    <Compile Include="Menus\EndGame.cs" />
     <Compile Include="Menus\MainMenu.cs" />
     <Compile Include="Menus\PlayerStats.cs" />
     <Compile Include="Program.cs" />

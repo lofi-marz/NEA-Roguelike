@@ -1,13 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace DnDGame.Engine.Components
 {
+	/// <summary>
+	/// Stores the a queue of stat changes to apply to the entity's CharacterStats component.
+	/// </summary>
 	public class StatChangeQueue : IComponent
 	{
+		/// <summary>
+		/// THe current queue of changes to apply.
+		/// </summary>
 		public Queue<StatChange> ChangeQueue;
 		public StatChangeQueue()
 		{
@@ -15,16 +17,25 @@ namespace DnDGame.Engine.Components
 		}
 	}
 
+	/// <summary>
+	/// A structure to store the values  needed to change a stat.
+	/// </summary>
 	public struct StatChange
 	{
+		/// <summary>
+		/// The name of the stat to change.
+		/// </summary>
 		public string Stat;
+
+		/// <summary>
+		/// The value to increment or decrement it by.
+		/// </summary>
 		public float Change;
-		public int Source;
-		public StatChange(string stat, float change, int source = -1)
+
+		public StatChange(string stat, float change)
 		{
 			Stat = stat;
 			Change = change;
-			Source = source;
 		}
 	}
 }

@@ -29,23 +29,39 @@ namespace DnDGame.Engine.Initialization.CreateObjects
 			var AABB = TilesetManager.Tilesets["dungeon"].GetCollisionBox(defaultSprite).AABB;
 			AABB.Inflate(1.1f, 1.1f);
 			var CharacterStats = new CharacterStats(Race.Orc);
-			var hitBox = new Hitbox()
+			var hurtBox = new Hurtbox()
 			{
 				AABB = AABB,
-				OnHit = (int hit, int hurt) =>
+				OnHurt = (int hit, int hurt) =>
 				{
-					Console.WriteLine($"{hit} hit");
+					var hitParent = World.Instance.GetComponent<ParentController>(hit);
+					if (!(hitParent == null) && hitParent.ParentId == hurt) return;
+					World.Instance.DestroyEntity(hurt);
+					/*var MyHurtQueue = World.Instance.GetComponent<HurtQueue>(hurt);
+					var animPlayer = World.Instance.GetComponent<AnimationPlayer>(hurt);
+					MyHurtQueue.HittingEntities.Enqueue(hit);
+					World.Instance.SetComponent(hurt, MyHurtQueue);*/
 				}
 			};
-			int npcid = World.Instance.CreateEntity(
+			int npcid = World.Instance.CreateEntity("npc",
 				new Transform(startPos, new Vector2(1f)),
 				new Sprite("dungeon", defaultSprite, 0.5f),
 				new PhysicsBody(new Vector2(1000f)),
 				TilesetManager.Tilesets["dungeon"].GetCollisionBox(defaultSprite),
 				new AnimationPlayer("dungeon", defaultAnim, defaultAnim),
-				new Follower(startPos, 100, 10),
+				new Follower(startPos, 100, 50)
+				{
+					EnteredRange = (int npcId) =>
+					{
+						var npcSprite = World.Instance.GetComponent<Sprite>(npcId);
+						CreateWeapon.Init(npcId, "knife", npcSprite.Facing);
+					}
+				},
+				new HurtQueue(),
+				new StatChangeQueue(),
+				new CharacterStats(Race.Orc),
 				CharacterStats,
-				hitBox
+				hurtBox
 				);
 			return npcid;
 		}

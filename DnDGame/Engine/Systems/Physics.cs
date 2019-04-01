@@ -31,6 +31,7 @@ namespace DnDGame.Engine.Systems
 				var newPos = oldPos + displacement;
 				//pBody.Acc = newAcc;
 				CollisionBox hitbox = World.Instance.GetComponent<CollisionBox>(entity);
+				if (hitbox == null) continue;
 				var realAABB = new Rectangle(
 					(int)(hitbox.AABB.X + newPos.X),
 					(int)(hitbox.AABB.Y + newPos.Y),
@@ -94,8 +95,8 @@ namespace DnDGame.Engine.Systems
 
 				if (oldPos != transform.Pos)
 				{
-					World.Instance.Sprites.Remove(entity, oldPos);
-					World.Instance.Sprites.Add(entity, transform.Pos);
+					World.Instance.SpriteHash.Remove(entity, oldPos);
+					World.Instance.SpriteHash.Add(entity, transform.Pos);
 				}
 
 

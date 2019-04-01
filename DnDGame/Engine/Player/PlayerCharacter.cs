@@ -27,20 +27,23 @@ namespace DnDGame.Engine.Player
 		Elf
 	}
 
+
 	/// <summary>
 	/// Store the information required for a player character
 	/// </summary>
 	public class PlayerCharacter
 	{
 		public int Entity;
+		public string Weapon;
 		public Class Class;
 		public Race Race;
 		public Gender Gender;
-		public PlayerCharacter(Class pclass, Race race, Gender gender)
+		public PlayerCharacter(Class pclass, Race race, Gender gender, string weapon = "knife")
 		{
 			Class = pclass;
 			Race = race;
 			Gender = gender;
+			Weapon = weapon;
 		}
 
 		public string GetClassName()

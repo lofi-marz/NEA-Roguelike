@@ -1,10 +1,8 @@
 ﻿using DnDGame.Engine.Components;
 using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
+
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace DnDGame.Engine.Systems.Drawing
 {
@@ -15,14 +13,13 @@ namespace DnDGame.Engine.Systems.Drawing
 		/// Update the AnimationPlayer; For each entity with an animationplayer, update their current sprite.
 		/// </summary>
 		/// <param name="gameTime"></param>
-		/// <param name="region"></param>
+		/// <param name="region">The region to update animations in.</param>
 		public static void Update(GameTime gameTime, Rectangle region)
 		{
 			var animEntities = World.Instance.GetByTypeAndRegion(region, true, typeof(AnimationPlayer));
 
 			foreach (var entity in animEntities)
 			{
-				
 				var animPlayer = World.Instance.GetComponent<AnimationPlayer>(entity);
 				var currentSprite = World.Instance.GetComponent<Sprite>(entity);
 				var tileSet = TilesetManager.Tilesets[currentSprite.SpriteSheet];

@@ -13,18 +13,23 @@ namespace DnDGame.Engine.Systems.Input
         Press,
         Release
     }
+	/// <summary>
+	/// A class to store all of the components required for controling a player character with keyboard inputs.
+	/// </summary>
     public class PlayerController
     {
-        InputHelper Input;
+        KeyboardManager Input;
         public InputMap Map;
 
         public PlayerController()
         {
-            Input = new InputHelper();
+            Input = new KeyboardManager();
             Map = new InputMap();
         }
 
-
+		/// <summary>
+		/// Add an action to the player character.
+		/// </summary>
         public void AddAction(GameAction gameAction, Action action, ActionType type = ActionType.Down)
         {
             switch (type)
@@ -43,7 +48,9 @@ namespace DnDGame.Engine.Systems.Input
         }
 
 
-
+		/// <summary>
+		/// Update the KeyboardManager and check if any actions have been triggered.
+		/// </summary>
         public void Update()
         {
             Input.Update();
@@ -63,14 +70,14 @@ namespace DnDGame.Engine.Systems.Input
                     Map.InvokeAction(ActionType.Down, action);
                 }
 
-                var pressedKeys = keys.Where(x => Input.IsNewKeyPress(x)).ToList();
+                var pressedKeys = keys.Where(x => Input.IsKeyPress(x)).ToList();
                 var isActionPressed = pressedKeys.Count() > 0;
                 if (isActionPressed)
                 {
                     Map.InvokeAction(ActionType.Press, action);
                 }
 
-                var releasedKeys = keys.Where(x => Input.IsNewKeyRelease(x)).ToList();
+                var releasedKeys = keys.Where(x => Input.IsKeyRelease(x)).ToList();
                 var isActionReleased = releasedKeys.Count() > 0;
                 if (isActionReleased)
                 {

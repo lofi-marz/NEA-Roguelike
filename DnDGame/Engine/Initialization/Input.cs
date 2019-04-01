@@ -39,5 +39,18 @@ namespace DnDGame.Engine.Initialization
 					ActionType.Release);
 			}
 		}
+
+		public static void AssignWeaponController(PlayerCharacter player, ref PlayerController playerInput)
+		{
+			playerInput.AddAction(GameAction.PrimaryAction,
+				new Action(() =>
+				{
+					var playerId = player.Entity;
+					var playerTransform = World.Instance.GetComponent<Transform>(playerId);
+					var playerSprite = World.Instance.GetComponent<Sprite>(playerId);
+					CreateObjects.CreateWeapon.Init(playerId, player.Weapon, playerSprite.Facing);
+				}
+			), ActionType.Press);
+		}
 	}
 }

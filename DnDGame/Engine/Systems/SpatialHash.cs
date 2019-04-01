@@ -9,7 +9,13 @@ namespace DnDGame.Engine.Systems
 {
     public class SpatialHash
     {
+		/// <summary>
+		/// The size of each cell in the spatial hash. Items in the same cell will be retrieved together.
+		/// </summary>
         const int CELL_SIZE = 32;
+		/// <summary>
+		/// How far to check outside of the given region, if specified.
+		/// </summary>
         const int PADDING = CELL_SIZE;
 
         public Dictionary<string, List<int>> Hash;
@@ -19,17 +25,27 @@ namespace DnDGame.Engine.Systems
             Hash = new Dictionary<string, List<int>>();
         }
 
+		/// <summary>
+		/// Add an entity to the spatial hash in the cell the position vector is located in.
+		/// </summary>
+		/// <param name="entityId">The entity to add.</param>
+		/// <param name="pos">The position of the entity in the world.</param>
         public void Add(int entityId, Vector2 pos)
         {
 
-            var x = Math.Floor(pos.X / CELL_SIZE) * CELL_SIZE;
+            var x = Math.Floor(pos.X / CELL_SIZE) * CELL_SIZE; //Round to the nearest cell
             var y = Math.Floor(pos.Y / CELL_SIZE) * CELL_SIZE;
             var key = x.ToString() + "," + y.ToString();
             if (!Hash.ContainsKey(key)) Hash.Add(key, new List<int>());
             Hash[key].Add(entityId);
         }
 
-        public void Remove(int entityId, Vector2 pos)
+		/// <summary>
+		/// Remove the entity from the cell containing the  position given.
+		/// </summary>
+		/// <param name="entityId">The entity to remove.</param>
+		/// <param name="pos">The position of the entity in the world.</param>
+		public void Remove(int entityId, Vector2 pos)
         {
             var x = (int)Math.Floor(pos.X / CELL_SIZE) * CELL_SIZE;
             var y = (int)Math.Floor(pos.Y / CELL_SIZE) * CELL_SIZE;
@@ -38,6 +54,12 @@ namespace DnDGame.Engine.Systems
             if (cell.Contains(entityId)) cell.Remove(entityId);
         }
 
+		/// <summary>
+		/// Retrieve all of the entities from a given cell.
+		/// </summary>
+		/// <param name="x"></param>
+		/// <param name="y"></param>
+		/// <returns></returns>
         public List<int> GetCell(int x, int y)
         {
             var cellx = (int)Math.Floor((float)x / CELL_SIZE) * CELL_SIZE;

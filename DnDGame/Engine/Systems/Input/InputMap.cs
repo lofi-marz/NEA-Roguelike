@@ -7,19 +7,25 @@ using System.Threading.Tasks;
 
 namespace DnDGame.Engine.Systems.Input
 {
+	/// <summary>
+	/// The default controls for the game.
+	/// </summary>
     public static class DefaultInputs
     {
         public static Dictionary<GameAction, List<Keys>> KeyMap = new Dictionary<GameAction, List<Keys>>
             {
-                { GameAction.MoveUp, new List<Keys>() {Keys.Up, Keys.W } },
-                { GameAction.MoveDown, new List<Keys>() {Keys.Down, Keys.S } },
-                { GameAction.MoveLeft, new List<Keys>() {Keys.Left, Keys.A } },
-                { GameAction.MoveRight, new List<Keys>() {Keys.Right, Keys.D } }
-            
-            };
+				{ GameAction.MoveUp, new List<Keys>() {Keys.Up, Keys.W } },
+				{ GameAction.MoveDown, new List<Keys>() {Keys.Down, Keys.S } },
+				{ GameAction.MoveLeft, new List<Keys>() {Keys.Left, Keys.A } },
+				{ GameAction.MoveRight, new List<Keys>() {Keys.Right, Keys.D } },
+				{ GameAction.PrimaryAction, new List<Keys> {Keys.Space, Keys.Q} }
+			};
 
     }
 
+	/// <summary>
+	/// All of the actions the player is able to perform in the game.
+	/// </summary>
     public enum GameAction
     {
         MoveUp,
@@ -36,8 +42,14 @@ namespace DnDGame.Engine.Systems.Input
     /// </summary>
     public class InputMap
     {
+		/// <summary>
+		/// Maps a list of key presses to a game action.
+		/// </summary>
         public Dictionary<GameAction, List<Keys>> KeyMap;
 
+		/// <summary>
+		/// Maps a key press, release or down event to an Action function.
+		/// </summary>
         public Dictionary<GameAction, Action> ActionDownMap;
         public Dictionary<GameAction, Action> ActionReleasedMap;
         public Dictionary<GameAction, Action> ActionPressedMap;
@@ -58,7 +70,9 @@ namespace DnDGame.Engine.Systems.Input
         }
         
 
-
+		/// <summary>
+		/// Assign the default keys to the game actions.
+		/// </summary>
         public InputMap()
         {
             KeyMap = DefaultInputs.KeyMap;
@@ -73,6 +87,11 @@ namespace DnDGame.Engine.Systems.Input
             }
         }
 
+		/// <summary>
+		/// Trigger a game action.
+		/// </summary>
+		/// <param name="type">Key press, down or release.</param>
+		/// <param name="gameAction">The type of GameAction.</param>
         public void InvokeAction(ActionType type, GameAction gameAction)
         {
             switch (type)
@@ -92,20 +111,5 @@ namespace DnDGame.Engine.Systems.Input
                     break;
             }
         }
-
-        public bool IsActioenTriggered(InputHelper input, GameAction action)
-        {
-            var ActionKeys = KeyMap[action];
-            foreach (var key in ActionKeys)
-            {
-                if (input.IsKeyDown(key))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        
     }
 }
