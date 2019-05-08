@@ -30,8 +30,7 @@ namespace DnDGame.Engine.Initialization.CreateObjects
 			var pos = parentTransform.Pos;
 			var AABB = TilesetManager.Tilesets["dungeon"].GetCollisionBox(fullName).AABB;
 			var parentTile = TilesetManager.Tilesets[parentSprite.SpriteSheet].GetSprite(parentSprite.Tile);
-			
-			//AABB.Inflate(1.1f, 1.1f);
+
 			var hitbox = new Hitbox()
 			{
 				AABB = AABB,
@@ -41,14 +40,14 @@ namespace DnDGame.Engine.Initialization.CreateObjects
 			};
 
 			float rot = 0f;
-			Vector2 offset = new Vector2();
+			Vector2 offset = new Vector2(); //Make the sword face the attackee. Need to translate it a bit to keep it at the centre.
 			switch (parentSprite.Facing)
 			{
 				case Direction.North:
 
 					break;
 				case Direction.East:
-					offset = new Vector2(parentTile.Width*1.5f, parentTile.Height * 0.7f);
+					offset = new Vector2(parentTile.Width*1.5f, parentTile.Height * 0.7f); 
 					rot = (float)Math.PI / 2f;
 					break;
 				case Direction.South:

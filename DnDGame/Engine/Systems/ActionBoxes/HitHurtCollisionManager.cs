@@ -25,19 +25,19 @@ namespace DnDGame.Engine.Systems
 				(hitEntity: e, 
 				hitbox: World.Instance.GetComponent<Hitbox>(e),
 				hittransform: World.Instance.GetComponent<Transform>(e)
-				));
+				)); //Geting all the hitboxes and their transforms in the region.
 
 			foreach (var (hitEntity, hitbox, hitTransform) in Hitboxes)
 			{
-				bool collChange = false;
-				var realHitboxAABB = new Rectangle(
+				bool collChange = false; 
+				var realHitboxAABB = new Rectangle( //Translate the hitbox to its real size and scale in the world.
 					(int)(hitbox.AABB.X + hitTransform.Pos.X), 
 					(int)(hitbox.AABB.Y + hitTransform.Pos.Y),
 					(int)(hitbox.AABB.Width * hitTransform.Scale.X),
 					(int)(hitbox.AABB.Height * hitTransform.Scale.Y));
 
 				var nearbyRegion = realHitboxAABB;
-				var nearbyHurtboxes = World.Instance.GetByTypeAndRegion(nearbyRegion, true, typeof(Hurtbox))
+				var nearbyHurtboxes = World.Instance.GetByTypeAndRegion(nearbyRegion, true, typeof(Hurtbox)) //Check any nearby hurtboxes in a much smaller radius
 					.Select(e =>
 					(hurtEntity: e,
 					hurtbox: World.Instance.GetComponent<Hurtbox>(e),
@@ -46,14 +46,14 @@ namespace DnDGame.Engine.Systems
 				foreach (var (hurtentity, hurtbox, hurttransform) in nearbyHurtboxes)
 				{
 
-					var realHurtboxAABB = new Rectangle(
+					var realHurtboxAABB = new Rectangle( //Translate the hurtbox to its real size and scale in the world.
 						(int)(hurtbox.AABB.X + hurttransform.Pos.X),
 						(int)(hurtbox.AABB.Y + hurttransform.Pos.Y),
 						(int)(hurtbox.AABB.Width * hurttransform.Scale.X),
 						(int)(hurtbox.AABB.Height * hurttransform.Scale.Y));
 					if (realHitboxAABB.Intersects(realHurtboxAABB))
 					{
-						if (!hitbox.HurtingEntities.Contains(hurtentity))
+						if (!hitbox.HurtingEntities.Contains(hurtentity)) //We only want to trigger a collision when the two boxes begin touching
 						{
 							hitbox.OnHit(hitEntity, hurtentity);
 							hitbox.HurtingEntities.Add(hitEntity);

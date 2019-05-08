@@ -1,35 +1,42 @@
 ﻿using DnDGame.Engine.Components;
 using Microsoft.Xna.Framework;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DnDGame.Engine.Systems
 {
+	/// <summary>
+	/// This system manages collisions within the world between hitboxes, updating them ina  given region.
+	/// </summary>
 	public static class Physics
 	{
 
+		/// <summary>
+		/// Calculate and resolve any collisions for the given region.
+		/// </summary>
+		/// <param name="region">The region to update collisions in.</param>
 		public static void Update(GameTime gameTime, Rectangle region)
 		{
+			//All of the physics bodies in the region
 			IEnumerable<int> entitiesToUpdate = World.Instance.GetByTypeAndRegion(region, true, typeof(PhysicsBody));
 
 
 			foreach (int entity in entitiesToUpdate)
 			{
+				//Time since the last rame as fractions of a second
 				float delta = gameTime.ElapsedGameTime.Milliseconds / 1000f;
-				Vector2 vDelta = new Vector2(delta);
+
 				PhysicsBody pBody = World.Instance.GetComponent<PhysicsBody>(entity);
 				Transform transform = World.Instance.GetComponent<Transform>(entity);
 
-				//X Axis
+				//Verlet Integration
 				var oldVel = pBody.Velocity;
 				var newVel = oldVel + pBody.Acc * delta;
 				var oldPos = transform.Pos;
 				var displacement = 0.5f * (oldVel + newVel) * delta;
 				var newPos = oldPos + displacement;
-				//pBody.Acc = newAcc;
+
+				//Start of collision management
 				CollisionBox hitbox = World.Instance.GetComponent<CollisionBox>(entity);
 				if (hitbox == null) continue;
 				var realAABB = new Rectangle(
@@ -37,18 +44,21 @@ namespace DnDGame.Engine.Systems
 					(int)(hitbox.AABB.Y + newPos.Y),
 					(int)(hitbox.AABB.Width * transform.Scale.X),
 					(int)(hitbox.AABB.Height * transform.Scale.Y));
-				if (hitbox == null) continue;
 
 				IEnumerable<int> nearbyPotentialCollisions = World.Instance.GetByTypeAndRegion(realAABB, true, typeof(CollisionBox));
+
 				var prevPos = oldPos;
 				var AllCollisions = new List<Rectangle>();
 				var RealHitbox1 = hitbox.Translate(newPos).Scale(transform.Scale);
+				//Go through all of the CollisonBoxes near that could be colliding
 				foreach (var entity2 in nearbyPotentialCollisions)
 				{
 					if (entity == entity2) continue;
 					var trans2 = World.Instance.GetComponent<Transform>(entity2);
+					//Scale the hitboxes to their real size and position in the world
 					var realHitbox2 = World.Instance.GetComponent<CollisionBox>(entity2).Translate(trans2.Pos).Scale(trans2.Scale);
 					if (realHitbox2.AABB.Width == 0 && realHitbox2.AABB.Height == 0) continue;
+					//Check if any of the recangles are actually colliding
 					var RectCollisions = realHitbox2.CheckCollidingBoxes(RealHitbox1);
 					if (RectCollisions.Count > 0)
 					{
@@ -57,7 +67,8 @@ namespace DnDGame.Engine.Systems
 
 				}
 
-				var OrderedCollisionRects = AllCollisions.OrderBy(rect => ((rect.Center - RealHitbox1.AABB.Center).ToVector2().Length()));
+				//Sort collisions by distance to the CollisionBox
+				var OrderedCollisionRects = AllCollisions.OrderBy(rect => (rect.Center - RealHitbox1.AABB.Center).ToVector2().Length());
 				foreach (var rect in OrderedCollisionRects)
 				{
 					RealHitbox1 = hitbox.Translate(newPos).Scale(transform.Scale);
@@ -66,7 +77,6 @@ namespace DnDGame.Engine.Systems
 					Direction collDirection = GetCollisionDirection((rect.Center - RealHitbox1.AABB.Center).ToVector2());
 					Rectangle intersect = Rectangle.Intersect(RealHitbox1.AABB, rect);
 					if (intersect.Width == 0 && intersect.Height == 0) continue;
-					//Console.WriteLine(collDirection);
 					switch (collDirection)
 					{
 						case Direction.South: //Colliding with something below us
@@ -90,6 +100,7 @@ namespace DnDGame.Engine.Systems
 				
 				transform.Pos = newPos;
 				pBody.Velocity = newVel;
+				//Drag simulation
 				pBody.Acc *= 0.1f;
 				pBody.Velocity *= 0.9f;
 
@@ -105,59 +116,15 @@ namespace DnDGame.Engine.Systems
 				World.Instance.SetComponent(entity, transform);
 				World.Instance.SetComponent(entity, pBody);
 
-				/*if (hitbox == null) continue;
-                List<int> nearbyPotentialCollisions = World.Instance.GetByTypeAndRegion(nearbyRegion, typeof(Hitbox));
-
-             
-
-                foreach (var entity2 in nearbyPotentialCollisions)
-                {
-                    if (entity == entity2) continue;
-                    var hitbox2 = World.Instance.GetComponent<Hitbox>(entity2);
-                    var transform2 = World.Instance.GetComponent<Transform>(entity2);
-                    //(CheckCollision(hitbox, transform, hitbox2, transform2))
-
-                }*/
-
 			}
 		}
 
-
-		public static bool CheckCollision(CollisionBox hit1, Transform trans1, CollisionBox hit2, Transform trans2)
-		{
-			var realHit1 = hit1.Scale(trans1.Scale).Translate(trans1.Pos);
-			var realHit2 = hit2.Scale(trans2.Scale).Translate(trans2.Pos);
-			return IsColliding(hit1, hit2);
-		}
-
-		public static int CheckCollisionSide(CollisionBox hit1, Transform trans1, CollisionBox hit2, Transform trans2)
-		{
-			var realHit1 = hit1.Scale(trans1.Scale).Translate(trans1.Pos);
-			var realHit2 = hit2.Scale(trans2.Scale).Translate(trans2.Pos);
-			return 1;
-		}
-
-		public static bool IsColliding(CollisionBox hit1, CollisionBox hit2)
-		{
-
-			foreach (var box1 in hit1.Boxes)
-			{
-				foreach (var box2 in hit2.Boxes)
-				{
-					if (box1.Intersects(box2))
-					{
-						return true;
-					}
-				}
-			}
-			return false;
-		}
 
 		/// <summary>
-		/// Given a vector, return the direction it is moving the most in.
+		/// Given a vector, return the direction it is moving the most in. using the dotproduct with the 4 cardinal directions.
 		/// </summary>
-		/// <param name="vector"></param>
-		/// <returns></returns>
+		/// <param name="vector">The vector to check the direction in.</param>
+		/// <returns>The direction the vector is actingthe most in.</returns>
 		public static Direction GetCollisionDirection(Vector2 vector)
 		{
 			Vector2[] compass =
@@ -181,6 +148,4 @@ namespace DnDGame.Engine.Systems
 			return (Direction)bestMatch;
 		}
 	}
-
-
 }

@@ -32,11 +32,7 @@ namespace DnDGame.Engine.Systems.Drawing
         {
 			ITraceWriter traceWriter = new MemoryTraceWriter();
             var json = File.ReadAllText($"{jsonPath}{name}.json");
-            var tileset = JsonConvert.DeserializeObject<TileAtlas>(json, new JsonSerializerSettings
-			{
-				TraceWriter = traceWriter
-			});
-			Console.WriteLine(traceWriter);
+			var tileset = JsonConvert.DeserializeObject<TileAtlas>(json);
 			tileset.GenTileset();
             return tileset;
         }

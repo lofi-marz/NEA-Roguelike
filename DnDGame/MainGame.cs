@@ -3,25 +3,14 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 using DnDGame.Engine;
-
-using DnDGame.Engine.Drawing;
 using DnDGame.Engine.Systems;
-using DnDGame.Engine.Systems.Input;
-using DnDGame.Engine.Systems.MazeGen;
 using DnDGame.Engine.Systems.Drawing;
 using DnDGame.Engine.Components;
-using DnDGame.MazeGen.DepthFirst;
-using System.Collections.Generic;
-using System;
-
-using Newtonsoft.Json;
-using System.IO;
-using DnDGame.Engine.Initialization;
 using DnDGame.Engine.Player;
-using GeonBit.UI.Entities;
 using GeonBit.UI;
-using static DnDGame.Engine.Components.CharacterStats;
 using DnDGame.Engine.Systems.Stats;
+using System;
+using System.Linq;
 
 
 //TODO
@@ -44,7 +33,7 @@ namespace DnDGame
 		public int playerid;
 		public DungeonGame CurrentGame;
 		public Vector2 globalScale;
-		SpriteFont arial;
+
 		public MainGame()
 		{
 			IsMouseVisible = false;
@@ -71,7 +60,8 @@ namespace DnDGame
 			CurrentGame = new DungeonGame();
 			globalScale = new Vector2(2f);
 			graphics.PreferredBackBufferWidth = 1280;  
-			graphics.PreferredBackBufferHeight = 720;  
+			graphics.PreferredBackBufferHeight = 720;
+			Window.AllowUserResizing = true;
 			graphics.ApplyChanges();
 			
 
@@ -88,22 +78,22 @@ namespace DnDGame
 
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 			//Loading the dungeon tileset
-			var tileset = TilesetManager.LoadJson("DungeonTileset");
+			TileAtlas tileset = TilesetManager.LoadJson("DungeonTileset");
 			
 			tileset.SpriteSheet = Content.Load<Texture2D>("Sprites/DungeonTileset");
 			TilesetManager.AddSet("dungeon", tileset);
 
 			//Creating the main menu
 			var MainMenu = Menus.MainMenu.Init();
-			MainMenu.Find("start").OnClick += (GeonBit.UI.Entities.Entity btn) => {
+			MainMenu.Find("menuOptions").Find("start").OnClick += (GeonBit.UI.Entities.Entity btn) => {
 				StartGame();
 				var playerStatsBox = Menus.PlayerStats.Init(CurrentGame.Player.Entity);
 				UserInterface.Active.AddEntity(playerStatsBox);
-	
-				btn.Parent.Visible = false;
+				World.Instance.GetComponent<CharacterStats>(CurrentGame.Player.Entity).CurrentStats["health"] += 0;
+				btn.Parent.Parent.Visible = false;
 			};
 			
-			MainMenu.Find("exit").OnClick += (GeonBit.UI.Entities.Entity btn) => { Exit(); };
+			MainMenu.Find("menuOptions").Find("exit").OnClick += (GeonBit.UI.Entities.Entity btn) => { Exit(); };
 			UserInterface.Active.AddEntity(MainMenu);
 
 
@@ -145,6 +135,8 @@ namespace DnDGame
 			if (CurrentGame.GameStarted)
 			{
 				VisibleRegion = CurrentGame.GetVisibleRegion(viewport);
+				
+
 				Physics.Update(gameTime, VisibleRegion);
 				AnimationManager.Update(gameTime, VisibleRegion);
 				NPCController.Update(gameTime, VisibleRegion);
@@ -204,11 +196,27 @@ namespace DnDGame
 
 		public void StartGame()
 		{
-			CurrentGame.Player = new PlayerCharacter(Class.Elf, Race.Elf, Gender.Male);
+			var rnd = new Random();
+			CurrentGame.Player = new PlayerCharacter((Class)(rnd.Next(0, 3)), (Race)rnd.Next(0,3), Gender.Male);
 			CurrentGame.Initialize();
 			CurrentGame.LoadContent();
 			CurrentGame.CreateDungeon(20, 20, 5);
+
+			
 			CurrentGame.GameStarted = true;
+			Console.WriteLine("Entities:");
+			Console.WriteLine(string.Join(", ", World.Instance.Entities.Select(e => e.Id)));
+			Console.WriteLine("Player Components:");
+			foreach (var componentType in World.Instance.EntityComponents)
+			{
+				foreach (var component in componentType.Value)
+				{
+					if (component.Key == CurrentGame.Player.Entity)
+					{
+						Console.WriteLine(component.Value.GetType() + ", ");
+					}
+				}
+			}
 		}
 	}
 }

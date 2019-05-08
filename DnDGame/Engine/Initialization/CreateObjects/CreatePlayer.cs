@@ -5,10 +5,7 @@ using DnDGame.Engine.Systems.Drawing;
 using DnDGame.Engine.Systems.MazeGen;
 using Microsoft.Xna.Framework;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace DnDGame.Engine.Initialization
 {
@@ -24,9 +21,10 @@ namespace DnDGame.Engine.Initialization
 		/// <param name="startPos"></param>
 		/// <param name="player"></param>
 		/// <returns></returns>
-		public static int Init(Vector2 startPos, PlayerCharacter player)
+		public static int Init(PlayerCharacter player)
 		{
 			int playerId;
+			Vector2 startPos = player.StartPos;
 			var AABB = TilesetManager.Tilesets["dungeon"].GetCollisionBox($"{player.GetClassName()}_{player.GetGenderName()}_idle_anim_0").AABB;
 			AABB.Inflate(1.1f, 1.1f);
 			var hurtBox = new Hurtbox()
@@ -50,10 +48,11 @@ namespace DnDGame.Engine.Initialization
 				new PhysicsBody(new Vector2(2000f)),
 				TilesetManager.Tilesets["dungeon"].GetCollisionBox($"{player.GetClassName()}_{player.GetGenderName()}_idle_anim_0"),
 				new AnimationPlayer("dungeon", $"{player.GetClassName()}_{player.GetGenderName()}_idle", $"{player.GetClassName()}_{player.GetGenderName()}_idle"),
-				new CharacterStats((Race)Enum.Parse(typeof(Race), player.GetClassName(), true)),
+				new CharacterStats((Race)Enum.Parse(typeof(Race), player.GetRaceName(), true)),
 				new HurtQueue(),
 				new StatChangeQueue(),
 				hurtBox);
+			
 			World.Instance.SpriteHash.Add(playerId, startPos);
 			return playerId;
 		}

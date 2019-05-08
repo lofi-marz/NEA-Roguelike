@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using DnDGame.Engine.Drawing;
 using DnDGame.Engine.Systems.Drawing;
-using DnDGame.MazeGen.DepthFirst;
+
 using DnDGame.Engine.Systems.MazeGen;
 using DnDGame.Engine.Player;
 using DnDGame.Engine.Components;
@@ -44,9 +44,10 @@ namespace DnDGame.Engine.Systems
 
 		public void LoadContent()
 		{
-			Player.Entity = CreatePlayer.Init(Vector2.Zero, Player);
+			Player.Entity = CreatePlayer.Init(Player);
 			InputAssign.AssignMovementController(Player, ref InputController);
 			InputAssign.AssignWeaponController(Player, ref InputController);
+		
 
 			var playerStats = World.Instance.GetComponent<CharacterStats>(Player.Entity);
 			playerStats.CurrentStats = playerStats.MaxStats;
@@ -58,6 +59,7 @@ namespace DnDGame.Engine.Systems
 				}
 			};
 			World.Instance.SetComponent(Player.Entity, playerStats);
+
 
 		}
 
@@ -94,33 +96,19 @@ namespace DnDGame.Engine.Systems
 				}
 			}
 		
-			var realDungeon = DungeonGen.ConvertMaze(mazeList, width * pathWidth, height * pathWidth);
-
+			var realDungeon = ConvertMaze(mazeList, width * pathWidth, height * pathWidth);
+			
 			foreach (var (Pos, Item) in realDungeon)
 			{
-
 				var realPos = Pos.ToVector2() * new Vector2(16 * 1);
 				List<int> cellEntities = new List<int>();
 				if (Item.StartsWith("floor"))
 				{
 					cellEntities.Add(CreateCell.Init(realPos, Item, 0f));
-					if (rnd.Next(0,1000) < 5) cellEntities.Add(CreateNPC.Init(realPos, "orc_shaman"));
-					if (!playerAdded)
-					{
-						bool addPlayer = (rnd.Next(1, 10) == 1);
-						
-						if (addPlayer)
-						{
-							var nonFloorItems = realDungeon.Where(x => x.Pos == Pos && x.Item != "floor");
-							if (nonFloorItems.Count() <= 1)
-							{
-								playerAdded = true;
-								var transform = World.Instance.GetComponent<Transform>(Player.Entity);
-								transform.Pos = Pos.ToVector2() * new Vector2(16 * 1);
-								World.Instance.SetComponent(Player.Entity, transform);
-							}
-						}
-					}
+					var nonFloorItems = realDungeon.Where(x => x.Pos == Pos && x.Item != "floor");
+
+					if (rnd.Next(0,1000) < 5 && nonFloorItems.Count() <= 1) cellEntities.Add(CreateNPC.Init(realPos, "orc_shaman"));
+
 				}
 				else
 				{
@@ -135,14 +123,30 @@ namespace DnDGame.Engine.Systems
 				controller.Parent = Player.Entity;
 				World.Instance.SetComponent(follower, controller);
 			}
+
+			do
+			{
+				(Point Pos, string Item) = realDungeon[rnd.Next(0, realDungeon.Count())];
+				var nonFloorItems = realDungeon.Where(x => x.Pos == Pos && x.Item != "floor");
+				if (nonFloorItems.Count() > 1) continue;
+				playerAdded = true;
+
+				var transform = World.Instance.GetComponent<Transform>(Player.Entity);
+
+				World.Instance.SpriteHash.Remove(Player.Entity, transform.Pos);
+				transform.Pos = Pos.ToVector2() * 16;
+				World.Instance.SetComponent(Player.Entity, transform);
+				World.Instance.SpriteHash.Add(Player.Entity, transform.Pos);
+			} while (!playerAdded);
 		}
 
 		public void Draw(ref SpriteBatch spriteBatch, Viewport viewport, GameTime gameTime)
 		{
 			if (!GameStarted) return;
 			//SpriteBatch.DrawString(arial, $"{camera.Pos.X}, {camera.Pos.Y}", camera.Pos, Color.Black);
-
-			SpriteDrawSystem.Update(ref spriteBatch, GetVisibleRegion(viewport));
+			var visibleRegion = GetVisibleRegion(viewport);
+			visibleRegion.Inflate(-32, -32);
+			SpriteDrawSystem.Update(ref spriteBatch, visibleRegion);
 
 		}
 

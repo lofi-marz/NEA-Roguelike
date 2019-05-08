@@ -2,11 +2,7 @@
 using DnDGame.Engine.Player;
 using DnDGame.Engine.Systems.Drawing;
 using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace DnDGame.Engine.Initialization.CreateObjects
 {
@@ -32,15 +28,11 @@ namespace DnDGame.Engine.Initialization.CreateObjects
 			var hurtBox = new Hurtbox()
 			{
 				AABB = AABB,
-				OnHurt = (int hit, int hurt) =>
-				{
+				OnHurt = (int hit, int hurt) => 
+				{//Die when hit
 					var hitParent = World.Instance.GetComponent<ParentController>(hit);
 					if (!(hitParent == null) && hitParent.ParentId == hurt) return;
 					World.Instance.DestroyEntity(hurt);
-					/*var MyHurtQueue = World.Instance.GetComponent<HurtQueue>(hurt);
-					var animPlayer = World.Instance.GetComponent<AnimationPlayer>(hurt);
-					MyHurtQueue.HittingEntities.Enqueue(hit);
-					World.Instance.SetComponent(hurt, MyHurtQueue);*/
 				}
 			};
 			int npcid = World.Instance.CreateEntity("npc",
@@ -51,7 +43,7 @@ namespace DnDGame.Engine.Initialization.CreateObjects
 				new AnimationPlayer("dungeon", defaultAnim, defaultAnim),
 				new Follower(startPos, 100, 50)
 				{
-					EnteredRange = (int npcId) =>
+					EnteredRange = (int npcId) =>  //Follow the player, once in range, stab the player.
 					{
 						var npcSprite = World.Instance.GetComponent<Sprite>(npcId);
 						CreateWeapon.Init(npcId, "knife", npcSprite.Facing);

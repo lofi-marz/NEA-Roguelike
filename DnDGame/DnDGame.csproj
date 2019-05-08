@@ -15,6 +15,21 @@
     <MonoGamePlatform>DesktopGL</MonoGamePlatform>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <TargetFrameworkProfile />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -73,7 +88,6 @@
     <Compile Include="Engine\Entity.cs" />
     <Compile Include="Engine\Systems\DungeonGame.cs" />
     <Compile Include="Engine\Systems\Input\Attack.cs" />
-    <Compile Include="Engine\Systems\ISystem.cs" />
     <Compile Include="Engine\Systems\LifeTimerManager.cs" />
     <Compile Include="Engine\Systems\NPC\NPCController.cs" />
     <Compile Include="Engine\Systems\Physics.cs" />
@@ -91,8 +105,8 @@
     <Compile Include="Engine\Initialization\CreateObjects\CreatePlayer.cs" />
     <Compile Include="Engine\Utils\Direction.cs" />
     <Compile Include="MainGame.cs" />
-    <Compile Include="Engine\Systems\Input\InputHelper.cs" />
-    <Compile Include="Engine\MazeUtils\DepthFirstGen.cs" />
+    <Compile Include="Engine\Systems\Input\KeyboardManager.cs" />
+    <Compile Include="Engine\Systems\MazeGen\DepthFirstGen.cs" />
     <Compile Include="Menus\EndGame.cs" />
     <Compile Include="Menus\MainMenu.cs" />
     <Compile Include="Menus\PlayerStats.cs" />
@@ -768,6 +782,19 @@
     <Content Include="Content\GeonBit.UI\themes\lowres\textures\slider_fancy_md.xml" />
     <Content Include="Content\GeonBit.UI\themes\lowres\textures\white_texture.png" />
     <Content Include="Content\GeonBit.UI\themes\lowres\ThemeData.xml" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.6.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.6.2 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />

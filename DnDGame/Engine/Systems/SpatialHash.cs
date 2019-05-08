@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DnDGame.Engine.Systems
 {
@@ -18,6 +16,9 @@ namespace DnDGame.Engine.Systems
 		/// </summary>
         const int PADDING = CELL_SIZE;
 
+		/// <summary>
+		/// The hash dictionary storing the entity cells.
+		/// </summary>
         public Dictionary<string, List<int>> Hash;
 
         public SpatialHash()
@@ -47,7 +48,7 @@ namespace DnDGame.Engine.Systems
 		/// <param name="pos">The position of the entity in the world.</param>
 		public void Remove(int entityId, Vector2 pos)
         {
-            var x = (int)Math.Floor(pos.X / CELL_SIZE) * CELL_SIZE;
+            var x = (int)Math.Floor(pos.X / CELL_SIZE) * CELL_SIZE; //Round to the nearest cell
             var y = (int)Math.Floor(pos.Y / CELL_SIZE) * CELL_SIZE;
             var cell = GetCell(x, y);
             if (cell == null) return;
@@ -57,9 +58,9 @@ namespace DnDGame.Engine.Systems
 		/// <summary>
 		/// Retrieve all of the entities from a given cell.
 		/// </summary>
-		/// <param name="x"></param>
-		/// <param name="y"></param>
-		/// <returns></returns>
+		/// <param name="x">The x position of the cell in the world.</param>
+		/// <param name="y">The y position of the cell in the world.</param>
+		/// <returns>A list of the entities in the cell.</returns>
         public List<int> GetCell(int x, int y)
         {
             var cellx = (int)Math.Floor((float)x / CELL_SIZE) * CELL_SIZE;
@@ -68,20 +69,23 @@ namespace DnDGame.Engine.Systems
             return Hash.ContainsKey(key) ? Hash[key] : null;
         }
 
-        public List<int> GetCell(Vector2 pos)
-        {
-            var x = (int)pos.X;
-            var y = (int)pos.Y;
-            return GetCell(x, y);
-        }
-
+		/// <summary>
+		/// Collect all of the entities in the cells in the given region.
+		/// </summary>
+		/// <param name="region">The region to search for cells in.</param>
+		/// <param name="pad">If true, search PADDING units outside of the given region as well.</param>
+		/// <returns>Returns all of the entities found in the given region.</returns>
         public IEnumerable<int> GetItems(Rectangle region, bool pad)
         {
-            var VisibleItemLists = new List<List<int>>();
-            var startX = region.X - (pad ? PADDING:0);
-            var startY = region.Y - (pad ? PADDING : 0);
-            var endX = region.Right + (pad ? PADDING : 0);
-            var endY = region.Bottom + (pad ? PADDING : 0);
+			List<List<int>> VisibleItemLists = new List<List<int>>();
+
+			int padding = (pad ? PADDING : 0); 
+			int startX = region.X - padding;
+			int startY = region.Y - padding;
+			int endX = region.Right + padding;
+			int endY = region.Bottom + padding;
+
+			//Go through every cell in the region
             for (int x = startX; x < endX; x += CELL_SIZE)
             {
                 for (int y = startY; y < endY; y += CELL_SIZE)
@@ -94,6 +98,7 @@ namespace DnDGame.Engine.Systems
                 }
             }
             var VisibleItems = new List<int>();
+			//Compile them all into a list
             for (int i = 0; i < VisibleItemLists.Count(); i++) 
             {
                 VisibleItems.AddRange(VisibleItemLists[i]);

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -35,6 +36,7 @@ namespace DnDGame.Engine.Player
 	{
 		public int Entity;
 		public string Weapon;
+		public Vector2 StartPos;
 		public Class Class;
 		public Race Race;
 		public Gender Gender;
@@ -49,6 +51,11 @@ namespace DnDGame.Engine.Player
 		public string GetClassName()
 		{
 			return Class.ToString().ToLower();
+		}
+
+		public string GetRaceName()
+		{
+			return Race.ToString().ToLower();
 		}
 
 		public char GetGenderName()

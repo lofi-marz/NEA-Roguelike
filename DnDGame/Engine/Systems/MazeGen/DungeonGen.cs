@@ -157,7 +157,7 @@ namespace DnDGame.Engine.Systems.MazeGen
         }
 
 		/// <summary>
-		/// FInd and return any cells diagonally adjacent to a cell.
+		/// Find and return any cells diagonally adjacent to a cell.
 		/// </summary>
 
         static List<Point> GetDiagAdjacentCells(Point cell, int[,] grid, int width, int height)
